@@ -1,0 +1,55 @@
+<com.teotigraphix.android.components.support.MainLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#F7F7F7"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/section_control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/button_load_song"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:text="@string/load_song" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_rewind_song"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/rewind_song" />
+
+        <Button
+            android:id="@+id/button_play_song"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/play_song" />
+
+        <Button
+            android:id="@+id/button_stop_song"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/stop_song" />
+    </LinearLayout>
+
+    <com.teotigraphix.android.components.PadMatrix
+        android:id="@+id/pad_matrix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        custom:num_columns="4"
+        custom:num_rows="4" >
+    </com.teotigraphix.android.components.PadMatrix>
+
+</com.teotigraphix.android.components.support.MainLayout>
