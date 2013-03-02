@@ -34,7 +34,6 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.google.inject.Inject;
-import com.teotigraphix.android.components.support.MainLayout;
 import com.teotigraphix.android.service.ITouchService;
 import com.teotigraphix.caustic.controller.ISequencerController.OnSequencerSeekEvent;
 import com.teotigraphix.caustic.core.CausticException;
@@ -54,11 +53,7 @@ import com.teotigraphix.caustic.song.IWorkspace;
 import com.teotigraphix.caustic.song.IWorkspace.OnRackStateChangedEvent;
 import com.teotigraphix.caustic.song.IWorkspace.OnWorkspaceProjectChangeEvent;
 import com.teotigraphix.caustic.song.IWorkspace.OnWorkspaceRunEvent;
-import com.teotigraphix.causticlive.R;
 import com.teotigraphix.causticlive.model.IApplicationModel;
-import com.teotigraphix.causticlive.view.ControlBarMediator;
-import com.teotigraphix.causticlive.view.PadMatrixMediator;
-import com.teotigraphix.causticlive.view.TransportControlMediator;
 
 @ContextSingleton
 public class ApplicationModel implements IApplicationModel {
@@ -80,14 +75,14 @@ public class ApplicationModel implements IApplicationModel {
     @Inject
     ITouchService touchService;
 
-    @Inject
-    PadMatrixMediator padMatrixMediator;
+    //@Inject
+    //PadMatrixMediator padMatrixMediator;
 
-    @Inject
-    ControlBarMediator controlBarMediator;
+    //@Inject
+    //ControlBarMediator controlBarMediator;
 
-    @Inject
-    TransportControlMediator transportControlMediator;
+    //@Inject
+    //TransportControlMediator transportControlMediator;
 
     //--------------------------------------------------------------------------
     // IApplicationModel API :: Properties
@@ -191,8 +186,8 @@ public class ApplicationModel implements IApplicationModel {
 
     public void onCreateEvent(@Observes OnCreateEvent event) {
         Log.d("IApp", "OnCreateEvent");
-        MainLayout layout = (MainLayout)activity.findViewById(R.id.main_layout);
-        layout.setTouchService(touchService);
+        //MainLayout layout = (MainLayout)activity.findViewById(R.id.main_layout);
+        //layout.setTouchService(touchService);
     }
 
     public void onStartEvent(@Observes OnStartEvent event) {

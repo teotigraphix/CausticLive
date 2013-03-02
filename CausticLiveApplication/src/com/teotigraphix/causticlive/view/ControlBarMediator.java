@@ -35,7 +35,6 @@ import com.teotigraphix.caustic.dialog.CausticUtils;
 import com.teotigraphix.caustic.dialog.CausticUtils.ISongChooserListener;
 import com.teotigraphix.caustic.view.Mediator;
 import com.teotigraphix.causticlive.R;
-import com.teotigraphix.causticlive.model.IApplicationModel;
 import com.teotigraphix.common.utils.RuntimeUtils;
 
 @ContextSingleton
@@ -46,8 +45,8 @@ public class ControlBarMediator extends Mediator implements ISongChooserListener
     @Inject
     Activity context;
 
-    @Inject
-    IApplicationModel model;
+    //@Inject
+    //IApplicationModel model;
 
     @InjectView(R.id.button_load_song)
     Button loadSongButton;
@@ -81,7 +80,7 @@ public class ControlBarMediator extends Mediator implements ISongChooserListener
 
         @Override
         protected String doInBackground(String... params) {
-            model.loadSong(params[0]);
+            //model.loadSong(params[0]);
             return params[0];
         }
 
