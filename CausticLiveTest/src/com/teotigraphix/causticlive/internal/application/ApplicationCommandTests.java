@@ -29,15 +29,18 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.teotigraphix.android.components.support.MainLayout;
 import com.teotigraphix.android.service.ITouchService;
 import com.teotigraphix.caustic.controller.IApplicationController;
+import com.teotigraphix.caustic.controller.IApplicationPreferences;
 import com.teotigraphix.caustic.controller.OSCMessage;
 import com.teotigraphix.caustic.core.CausticException;
-import com.teotigraphix.caustic.internal.application.project.LoadProjectCommand;
-import com.teotigraphix.caustic.internal.application.project.RestoreProjectCommand;
-import com.teotigraphix.caustic.internal.application.project.SaveProjectAsCommand;
-import com.teotigraphix.caustic.internal.application.project.SaveProjectCommand;
-import com.teotigraphix.caustic.internal.application.startup.RegisterMainLayoutCommand;
-import com.teotigraphix.caustic.internal.application.startup.StartupWorkspaceCommand;
+import com.teotigraphix.caustic.internal.command.project.LoadProjectCommand;
+import com.teotigraphix.caustic.internal.command.project.RestoreProjectCommand;
+import com.teotigraphix.caustic.internal.command.project.SaveProjectAsCommand;
+import com.teotigraphix.caustic.internal.command.project.SaveProjectCommand;
+import com.teotigraphix.caustic.internal.command.startup.RegisterMainLayoutCommand;
+import com.teotigraphix.caustic.internal.command.workspace.StartupWorkspaceCommand;
+import com.teotigraphix.caustic.internal.command.workspace.WorkspaceSaveQuickCommand;
 import com.teotigraphix.caustic.internal.router.Router;
+import com.teotigraphix.caustic.internal.song.Workspace;
 import com.teotigraphix.caustic.song.IProject;
 import com.teotigraphix.caustic.song.IWorkspace;
 import com.teotigraphix.causticlive.MainActivity;
@@ -55,6 +58,8 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
 
     private Router router;
 
+    private Workspace workspace;
+
     public ApplicationCommandTests() {
         super(MainActivity.class);
     }
@@ -63,8 +68,13 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     protected void setUp() throws Exception {
         super.setUp();
 
+        // XXX HACK!
+        Workspace.TEST_MODE = true;
+
         activity = getActivity();
         injector = RoboGuice.getInjector(activity);
+
+        workspace = (Workspace)injector.getInstance(IWorkspace.class);
 
         router = injector.getInstance(Router.class);
         router.setName("controller");
@@ -94,7 +104,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
      * Starts and runs the workspace independently.
      */
     public void testStartupWorkspace_Command() throws CausticException {
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
 
         assertFalse(workspace.isRunning());
 
@@ -127,8 +136,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     //   in separate methods
 
     public void testLoadProject_Command_NonExists() throws CausticException {
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
-
         addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
 
@@ -157,8 +164,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
         // XXX if you want to test the sate of the project XML, do that as a unit
         // test, the verifies that the process of loading an existing project
         // file works correctly, does not check that state is being restored right
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
-
         addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
 
@@ -181,8 +186,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     }
 
     public void testRestoreProject_Command() throws CausticException, IOException {
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
-
         addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
@@ -202,8 +205,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     }
 
     public void testSaveProject_Command() throws CausticException, IOException {
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
-
         addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
@@ -241,8 +242,6 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     public void testSaveProjectAs_Command() throws CausticException, IOException {
         // the saveAs will just replace the internal File pointer in the project and
         // call save(), the Project instance is the same instance
-        IWorkspace workspace = injector.getInstance(IWorkspace.class);
-
         addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
@@ -267,6 +266,36 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
 
         assertTrue(newFile.delete());
         assertTrue(savedFile.delete());
+    }
+
+    public void testWorkspaceQuickSave_Command() throws CausticException, IOException {
+        // the saveAs will just replace the internal File pointer in the project and
+        // call save(), the Project instance is the same instance
+        IApplicationPreferences preferences = injector.getInstance(IApplicationPreferences.class);
+
+        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
+        addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
+        addCommand(IApplicationController.WORKSPACE_SAVE_QUICK, WorkspaceSaveQuickCommand.class);
+
+        assertNull(preferences.getQuickSaveFile());
+        assertNull(preferences.getLastProjectFile());
+
+        // runtime.boot() sets the lastProjectFile and qucikSaveFile
+        router.sendCommand(message(IApplicationController.START_WORKSPACE));
+
+        File newFile = createMockProjectFile(workspace, "FooBar.xml");
+        router.sendCommand(message(IApplicationController.LOAD_PROJECT, newFile.getAbsolutePath()));
+        assertNotNull(preferences.getQuickSaveFile());
+
+        router.sendCommand(message(IApplicationController.WORKSPACE_SAVE_QUICK));
+        assertTrue(preferences.getQuickSaveFile().exists());
+
+        assertTrue(newFile.delete());
+        assertTrue(preferences.getQuickSaveFile().delete());
+    }
+
+    public void testWorkspaceShutdown_Command() throws CausticException, IOException {
+        // TODO impl test
     }
 
     private File createMockProjectFile(IWorkspace workspace, String fileName) throws IOException {
