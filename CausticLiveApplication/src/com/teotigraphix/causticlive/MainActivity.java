@@ -24,11 +24,9 @@ import roboguice.inject.ContentView;
 import android.os.Bundle;
 
 import com.google.inject.Inject;
-import com.google.inject.Module;
 import com.teotigraphix.caustic.activity.CausticActivity;
 import com.teotigraphix.caustic.controller.IApplicationController;
 import com.teotigraphix.caustic.internal.song.Workspace;
-import com.teotigraphix.causticlive.config.CausticLiveModule;
 import com.teotigraphix.causticlive.internal.controller.ApplicationHandlers;
 
 @ContentView(R.layout.activity_main)
@@ -37,26 +35,12 @@ public class MainActivity extends CausticActivity {
     @Inject
     IApplicationController applicationController;
 
-    ApplicationHandlers applicationHandlers;
-
     @Override
-    protected Module createApplicationModule() {
-        return new CausticLiveModule();
-    }
-
-    @Override
-    protected void createModule(Bundle state) {
-        super.createModule(state);
+    protected void onCreate(Bundle savedInstanceState) {
         if (!Workspace.TEST_MODE) {
-            applicationHandlers = new ApplicationHandlers();
+            ApplicationHandlers applicationHandlers = new ApplicationHandlers();
             RoboGuice.injectMembers(this, applicationHandlers);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
-        super.onSaveInstanceState(outState);
-
+        super.onCreate(savedInstanceState);
     }
 }

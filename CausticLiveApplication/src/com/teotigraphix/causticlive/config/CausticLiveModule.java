@@ -19,21 +19,29 @@
 
 package com.teotigraphix.causticlive.config;
 
+import roboguice.inject.ContextSingleton;
+
 import com.google.inject.Binder;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.application.CausticUIModule;
 import com.teotigraphix.caustic.controller.IApplicationPreferences;
 import com.teotigraphix.causticlive.internal.model.SongLibraryModel;
+import com.teotigraphix.causticlive.internal.service.ArchiveService;
 import com.teotigraphix.causticlive.model.ISongLibraryModel;
+import com.teotigraphix.causticlive.service.IArchiveService;
 
 public class CausticLiveModule extends CausticUIModule {
     @Override
     public void configure(Binder binder) {
         super.configure(binder);
-
+        
+        // MainActivity
         binder.bind(ICausticConfiguration.class).to(CausticLiveConfiguration.class);
         binder.bind(IApplicationPreferences.class).to(CausticLiveApplicationPreferences.class);
+
+        // BrowserActivity
+        binder.bind(IArchiveService.class).to(ArchiveService.class).in(ContextSingleton.class);
 
         // singletons
         binder.bind(ISongLibraryModel.class).to(SongLibraryModel.class).in(Singleton.class);
