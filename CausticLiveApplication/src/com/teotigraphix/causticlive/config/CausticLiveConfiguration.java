@@ -19,9 +19,7 @@
 
 package com.teotigraphix.causticlive.config;
 
-import roboguice.inject.ContextSingleton;
-
-import com.teotigraphix.caustic.activity.IApplicationRuntime;
+import com.google.inject.Singleton;
 import com.teotigraphix.caustic.activity.ICausticBackend;
 import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.internal.actvity.DefaultCausticBackend;
@@ -30,7 +28,7 @@ import com.teotigraphix.caustic.part.ISoundGenerator;
 import com.teotigraphix.caustic.rack.IRack;
 import com.teotigraphix.caustic.song.IWorkspace;
 
-@ContextSingleton
+@Singleton
 public class CausticLiveConfiguration implements ICausticConfiguration {
 
     @Override
@@ -53,11 +51,6 @@ public class CausticLiveConfiguration implements ICausticConfiguration {
         @Override
         public ISoundGenerator createSoundGenerator(IWorkspace workpace) {
             return super.createSoundGenerator(workpace);
-        }
-
-        @Override
-        public IApplicationRuntime createApplicationRuntime(IWorkspace workpace) {
-            return new CausticLiveApplicationRuntime(workpace);
         }
 
         @Override

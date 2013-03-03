@@ -11,8 +11,9 @@ import roboguice.activity.event.OnRestartEvent;
 import roboguice.activity.event.OnResumeEvent;
 import roboguice.activity.event.OnStartEvent;
 import roboguice.activity.event.OnStopEvent;
+import roboguice.event.EventManager;
 import roboguice.event.Observes;
-import android.app.Activity;
+import roboguice.inject.ContextSingleton;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -57,15 +58,15 @@ OnStopEvent
 
 
 */
-
+@ContextSingleton
 // should be ApplicationInstrumentation, the facade template for all majors states and phases
-public class ApplicationHandlers {
-
-    @Inject
-    Activity activity;
+public class MainActivityHandlers {
 
     @Inject
     IWorkspace workspace;
+
+    @Inject
+    EventManager eventManager;
 
     @Inject
     IRouter router;
@@ -84,10 +85,6 @@ public class ApplicationHandlers {
     void onCreateEvent(@Observes OnCreateEvent event) throws CausticException {
         Log.d(TAG, "OnCreateEvent");
 
-        // startup the workspace since create is always a fresh startup
-        // controller.sendCommand(IApplicationController.START_WORKSPACE);
-        // for now this cannot be run from a command because it sets up the app root
-        workspace.startAndRun();
         // register all module client commands [OnRegisterRouterCommandsEvent]
         router.initialize();
         // load the last project
@@ -101,7 +98,7 @@ public class ApplicationHandlers {
         controller.sendCommand(IApplicationController.REGISTER_MAIN_LAYOUT, R.id.main_layout);
         // OnSetupMediatorEvent ?
         // all models, sound system and rack are restored, notify the mediators
-        workspace.getEventManager().fire(new OnAttachMediatorEvent());
+        eventManager.fire(new OnAttachMediatorEvent());
     }
 
     void onStartEvent(@Observes OnStartEvent event) {

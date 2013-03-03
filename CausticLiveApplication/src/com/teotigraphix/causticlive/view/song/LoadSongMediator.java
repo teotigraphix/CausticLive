@@ -16,6 +16,7 @@ import com.teotigraphix.caustic.dialog.CausticUtils;
 import com.teotigraphix.caustic.dialog.CausticUtils.ISongChooserListener;
 import com.teotigraphix.caustic.view.Mediator;
 import com.teotigraphix.causticlive.R;
+import com.teotigraphix.causticlive.model.IBrowserModel;
 import com.teotigraphix.common.utils.RuntimeUtils;
 
 /**
@@ -27,6 +28,9 @@ public class LoadSongMediator extends Mediator implements ISongChooserListener {
 
     @Inject
     Activity context;
+
+    @Inject
+    IBrowserModel browserModel;
 
     @InjectView(R.id.button_load_song)
     Button loadSongButton;
@@ -48,7 +52,7 @@ public class LoadSongMediator extends Mediator implements ISongChooserListener {
 
     @Override
     public void onSongSelect(String songName) {
-        new LoadSongTask().execute(returnSongPath(songName));
+        new LoadSongTask().execute(RuntimeUtils.getCausticSongFile(songName).getAbsolutePath());
     }
 
     private class LoadSongTask extends AsyncTask<String, Void, String> {
@@ -60,7 +64,7 @@ public class LoadSongMediator extends Mediator implements ISongChooserListener {
 
         @Override
         protected String doInBackground(String... params) {
-            //model.loadSong(params[0]);
+            browserModel.loadSong(params[0]);
             return params[0];
         }
 
@@ -69,13 +73,6 @@ public class LoadSongMediator extends Mediator implements ISongChooserListener {
             dialog.dismiss();
             dialog = null;
         }
-    }
-
-    private final String returnSongPath(String songName) {
-        //        return RuntimeUtils.getDirectory("caustic/songs").getAbsolutePath() + "/"
-        //                + model.getSongNames().get(item) + ".caustic";
-        return RuntimeUtils.getDirectory("caustic/songs").getAbsolutePath() + "/" + songName
-                + ".caustic";
     }
 
     private void createLoadingDialog() {

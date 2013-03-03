@@ -33,6 +33,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teotigraphix.causticlive.MainActivity" />
         </activity>
+        <service android:name=".internal.service.MyService"></service>
     </application>
 
 </manifest>

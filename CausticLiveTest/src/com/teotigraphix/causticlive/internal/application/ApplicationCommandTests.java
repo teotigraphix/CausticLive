@@ -108,7 +108,7 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
 
         assertFalse(workspace.isRunning());
 
-        assertSame(activity, workspace.getActivity());
+        //assertSame(activity, workspace.getActivity());
         assertNotNull(workspace.getGenerator());
         assertNotNull(workspace.getRack());
         assertNotNull(workspace.getPreferences());

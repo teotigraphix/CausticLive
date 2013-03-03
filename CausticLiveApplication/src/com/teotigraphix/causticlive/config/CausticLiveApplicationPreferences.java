@@ -19,11 +19,10 @@
 
 package com.teotigraphix.causticlive.config;
 
-import roboguice.inject.ContextSingleton;
-
+import com.google.inject.Singleton;
 import com.teotigraphix.caustic.internal.controller.application.ApplicationPreferences;
 
-@ContextSingleton
+@Singleton
 public class CausticLiveApplicationPreferences extends ApplicationPreferences {
 
     public CausticLiveApplicationPreferences() {

@@ -23,22 +23,17 @@ import roboguice.RoboGuice;
 import roboguice.inject.ContentView;
 import android.os.Bundle;
 
-import com.google.inject.Inject;
 import com.teotigraphix.caustic.activity.CausticActivity;
 import com.teotigraphix.caustic.activity.IApplicationConfig;
-import com.teotigraphix.caustic.controller.IApplicationController;
-import com.teotigraphix.causticlive.internal.controller.ApplicationHandlers;
+import com.teotigraphix.causticlive.internal.controller.MainActivityHandlers;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends CausticActivity {
 
-    @Inject
-    IApplicationController applicationController;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (!IApplicationConfig.Test.TEST_MODE) {
-            ApplicationHandlers applicationHandlers = new ApplicationHandlers();
+            MainActivityHandlers applicationHandlers = new MainActivityHandlers();
             RoboGuice.injectMembers(this, applicationHandlers);
         }
         super.onCreate(savedInstanceState);

@@ -24,11 +24,14 @@ import roboguice.inject.ContextSingleton;
 import com.google.inject.Binder;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.activity.IApplicationConfig;
+import com.teotigraphix.caustic.activity.IApplicationRuntime;
 import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.application.CausticUIModule;
 import com.teotigraphix.caustic.controller.IApplicationPreferences;
+import com.teotigraphix.causticlive.internal.model.BrowserModel;
 import com.teotigraphix.causticlive.internal.model.SongLibraryModel;
 import com.teotigraphix.causticlive.internal.service.ArchiveService;
+import com.teotigraphix.causticlive.model.IBrowserModel;
 import com.teotigraphix.causticlive.model.ISongLibraryModel;
 import com.teotigraphix.causticlive.service.IArchiveService;
 
@@ -38,14 +41,20 @@ public class CausticLiveModule extends CausticUIModule {
         super.configure(binder);
 
         // Application
-        binder.bind(IApplicationConfig.class).to(CausticLiveApplicationConfig.class);
-        binder.bind(ICausticConfiguration.class).to(CausticLiveConfiguration.class);
-        binder.bind(IApplicationPreferences.class).to(CausticLiveApplicationPreferences.class);
+        binder.bind(IApplicationConfig.class).to(CausticLiveApplicationConfig.class)
+                .in(Singleton.class);
+        binder.bind(ICausticConfiguration.class).to(CausticLiveConfiguration.class)
+                .in(Singleton.class);
+        binder.bind(IApplicationPreferences.class).to(CausticLiveApplicationPreferences.class)
+                .in(Singleton.class);
+        binder.bind(IApplicationRuntime.class).to(CausticLiveApplicationRuntime.class)
+                .in(Singleton.class);
 
         // BrowserActivity
         binder.bind(IArchiveService.class).to(ArchiveService.class).in(ContextSingleton.class);
 
         // singletons
+        binder.bind(IBrowserModel.class).to(BrowserModel.class).in(ContextSingleton.class);
         binder.bind(ISongLibraryModel.class).to(SongLibraryModel.class).in(Singleton.class);
     }
 }
