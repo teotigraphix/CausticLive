@@ -13,10 +13,10 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button_load_song"
+            android:id="@+id/button_open_library"
             android:layout_width="80dp"
             android:layout_height="50dp"
-            android:text="@string/load_song" />
+            android:text="@string/open_library" />
 
         <View
             android:layout_width="0dp"

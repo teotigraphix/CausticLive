@@ -20,9 +20,12 @@
 package com.teotigraphix.causticlive.config;
 
 import com.google.inject.Binder;
+import com.google.inject.Singleton;
 import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.application.CausticUIModule;
 import com.teotigraphix.caustic.controller.IApplicationPreferences;
+import com.teotigraphix.causticlive.internal.model.SongLibraryModel;
+import com.teotigraphix.causticlive.model.ISongLibraryModel;
 
 public class CausticLiveModule extends CausticUIModule {
     @Override
@@ -31,5 +34,8 @@ public class CausticLiveModule extends CausticUIModule {
 
         binder.bind(ICausticConfiguration.class).to(CausticLiveConfiguration.class);
         binder.bind(IApplicationPreferences.class).to(CausticLiveApplicationPreferences.class);
+
+        // singletons
+        binder.bind(ISongLibraryModel.class).to(SongLibraryModel.class).in(Singleton.class);
     }
 }

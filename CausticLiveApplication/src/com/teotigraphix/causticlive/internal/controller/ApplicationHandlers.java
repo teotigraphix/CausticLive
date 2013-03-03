@@ -58,6 +58,7 @@ OnStopEvent
 
 */
 
+// should be ApplicationInstrumentation, the facade template for all majors states and phases
 public class ApplicationHandlers {
 
     @Inject
@@ -98,12 +99,13 @@ public class ApplicationHandlers {
         Log.d(TAG, "OnContentChangedEvent");
         // register the layout
         controller.sendCommand(IApplicationController.REGISTER_MAIN_LAYOUT, R.id.main_layout);
+        // OnSetupMediatorEvent ?
+        // all models, sound system and rack are restored, notify the mediators
+        workspace.getEventManager().fire(new OnAttachMediatorEvent());
     }
 
     void onStartEvent(@Observes OnStartEvent event) {
         Log.d(TAG, "OnStartEvent");
-        // all models, sound system and rack are restored, notify the mediators
-        workspace.getEventManager().fire(new OnAttachMediatorEvent());
     }
 
     void onStopEvent(@Observes OnStopEvent event) {

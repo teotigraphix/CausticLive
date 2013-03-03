@@ -24,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.teotigraphix.causticlive.BrowserActivity"
+            android:label="@string/title_activity_library"
+            android:parentActivityName="com.teotigraphix.causticlive.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.teotigraphix.causticlive.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
