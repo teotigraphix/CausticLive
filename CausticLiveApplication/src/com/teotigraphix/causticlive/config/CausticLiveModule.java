@@ -23,6 +23,7 @@ import roboguice.inject.ContextSingleton;
 
 import com.google.inject.Binder;
 import com.google.inject.Singleton;
+import com.teotigraphix.caustic.activity.IApplicationConfig;
 import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.application.CausticUIModule;
 import com.teotigraphix.caustic.controller.IApplicationPreferences;
@@ -35,8 +36,9 @@ public class CausticLiveModule extends CausticUIModule {
     @Override
     public void configure(Binder binder) {
         super.configure(binder);
-        
-        // MainActivity
+
+        // Application
+        binder.bind(IApplicationConfig.class).to(CausticLiveApplicationConfig.class);
         binder.bind(ICausticConfiguration.class).to(CausticLiveConfiguration.class);
         binder.bind(IApplicationPreferences.class).to(CausticLiveApplicationPreferences.class);
 

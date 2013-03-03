@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright 2012 Michael Schmalle - Teoti Graphix, LLC
+// Copyright 2013 Michael Schmalle - Teoti Graphix, LLC
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,30 +17,19 @@
 // mschmalle at teotigraphix dot com
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.teotigraphix.causticlive;
+package com.teotigraphix.causticlive.config;
 
-import roboguice.RoboGuice;
-import roboguice.inject.ContentView;
-import android.os.Bundle;
-
-import com.google.inject.Inject;
-import com.teotigraphix.caustic.activity.CausticActivity;
+import com.google.inject.Singleton;
 import com.teotigraphix.caustic.activity.IApplicationConfig;
-import com.teotigraphix.caustic.controller.IApplicationController;
-import com.teotigraphix.causticlive.internal.controller.ApplicationHandlers;
 
-@ContentView(R.layout.activity_main)
-public class MainActivity extends CausticActivity {
+@Singleton
+public class CausticLiveApplicationConfig implements IApplicationConfig {
 
-    @Inject
-    IApplicationController applicationController;
+    private static final String CAUSTIC_LIVE = "CausticLive";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        if (!IApplicationConfig.Test.TEST_MODE) {
-            ApplicationHandlers applicationHandlers = new ApplicationHandlers();
-            RoboGuice.injectMembers(this, applicationHandlers);
-        }
-        super.onCreate(savedInstanceState);
+    public String getApplicationName() {
+        return IApplicationConfig.Test.TEST_MODE ? CAUSTIC_LIVE + "Test" : CAUSTIC_LIVE;
     }
+
 }

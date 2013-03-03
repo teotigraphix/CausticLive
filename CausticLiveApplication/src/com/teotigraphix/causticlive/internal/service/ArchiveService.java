@@ -22,7 +22,10 @@ package com.teotigraphix.causticlive.internal.service;
 import java.io.File;
 import java.io.IOException;
 
+import com.google.inject.Inject;
 import com.teotigraphix.caustic.core.CausticException;
+import com.teotigraphix.caustic.service.IFileService;
+import com.teotigraphix.caustic.song.IWorkspace;
 import com.teotigraphix.causticlive.service.IArchiveService;
 
 /*
@@ -44,18 +47,44 @@ CausticLiveFile
 
 public class ArchiveService implements IArchiveService {
 
+    @Inject
+    IFileService fileService;
+
+    @Inject
+    IWorkspace worksapce;
+
     public ArchiveService() {
-        // TODO Auto-generated constructor stub
+        //Compress c;
+        //Decompress d;
     }
 
+    @Override
     public void parse(File source, File target) throws CausticException, IOException {
-
+        // loop through the source directory non recursive
+        File[] files = source.listFiles();
+        for (File file : files) {
+            if (file.isDirectory())
+                continue;
+            archive(file, target);
+        }
     }
 
-    public static class CausticLiveFile extends File {
+    private void archive(File song, File target) throws CausticException {
+        // create a temp file
+        // save the .caustic file to temp
+        // create the manifest XML save it to temp
+        //IRackSong rackSong = worksapce.getRack().loadSong(song.getAbsolutePath());
+
+        // machines
+
+        // machine patterns
+
+        // Patch - 
+    }
+
+    public static class CausticLiveFile {
 
         public CausticLiveFile(File dir, String name) {
-            super(dir, name);
 
         }
 

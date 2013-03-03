@@ -19,17 +19,26 @@
 
 package com.teotigraphix.causticlive.internal.service;
 
+import java.io.File;
+import java.io.IOException;
+
 import roboguice.RoboGuice;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.teotigraphix.caustic.activity.IApplicationConfig;
+import com.teotigraphix.caustic.core.CausticException;
+import com.teotigraphix.caustic.service.IFileService;
 import com.teotigraphix.causticlive.BrowserActivity;
 import com.teotigraphix.causticlive.service.IArchiveService;
+import com.teotigraphix.common.utils.RuntimeUtils;
 
 public class ArchiveServiceTests extends ActivityInstrumentationTestCase2<BrowserActivity> {
 
     private BrowserActivity activity;
 
     private IArchiveService archiveService;
+
+    private IFileService fileService;
 
     public ArchiveServiceTests() {
         super(BrowserActivity.class);
@@ -38,18 +47,23 @@ public class ArchiveServiceTests extends ActivityInstrumentationTestCase2<Browse
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        IApplicationConfig.Test.TEST_MODE = true;
         activity = getActivity();
         archiveService = RoboGuice.getInjector(activity).getInstance(IArchiveService.class);
+        fileService = RoboGuice.getInjector(activity).getInstance(IFileService.class);
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+        IApplicationConfig.Test.TEST_MODE = false;
     }
 
-    public void testParse() {
-        // Singletons need Provider<Context>
+    public void testParse() throws CausticException, IOException {
+        File source = RuntimeUtils.getCausticSongsDirectory();
+        File target = fileService.getLibrariesDirectory();
+        archiveService.parse(source, target);
+
     }
 
 }

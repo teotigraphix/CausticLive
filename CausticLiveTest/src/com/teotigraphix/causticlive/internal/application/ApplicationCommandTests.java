@@ -28,6 +28,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.teotigraphix.android.components.support.MainLayout;
 import com.teotigraphix.android.service.ITouchService;
+import com.teotigraphix.caustic.activity.IApplicationConfig;
 import com.teotigraphix.caustic.controller.IApplicationController;
 import com.teotigraphix.caustic.controller.IApplicationPreferences;
 import com.teotigraphix.caustic.controller.OSCMessage;
@@ -69,7 +70,7 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
         super.setUp();
 
         // XXX HACK!
-        Workspace.TEST_MODE = true;
+        IApplicationConfig.Test.TEST_MODE = true;
 
         activity = getActivity();
         injector = RoboGuice.getInjector(activity);
