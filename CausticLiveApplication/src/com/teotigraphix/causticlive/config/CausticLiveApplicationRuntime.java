@@ -23,18 +23,13 @@ import java.io.IOException;
 
 import android.content.SharedPreferences;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.teotigraphix.caustic.controller.IApplicationPreferences;
 import com.teotigraphix.caustic.internal.actvity.DefaultApplicationRuntime;
+import com.teotigraphix.caustic.song.IWorkspace;
 
-@Singleton
 public class CausticLiveApplicationRuntime extends DefaultApplicationRuntime {
 
-    @Inject
-    IApplicationPreferences applicationPreferences;
-
-    public CausticLiveApplicationRuntime() {
+    public CausticLiveApplicationRuntime(IWorkspace workspace) {
+        super(workspace);
     }
 
     @Override
@@ -48,8 +43,8 @@ public class CausticLiveApplicationRuntime extends DefaultApplicationRuntime {
 
     @Override
     public void boot() throws IOException {
-        SharedPreferences prefs = workspace.getPreferences();
-        applicationPreferences.bootPreferences(prefs);
+        SharedPreferences prefs = workspace.getSharedPreferences();
+        workspace.getApplicationPreferences().bootPreferences(prefs);
     }
 
     @Override

@@ -21,33 +21,33 @@ package com.teotigraphix.causticlive.application;
 
 import roboguice.RoboGuice;
 import android.app.Application;
-import android.content.Intent;
-import android.util.Log;
 
+import com.google.inject.Inject;
 import com.google.inject.Module;
-import com.teotigraphix.caustic.core.CausticException;
-import com.teotigraphix.caustic.internal.song.Workspace;
+import com.teotigraphix.caustic.activity.IApplicationConfiguration;
 import com.teotigraphix.caustic.song.IWorkspace;
 import com.teotigraphix.causticlive.config.CausticLiveModule;
-import com.teotigraphix.causticlive.internal.service.MyService;
 
 public class CausticLiveApplication extends Application {
+
+    @Inject
+    IWorkspace workspace;
+
+    @Inject
+    IApplicationConfiguration configuration;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        createModule();
-        Workspace workspace = (Workspace)RoboGuice.getInjector(getApplicationContext())
-                .getInstance(IWorkspace.class);
-        workspace.initialize();
-        try {
-            workspace.startAndRun();
-        } catch (CausticException e) {
-            Log.e("CausticLiveApplication", "workspace.startAndRun()", e);
-        }
 
-        Intent intent = new Intent(this, MyService.class);
-        startService(intent);
+        createModule();
+
+        //RoboGuice.injectMembers(getApplicationContext(), this);
+        //        try {
+        //            workspace.startAndRun();
+        //        } catch (CausticException e) {
+        //            Log.e("CausticLiveApplication", "workspace.startAndRun()", e);
+        //        }
 
     }
 

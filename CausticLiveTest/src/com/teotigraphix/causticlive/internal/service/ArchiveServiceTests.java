@@ -25,7 +25,7 @@ import java.io.IOException;
 import roboguice.RoboGuice;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.teotigraphix.caustic.activity.IApplicationConfig;
+import com.teotigraphix.caustic.activity.IApplicationConfiguration;
 import com.teotigraphix.caustic.core.CausticException;
 import com.teotigraphix.caustic.service.IFileService;
 import com.teotigraphix.causticlive.BrowserActivity;
@@ -47,7 +47,7 @@ public class ArchiveServiceTests extends ActivityInstrumentationTestCase2<Browse
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        IApplicationConfig.Test.TEST_MODE = true;
+        IApplicationConfiguration.Test.TEST_MODE = true;
         activity = getActivity();
         archiveService = RoboGuice.getInjector(activity).getInstance(IArchiveService.class);
         fileService = RoboGuice.getInjector(activity).getInstance(IFileService.class);
@@ -56,7 +56,7 @@ public class ArchiveServiceTests extends ActivityInstrumentationTestCase2<Browse
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        IApplicationConfig.Test.TEST_MODE = false;
+        IApplicationConfiguration.Test.TEST_MODE = false;
     }
 
     public void testParse() throws CausticException, IOException {

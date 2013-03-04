@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright 2012 Michael Schmalle - Teoti Graphix, LLC
+// Copyright 2013 Michael Schmalle - Teoti Graphix, LLC
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@
 package com.teotigraphix.causticlive.config;
 
 import com.google.inject.Singleton;
+import com.teotigraphix.caustic.activity.IApplicationConfiguration;
+import com.teotigraphix.caustic.activity.IApplicationRuntime;
 import com.teotigraphix.caustic.activity.ICausticBackend;
-import com.teotigraphix.caustic.activity.ICausticConfiguration;
 import com.teotigraphix.caustic.internal.actvity.DefaultCausticBackend;
 import com.teotigraphix.caustic.internal.song.ProjectData;
 import com.teotigraphix.caustic.part.ISoundGenerator;
@@ -29,7 +30,39 @@ import com.teotigraphix.caustic.rack.IRack;
 import com.teotigraphix.caustic.song.IWorkspace;
 
 @Singleton
-public class CausticLiveConfiguration implements ICausticConfiguration {
+public class CausticLiveApplicationConfiguration implements IApplicationConfiguration {
+
+    private static final String CAUSTIC_LIVE = "CausticLive";
+
+    @Override
+    public float getVersion() {
+        return 0.10f;
+    }
+
+    @Override
+    public int getVersionMajor() {
+        return 0;
+    }
+
+    @Override
+    public int getVersionMinor() {
+        return 1;
+    }
+
+    @Override
+    public int getVersionRevision() {
+        return 0;
+    }
+
+    @Override
+    public String getApplicationName() {
+        return IApplicationConfiguration.Test.TEST_MODE ? CAUSTIC_LIVE + "Test" : CAUSTIC_LIVE;
+    }
+
+    @Override
+    public IApplicationRuntime createRuntime(IWorkspace workspace) {
+        return new CausticLiveApplicationRuntime(workspace);
+    }
 
     @Override
     public ICausticBackend createBackend() {
@@ -58,4 +91,5 @@ public class CausticLiveConfiguration implements ICausticConfiguration {
             return new CausticLiveProjectData();
         }
     }
+
 }

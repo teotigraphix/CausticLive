@@ -20,29 +20,25 @@
 package com.teotigraphix.causticlive;
 
 import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
+import roboguice.inject.ContentView;
 import android.os.Bundle;
 
 import com.google.inject.Inject;
-import com.teotigraphix.caustic.view.Mediator.OnAttachMediatorEvent;
-import com.teotigraphix.causticlive.view.song.LoadSongMediator;
+import com.teotigraphix.causticlive.model.IBrowserHandlers;
 
+@ContentView(R.layout.activity_browser)
 public class BrowserActivity extends RoboActivity {
 
-    //@Inject
-    //ISongLibraryModel songLibraryModel;
-
     @Inject
-    LoadSongMediator loadSongMediator;
-
-    @Inject
-    EventManager eventManager;
+    IBrowserHandlers browserHandlers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //        if (!IApplicationConfig.Test.TEST_MODE) {
+        //            BroswerActivityHandlers applicationHandlers = new BroswerActivityHandlers();
+        //            RoboGuice.injectMembers(this, applicationHandlers);
+        //        }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browser);
-        eventManager.fire(new OnAttachMediatorEvent());
     }
 
 }

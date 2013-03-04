@@ -32,16 +32,12 @@ import com.google.inject.Inject;
 import com.teotigraphix.caustic.view.Mediator;
 import com.teotigraphix.causticlive.BrowserActivity;
 import com.teotigraphix.causticlive.R;
-import com.teotigraphix.causticlive.model.ISongLibraryModel;
 
 @ContextSingleton
 public class ControlBarMediator extends Mediator {
 
     @Inject
     Activity context;
-
-    @Inject
-    ISongLibraryModel songLibraryModel;
 
     @InjectView(R.id.button_open_library)
     Button openLibraryButton;

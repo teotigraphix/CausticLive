@@ -28,9 +28,9 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.teotigraphix.android.components.support.MainLayout;
 import com.teotigraphix.android.service.ITouchService;
-import com.teotigraphix.caustic.activity.IApplicationConfig;
+import com.teotigraphix.caustic.activity.IApplicationConfiguration;
+import com.teotigraphix.caustic.activity.IApplicationPreferences;
 import com.teotigraphix.caustic.controller.IApplicationController;
-import com.teotigraphix.caustic.controller.IApplicationPreferences;
 import com.teotigraphix.caustic.controller.OSCMessage;
 import com.teotigraphix.caustic.core.CausticException;
 import com.teotigraphix.caustic.internal.command.project.LoadProjectCommand;
@@ -38,7 +38,6 @@ import com.teotigraphix.caustic.internal.command.project.RestoreProjectCommand;
 import com.teotigraphix.caustic.internal.command.project.SaveProjectAsCommand;
 import com.teotigraphix.caustic.internal.command.project.SaveProjectCommand;
 import com.teotigraphix.caustic.internal.command.startup.RegisterMainLayoutCommand;
-import com.teotigraphix.caustic.internal.command.workspace.StartupWorkspaceCommand;
 import com.teotigraphix.caustic.internal.command.workspace.WorkspaceSaveQuickCommand;
 import com.teotigraphix.caustic.internal.router.Router;
 import com.teotigraphix.caustic.internal.song.Workspace;
@@ -69,20 +68,42 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     protected void setUp() throws Exception {
         super.setUp();
 
+        // To test this now, the Application here is gloabl and is only created ONCE
+        // per test suite. The only thing the Application does is
+        // - Create the Module
+        // - Inject itself with IWorkspace, IApplicationConfiguration
+        // - Call workspace.startAndRun()
+
+        // Application, IApplicationConfiguration, IApplicationPreferences
+        // Are all Singletons that do not hold state, they are for start configuration
+        // and factories
+
+        // Workspace.startAndRun() does all the setup work of the instance
+        // Workspace.shutdonw
+
         // XXX HACK!
-        IApplicationConfig.Test.TEST_MODE = true;
+        IApplicationConfiguration.Test.TEST_MODE = true;
 
         activity = getActivity();
         injector = RoboGuice.getInjector(activity);
 
-        workspace = (Workspace)injector.getInstance(IWorkspace.class);
+        // Singleton (the only one in the whole application)
+        workspace = (Workspace)RoboGuice.getInjector(activity.getApplicationContext()).getInstance(
+                IWorkspace.class);
+        assertFalse(workspace.isRunning());
+        workspace.startAndRun();
+        assertTrue(workspace.isRunning());
 
+        // ContextSingleton
         router = injector.getInstance(Router.class);
         router.setName("controller");
     }
 
     @Override
     protected void tearDown() throws Exception {
+        // clears out ALL state of the workspace, so it 'can' be started again fresh
+        workspace.stopAndShutdown();
+        assertFalse(workspace.isRunning());
         super.tearDown();
     }
 
@@ -105,29 +126,18 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
      * Starts and runs the workspace independently.
      */
     public void testStartupWorkspace_Command() throws CausticException {
-
-        assertFalse(workspace.isRunning());
-
-        //assertSame(activity, workspace.getActivity());
-        assertNotNull(workspace.getGenerator());
-        assertNotNull(workspace.getRack());
-        assertNotNull(workspace.getPreferences());
-
-        assertNull(workspace.getApplicationRoot());
-        assertNull(workspace.getProject());
-        assertNull(workspace.getProperties());
-
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
-
-        assertNotNull(workspace.getApplicationRoot());
-        assertNotNull(workspace.getProperties());
-        assertNotNull(workspace.getPreferences());
-
-        // project is not loaded until loadProject()
-        assertNull(workspace.getProject());
-
-        assertTrue(workspace.isRunning());
+        //        //assertSame(activity, workspace.getActivity());
+        //        assertNotNull(workspace.getGenerator());
+        //        //assertNotNull(workspace.getRack());
+        //        assertNotNull(workspace.getSharedPreferences());
+        //
+        //        assertNull(workspace.getProject());
+        //
+        //        assertNotNull(workspace.getApplicationRoot());
+        //        assertNotNull(workspace.getSharedPreferences());
+        //
+        //        // project is not loaded until loadProject()
+        //        assertNull(workspace.getProject());
     }
 
     // - need to test a project path that dosn't exists 'project.isNew'
@@ -137,11 +147,7 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     //   in separate methods
 
     public void testLoadProject_Command_NonExists() throws CausticException {
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
-
-        // the workspace needs to be started before we can access project specific
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
 
         // test non existent project that will be put into memory
         File newFile = workspace.getFileService().getProjectFile("FooBar.xml");
@@ -165,11 +171,7 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
         // XXX if you want to test the sate of the project XML, do that as a unit
         // test, the verifies that the process of loading an existing project
         // file works correctly, does not check that state is being restored right
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
-
-        // the workspace needs to be started before we can access project specific
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
 
         // test existent project that will be put into memory
         File newFile = createMockProjectFile(workspace, "FooBar.xml");
@@ -187,11 +189,8 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     }
 
     public void testRestoreProject_Command() throws CausticException, IOException {
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
-
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
 
         File newFile = createMockProjectFile(workspace, "FooBar.xml");
         router.sendCommand(message(IApplicationController.LOAD_PROJECT, newFile.getAbsolutePath()));
@@ -206,12 +205,9 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     }
 
     public void testSaveProject_Command() throws CausticException, IOException {
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
         addCommand(IApplicationController.SAVE_PROJECT, SaveProjectCommand.class);
-
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
 
         File newFile = createMockProjectFile(workspace, "FooBar.xml");
         router.sendCommand(message(IApplicationController.LOAD_PROJECT, newFile.getAbsolutePath()));
@@ -243,12 +239,9 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     public void testSaveProjectAs_Command() throws CausticException, IOException {
         // the saveAs will just replace the internal File pointer in the project and
         // call save(), the Project instance is the same instance
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.RESTORE_PROJECT, RestoreProjectCommand.class);
         addCommand(IApplicationController.SAVE_PROJECT_AS, SaveProjectAsCommand.class);
-
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
 
         File newFile = createMockProjectFile(workspace, "FooBar.xml");
         router.sendCommand(message(IApplicationController.LOAD_PROJECT, newFile.getAbsolutePath()));
@@ -272,17 +265,13 @@ public class ApplicationCommandTests extends ActivityInstrumentationTestCase2<Ma
     public void testWorkspaceQuickSave_Command() throws CausticException, IOException {
         // the saveAs will just replace the internal File pointer in the project and
         // call save(), the Project instance is the same instance
-        IApplicationPreferences preferences = injector.getInstance(IApplicationPreferences.class);
+        IApplicationPreferences preferences = workspace.getApplicationPreferences();
 
-        addCommand(IApplicationController.START_WORKSPACE, StartupWorkspaceCommand.class);
         addCommand(IApplicationController.LOAD_PROJECT, LoadProjectCommand.class);
         addCommand(IApplicationController.WORKSPACE_SAVE_QUICK, WorkspaceSaveQuickCommand.class);
 
-        assertNull(preferences.getQuickSaveFile());
-        assertNull(preferences.getLastProjectFile());
-
-        // runtime.boot() sets the lastProjectFile and qucikSaveFile
-        router.sendCommand(message(IApplicationController.START_WORKSPACE));
+        assertNotNull(preferences.getQuickSaveFile());
+        assertNotNull(preferences.getLastProjectFile());
 
         File newFile = createMockProjectFile(workspace, "FooBar.xml");
         router.sendCommand(message(IApplicationController.LOAD_PROJECT, newFile.getAbsolutePath()));

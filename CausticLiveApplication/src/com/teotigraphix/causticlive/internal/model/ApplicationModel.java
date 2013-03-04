@@ -192,13 +192,13 @@ public class ApplicationModel implements IApplicationModel {
 
     public void onStartEvent(@Observes OnStartEvent event) {
         Log.d("IApp", "OnStartEvent");
-        //        eventManager.fire(new OnStartApplication());
-        try {
-            workspace.startAndRun();
-        } catch (CausticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //        //        eventManager.fire(new OnStartApplication());
+        //        try {
+        //            workspace.startAndRun();
+        //        } catch (CausticException e) {
+        //            // TODO Auto-generated catch block
+        //            e.printStackTrace();
+        //        }
     }
 
     public void onDestroyEvent(@Observes OnDestroyEvent event) {

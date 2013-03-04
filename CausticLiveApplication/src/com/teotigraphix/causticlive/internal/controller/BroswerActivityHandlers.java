@@ -23,45 +23,11 @@ import com.teotigraphix.caustic.core.CausticException;
 import com.teotigraphix.caustic.router.IRouter;
 import com.teotigraphix.caustic.song.IWorkspace;
 import com.teotigraphix.caustic.view.Mediator.OnAttachMediatorEvent;
-import com.teotigraphix.causticlive.R;
-import com.teotigraphix.causticlive.model.IMainHandlers;
-import com.teotigraphix.causticlive.view.ControlBarMediator;
+import com.teotigraphix.causticlive.model.IBrowserHandlers;
+import com.teotigraphix.causticlive.view.song.LoadSongMediator;
 
-/*
-> Startup from dashboard | Startup after Back button from Recent menu
-OnContentChangedEvent
-!!! OnCreateEvent
-OnStartEvent
-OnResumeEvent
-
-> Back button
-OnPauseEvent
-OnStopEvent
-!!! OnDestroyEvent
-
-> Recent Menu Out of App
-OnPauseEvent
-OnStopEvent
-
-> Recent Menu In to App
-!!! OnRestartEvent
-OnStartEvent
-OnResumeEvent
-
-
-[OnCreateEvent|OnRestartEvent]
-OnStartEvent
-OnResumeEvent
-
-[OnDestroyEvent|Recent Menu]
-OnPauseEvent
-OnStopEvent
-
-
-*/
 @ContextSingleton
-// should be ApplicationInstrumentation, the facade template for all majors states and phases
-public class MainActivityHandlers implements IMainHandlers {
+public class BroswerActivityHandlers implements IBrowserHandlers {
 
     @Inject
     IWorkspace workspace;
@@ -79,34 +45,24 @@ public class MainActivityHandlers implements IMainHandlers {
     IApplicationPreferences preferences;
 
     @Inject
-    ControlBarMediator controlBarMediator;
+    LoadSongMediator loadSongMediator;
 
     private String TAG;
 
-    public MainActivityHandlers() {
-        TAG = "MainActivityHandlers";
+    public BroswerActivityHandlers() {
+        TAG = "BroswerActivityHandlers";
     }
 
     void onCreateEvent(@Observes OnCreateEvent event) throws CausticException {
-
         // register all module client commands [OnRegisterRouterCommandsEvent]
         router.initialize();
 
-        controller.sendCommand(IApplicationController.REGISTER_MAIN_LAYOUT, R.id.main_layout);
-
+        // OnSetupMediatorEvent ?
         // all models, sound system and rack are restored, notify the mediators
         eventManager.fire(new OnAttachMediatorEvent());
-
-        // load the last project
-        controller.sendCommand(IApplicationController.LOAD_PROJECT,
-                preferences.getLastProjectFile());
     }
 
     void onContentChangedEvent(@Observes OnContentChangedEvent event) {
-
-        // register the layout
-        //controller.sendCommand(IApplicationController.REGISTER_MAIN_LAYOUT, R.id.main_layout);
-        // OnSetupMediatorEvent ?
 
     }
 
@@ -116,7 +72,6 @@ public class MainActivityHandlers implements IMainHandlers {
 
     void onStopEvent(@Observes OnStopEvent event) {
         Log.d(TAG, "onStopEvent");
-        //workspace.getRack().getOutputPanel().stop();
     }
 
     void onDestroyEvent(@Observes OnDestroyEvent event) {
