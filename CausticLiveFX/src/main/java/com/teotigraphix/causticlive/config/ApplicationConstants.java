@@ -25,7 +25,7 @@ public final class ApplicationConstants {
 
     public static final String PANE_ROOT = "/com/teotigraphix/causticlive/view/RootLayout.fxml";
 
-    //public static final String IMAGE_BACKGROUND = "/images/Background.png";
+    public static final String IMAGE_BACKGROUND = "/images/CausticLiveBackground.png";
     
     //public static final String ID_STOP_BUTTON = "stop-button";
     
