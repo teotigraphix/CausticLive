@@ -30,11 +30,27 @@ import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
 import com.teotigraphix.causticlive.config.ApplicationModule;
 import com.teotigraphix.causticlive.mediator.BackgroundThemeMediator;
+import com.teotigraphix.causticlive.mediator.LibraryItemListMediator;
+import com.teotigraphix.causticlive.mediator.PadMediator;
+import com.teotigraphix.causticlive.model.PadModel;
+import com.teotigraphix.causticlive.model.SoundModel;
 
 public class CausticLiveApplication extends JavaFXApplication {
 
     @Inject
     BackgroundThemeMediator backgroundThemeMediator;
+    
+    @Inject
+    PadMediator padMediator;
+    
+    @Inject
+    LibraryItemListMediator libraryItemListMediator;
+    
+    @Inject
+    SoundModel soundModel;
+    
+    @Inject
+    PadModel padModel;
     
     @Override
     protected String getRootPane() {
@@ -44,6 +60,8 @@ public class CausticLiveApplication extends JavaFXApplication {
     @Override
     protected void initMediators(List<DesktopMediatorBase> mediators) {
         mediators.add(backgroundThemeMediator);
+        mediators.add(padMediator);
+        mediators.add(libraryItemListMediator);
     }
 
     @Override

@@ -6,12 +6,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.causticlive.CausticLiveApplication;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 
+@Singleton
 public class BackgroundThemeMediator extends DesktopMediatorBase {
 
     @Inject
