@@ -16,7 +16,6 @@ import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedFunctionChange;
 import com.teotigraphix.causticlive.model.IPadModel.PadFunction;
 import com.teotigraphix.causticlive.model.PadModel;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 
 public class FunctionGroupMediator extends DesktopMediatorBase {
 
@@ -26,11 +25,6 @@ public class FunctionGroupMediator extends DesktopMediatorBase {
 
     @Inject
     PadModel padModel;
-
-    @Inject
-    public FunctionGroupMediator(ICaustkApplicationProvider provider) {
-        super(provider);
-    }
 
     @Override
     public void create(Pane root) {
@@ -76,6 +70,12 @@ public class FunctionGroupMediator extends DesktopMediatorBase {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onRegister() {
+        // TODO Auto-generated method stub
+        
     }
 
 }

@@ -3,8 +3,6 @@ package com.teotigraphix.causticlive.mediator.machine;
 
 import java.util.List;
 
-import org.androidtransfuse.event.EventObserver;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +16,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
@@ -27,7 +27,6 @@ import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
@@ -51,11 +50,6 @@ public class MachineScreenMediator extends DesktopMediatorBase {
 
     @Inject
     IScreenManager screenManager;
-
-    @Inject
-    public MachineScreenMediator(ICaustkApplicationProvider provider) {
-        super(provider);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -100,7 +94,6 @@ public class MachineScreenMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-        super.onRegister();
 
         Library library = getController().getLibraryManager().getSelectedLibrary();
 

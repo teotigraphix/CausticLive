@@ -28,7 +28,6 @@ import com.teotigraphix.causticlive.model.PadModel.PadData;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 
@@ -50,11 +49,6 @@ public class ToolBarMediator extends DesktopMediatorBase {
     IPadModel padModel;
 
     private boolean reseting;
-
-    @Inject
-    public ToolBarMediator(ICaustkApplicationProvider provider) {
-        super(provider);
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -96,7 +90,6 @@ public class ToolBarMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-        super.onRegister();
 
         Library library = getController().getLibraryManager().getSelectedLibrary();
 

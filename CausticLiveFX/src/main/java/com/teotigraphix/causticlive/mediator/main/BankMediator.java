@@ -17,7 +17,6 @@ import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.causticlive.model.IPadModel;
 import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedBankChange;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 
 @Singleton
@@ -27,11 +26,6 @@ public class BankMediator extends DesktopMediatorBase {
 
     @Inject
     IPadModel padModel;
-
-    @Inject
-    public BankMediator(ICaustkApplicationProvider provider) {
-        super(provider);
-    }
 
     @Override
     public void create(Pane root) {
@@ -81,5 +75,11 @@ public class BankMediator extends DesktopMediatorBase {
                         button.setSelected(true);
                     }
                 });
+    }
+
+    @Override
+    public void onRegister() {
+        // TODO Auto-generated method stub
+        
     }
 }

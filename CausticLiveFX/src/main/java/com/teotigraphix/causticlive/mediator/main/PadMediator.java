@@ -28,7 +28,6 @@ import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
 import com.teotigraphix.causticlive.model.PadModel.PadData;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.tone.Tone;
 
@@ -47,11 +46,6 @@ public class PadMediator extends DesktopMediatorBase {
     ISoundModel soundModel;
 
     private Pane padButtonPane;
-
-    @Inject
-    public PadMediator(ICaustkApplicationProvider provider) {
-        super(provider);
-    }
 
     @Override
     public void create(Pane root) {
@@ -171,10 +165,6 @@ public class PadMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-        super.onRegister();
-        CtkDebug.view("   Register: PadMediator");
-
-        //padModel.setSelectedBank(0);
     }
 
     protected void updatePadView(List<PadData> view) {
