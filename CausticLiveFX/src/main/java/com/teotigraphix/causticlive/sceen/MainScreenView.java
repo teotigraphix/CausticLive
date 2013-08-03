@@ -10,7 +10,7 @@ import com.teotigraphix.caustic.screen.IScreenView;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
 import com.teotigraphix.causticlive.mediator.main.BankMediator;
 import com.teotigraphix.causticlive.mediator.main.FunctionGroupMediator;
-import com.teotigraphix.causticlive.mediator.main.PadMediator2;
+import com.teotigraphix.causticlive.mediator.main.PadMediator;
 import com.teotigraphix.causticlive.mediator.main.ToolBarMediator;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 
@@ -24,7 +24,7 @@ public class MainScreenView extends DesktopScreenView implements IScreenView {
     FunctionGroupMediator functionGroupMediator;
 
     @Inject
-    PadMediator2 padMediator;
+    PadMediator padMediator;
 
     @Inject
     BankMediator bankMediator;

@@ -19,6 +19,7 @@
 
 package com.teotigraphix.causticlive.config;
 
+import java.io.File;
 import java.util.ResourceBundle;
 
 import com.google.inject.AbstractModule;
@@ -34,8 +35,14 @@ import com.teotigraphix.caustic.model.StageModel;
 import com.teotigraphix.caustic.screen.IScreenManager;
 import com.teotigraphix.caustic.screen.ScreenManager;
 import com.teotigraphix.causticlive.CausticLiveApplication;
+import com.teotigraphix.causticlive.model.IPadModel;
+import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.PadModel;
+import com.teotigraphix.causticlive.model.SoundModel;
+import com.teotigraphix.caustk.application.CaustkConfigurationBase;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.application.ICaustkConfiguration;
+import com.teotigraphix.caustk.utils.RuntimeUtils;
 
 public class ApplicationModule extends AbstractModule {
 
@@ -44,9 +51,9 @@ public class ApplicationModule extends AbstractModule {
         // Core 
         bind(IApplicationModel.class).to(ApplicationModel.class).in(Singleton.class);
         bind(IApplicationController.class).to(ApplicationController.class).in(Singleton.class);
-        
+
         bind(IScreenManager.class).to(ScreenManager.class).in(Singleton.class);
-        
+
         // JavaFX
         bind(IStageModel.class).to(StageModel.class).in(Singleton.class);
 
@@ -57,6 +64,26 @@ public class ApplicationModule extends AbstractModule {
         // Application
         bind(ICaustkConfiguration.class).to(ApplicationConfiguration.class).in(Singleton.class);
         bind(ICaustkApplicationProvider.class).to(ApplicationProvider.class).in(Singleton.class);
+
+        bind(IPadModel.class).to(PadModel.class).in(Singleton.class);
+        bind(ISoundModel.class).to(SoundModel.class).in(Singleton.class);
+    }
+
+    public static class ApplicationConfiguration extends CaustkConfigurationBase {
+
+        @Override
+        public String getApplicationId() {
+            return "causticlive";
+        }
+
+        @Override
+        public void setCausticStorage(File value) {
+            super.setCausticStorage(value);
+            RuntimeUtils.STORAGE_ROOT = value.getAbsolutePath();
+        }
+
+        public ApplicationConfiguration() {
+        }
 
     }
 

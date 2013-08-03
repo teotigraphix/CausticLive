@@ -1,5 +1,5 @@
 
-package com.teotigraphix.causticlive.mediator;
+package com.teotigraphix.causticlive.mediator.machine;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
-import com.teotigraphix.causticlive.model.SoundModel;
+import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
@@ -47,7 +47,7 @@ public class MachineScreenMediator extends DesktopMediatorBase {
     private Pane machineButtonPane;
 
     @Inject
-    SoundModel soundModel;
+    ISoundModel soundModel;
 
     @Inject
     IScreenManager screenManager;

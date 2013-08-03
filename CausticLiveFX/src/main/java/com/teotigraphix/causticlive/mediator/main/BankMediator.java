@@ -1,8 +1,6 @@
 
 package com.teotigraphix.causticlive.mediator.main;
 
-import org.androidtransfuse.event.EventObserver;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -12,11 +10,13 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
-import com.teotigraphix.causticlive.model.PadModel;
-import com.teotigraphix.causticlive.model.PadModel.OnPadModelSelectedBankChange;
+import com.teotigraphix.causticlive.model.IPadModel;
+import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedBankChange;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 
@@ -26,7 +26,7 @@ public class BankMediator extends DesktopMediatorBase {
     private Pane bankButtonPane;
 
     @Inject
-    PadModel padModel;
+    IPadModel padModel;
 
     @Inject
     public BankMediator(ICaustkApplicationProvider provider) {

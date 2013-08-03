@@ -4,8 +4,6 @@ package com.teotigraphix.causticlive.mediator.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.androidtransfuse.event.EventObserver;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -16,25 +14,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.google.inject.Inject;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
-import com.teotigraphix.causticlive.model.PadModel;
+import com.teotigraphix.causticlive.model.IPadModel;
+import com.teotigraphix.causticlive.model.IPadModel.OnPadModelPadDataRefresh;
+import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedBankChange;
+import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedFunctionChange;
+import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
+import com.teotigraphix.causticlive.model.IPadModel.PadFunction;
+import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
-import com.teotigraphix.causticlive.model.PadModel.OnPadModelPadDataRefresh;
-import com.teotigraphix.causticlive.model.PadModel.OnPadModelSelectedBankChange;
-import com.teotigraphix.causticlive.model.PadModel.OnPadModelSelectedFunctionChange;
 import com.teotigraphix.causticlive.model.PadModel.PadData;
-import com.teotigraphix.causticlive.model.PadModel.PadDataState;
-import com.teotigraphix.causticlive.model.PadModel.PadFunction;
-import com.teotigraphix.causticlive.model.SoundModel;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
-import com.teotigraphix.caustk.core.PatternUtils;
-import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.tone.Tone;
 
-public class PadMediator2 extends DesktopMediatorBase {
+public class PadMediator extends DesktopMediatorBase {
 
     private boolean updatingView;
 
@@ -43,15 +41,15 @@ public class PadMediator2 extends DesktopMediatorBase {
     private Pane padSelectionOverlay;
 
     @Inject
-    PadModel padModel;
+    IPadModel padModel;
 
     @Inject
-    SoundModel soundModel;
+    ISoundModel soundModel;
 
     private Pane padButtonPane;
 
     @Inject
-    public PadMediator2(ICaustkApplicationProvider provider) {
+    public PadMediator(ICaustkApplicationProvider provider) {
         super(provider);
     }
 

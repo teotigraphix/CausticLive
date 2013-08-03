@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.screen.DesktopScreenView;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
-import com.teotigraphix.causticlive.mediator.MachineScreenMediator;
+import com.teotigraphix.causticlive.mediator.machine.MachineScreenMediator;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 
 @Singleton

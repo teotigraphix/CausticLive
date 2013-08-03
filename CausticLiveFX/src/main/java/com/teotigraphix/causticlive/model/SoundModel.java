@@ -19,8 +19,9 @@ import com.teotigraphix.caustk.library.LibraryScene;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
-public class SoundModel extends ModelBase {
+public class SoundModel extends ModelBase implements ISoundModel {
 
+    @Override
     public final Library getLibrary() {
         return getController().getLibraryManager().getSelectedLibrary();
     }
@@ -56,6 +57,7 @@ public class SoundModel extends ModelBase {
         //        getController().getSystemSequencer().play(SequencerMode.PATTERN);
     }
 
+    @Override
     public void loadScene(LibraryScene libraryScene) {
         // Load the scene to create the machines
         getController().getSoundSource().clearAndReset();
@@ -89,10 +91,12 @@ public class SoundModel extends ModelBase {
 
     private int selectedTone;
 
+    @Override
     public final int getSelectedTone() {
         return selectedTone;
     }
 
+    @Override
     public ToneData getSelectedToneData() {
         return toneMap.get(selectedTone);
     }
@@ -101,6 +105,7 @@ public class SoundModel extends ModelBase {
      * @see OnSoundModelSelectedToneChange
      * @param value
      */
+    @Override
     public final void setSelectedTone(int value) {
         // clear the selection
         if (value == -1) {
@@ -166,6 +171,7 @@ public class SoundModel extends ModelBase {
 
     }
 
+    @Override
     public boolean setPatch(ToneData data, LibraryPatch patch) {
         if (data == null)
             return false;

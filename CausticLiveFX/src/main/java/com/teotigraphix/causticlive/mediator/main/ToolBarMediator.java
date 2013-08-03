@@ -3,8 +3,6 @@ package com.teotigraphix.causticlive.mediator.main;
 
 import java.util.List;
 
-import org.androidtransfuse.event.EventObserver;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,21 +16,21 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.google.inject.Inject;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
-import com.teotigraphix.causticlive.model.PadModel;
+import com.teotigraphix.causticlive.model.IPadModel;
+import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
 import com.teotigraphix.causticlive.model.PadModel.PadData;
-import com.teotigraphix.causticlive.model.SoundModel;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.library.Library;
-import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryPhrase;
-import com.teotigraphix.caustk.library.LibraryScene;
 
 public class ToolBarMediator extends DesktopMediatorBase {
 
@@ -46,10 +44,10 @@ public class ToolBarMediator extends DesktopMediatorBase {
     IScreenManager screenManager;
 
     @Inject
-    SoundModel soundModel;
+    ISoundModel soundModel;
 
     @Inject
-    PadModel padModel;
+    IPadModel padModel;
 
     private boolean reseting;
 
@@ -147,7 +145,7 @@ public class ToolBarMediator extends DesktopMediatorBase {
     protected void onPhraseListselectedItemChange(LibraryPhrase libraryPhrase) {
         if (reseting)
             return;
-        
+
         PadData data = padModel.getAssignmentData();
         data.setPhraseId(libraryPhrase.getId());
     }
