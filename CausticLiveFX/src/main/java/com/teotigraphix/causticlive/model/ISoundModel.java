@@ -20,5 +20,9 @@ public interface ISoundModel extends ICaustkModel {
     void setSelectedTone(int value);
 
     boolean setPatch(ToneData data, LibraryPatch patch);
+    
+    public static class OnSoundModelLibraryImportComplete {
+        
+    }
 
 }

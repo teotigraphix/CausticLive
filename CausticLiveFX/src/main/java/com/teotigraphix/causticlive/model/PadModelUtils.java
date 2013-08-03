@@ -3,7 +3,8 @@ package com.teotigraphix.causticlive.model;
 
 import java.util.UUID;
 
-import com.teotigraphix.causticlive.model.PadModel.PadData;
+import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
+import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.components.PatternSequencerComponent;
@@ -20,6 +21,8 @@ public class PadModelUtils {
     public static void updatePhrase(ICaustkController controller, PadData data, UUID phraseId)
             throws CausticException {
         Library library = controller.getLibraryManager().getSelectedLibrary();
+
+        data.setPhraseId(phraseId);
         LibraryPhrase phrase = library.findPhraseById(phraseId);
 
         Tone tone = controller.getSoundSource().getTone(data.getToneIndex());
@@ -34,5 +37,8 @@ public class PadModelUtils {
         sequencer.clearIndex(data.getLocalIndex());
         sequencer.setLength(phrase.getLength());
         sequencer.initializeData(phrase.getNoteData());
+
+        if (data.getState() != PadDataState.SELECTED)
+            sequencer.setSelectedPattern(3, 15);
     }
 }

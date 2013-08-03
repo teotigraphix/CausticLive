@@ -1,6 +1,8 @@
 
 package com.teotigraphix.causticlive.mediator.main;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -15,21 +17,25 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
 import org.androidtransfuse.event.EventObserver;
 
 import com.google.inject.Inject;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
+import com.teotigraphix.caustic.utils.FileUtil;
 import com.teotigraphix.causticlive.model.IPadModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelLibraryImportComplete;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
-import com.teotigraphix.causticlive.model.PadModel.PadData;
-import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
-import com.teotigraphix.causticlive.model.SoundModel.ToneData;
+import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
+import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.caustk.utils.RuntimeUtils;
 
 public class ToolBarMediator extends DesktopMediatorBase {
 
@@ -50,9 +56,20 @@ public class ToolBarMediator extends DesktopMediatorBase {
 
     private boolean reseting;
 
+    private Button loadButton;
+
     @SuppressWarnings("unchecked")
     @Override
     public void create(Pane root) {
+
+        loadButton = (Button)root.lookup("#loadButton");
+        loadButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onLoadClick();
+            }
+        });
+
         machineViewButton = (Button)root.lookup("#machineViewButton");
         machineViewButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -61,6 +78,7 @@ public class ToolBarMediator extends DesktopMediatorBase {
             }
         });
 
+        // selectors on the main screen for the current assignment tone
         machineToggleButtons = (Pane)root.lookup("#machineToggleButtons");
         for (Node node : machineToggleButtons.getChildren()) {
             final ToggleButton button = (ToggleButton)node;
@@ -85,17 +103,31 @@ public class ToolBarMediator extends DesktopMediatorBase {
         }
 
         phraseList = (ListView<LibraryPhrase>)root.lookup("#phraseList");
+        phraseList.setDisable(true);
+    }
 
+    protected void onLoadClick() {
+        System.out.println("onLoadClick");
+        FileChooser chooser = FileUtil.createDefaultFileChooser(RuntimeUtils
+                .getCausticSongsDirectory().getAbsolutePath(), "Caustic song file", "*.caustic");
+        File causticFile = chooser.showOpenDialog(null);
+
+        // if no current library open error dialog
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+        try {
+            getController().getLibraryManager().importSong(library, causticFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+
+        soundModel.getDispatcher().trigger(new OnSoundModelLibraryImportComplete());
     }
 
     @Override
     public void onRegister() {
-
-        Library library = getController().getLibraryManager().getSelectedLibrary();
-
-        List<LibraryPhrase> phrases = library.getPhrases();
-        ObservableList<LibraryPhrase> items1 = FXCollections.observableArrayList(phrases);
-        phraseList.setItems(items1);
+        fillPhraseList();
 
         phraseList.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<LibraryPhrase>() {
@@ -108,28 +140,36 @@ public class ToolBarMediator extends DesktopMediatorBase {
                 });
     }
 
+    private void fillPhraseList() {
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+        List<LibraryPhrase> phrases = library.getPhrases();
+        ObservableList<LibraryPhrase> items1 = FXCollections.observableArrayList(phrases);
+        phraseList.setItems(items1);
+    }
+
     @Override
     protected void registerObservers() {
         super.registerObservers();
-
-        soundModel.getDispatcher().register(OnSoundModelSelectedToneChange.class,
-                new EventObserver<OnSoundModelSelectedToneChange>() {
-                    @Override
-                    public void trigger(OnSoundModelSelectedToneChange object) {
-                        ToneData tone = object.getTone();
-                        if (tone != null) {
-                            ToggleButton button = (ToggleButton)machineToggleButtons.getChildren()
-                                    .get(tone.getIndex());
-                            button.setSelected(true);
-                        }
-                    }
-                });
 
         padModel.getDispatcher().register(OnPadModelAssignmentIndexChange.class,
                 new EventObserver<OnPadModelAssignmentIndexChange>() {
                     @Override
                     public void trigger(OnPadModelAssignmentIndexChange object) {
-                        onPadModelAssignmentIndexChange();
+                        if (object.isNoSelection()) {
+                            phraseList.setDisable(true);
+                            return;
+                        } else {
+                            phraseList.setDisable(false);
+                            onPadModelAssignmentIndexChange();
+                        }
+                    }
+                });
+
+        soundModel.getDispatcher().register(OnSoundModelLibraryImportComplete.class,
+                new EventObserver<OnSoundModelLibraryImportComplete>() {
+                    @Override
+                    public void trigger(OnSoundModelLibraryImportComplete object) {
+                        fillPhraseList();
                     }
                 });
 
@@ -139,23 +179,37 @@ public class ToolBarMediator extends DesktopMediatorBase {
         if (reseting)
             return;
 
-        PadData data = padModel.getAssignmentData();
-        data.setPhraseId(libraryPhrase.getId());
+        if (libraryPhrase == null) {
+            CtkDebug.err("ToolBarMediator.onPhraseListselectedItemChange() libraryPhrase NULL");
+            return;
+        }
+
+        padModel.setAssignmentPhraseId(libraryPhrase.getId());
     }
 
     protected void onPadModelAssignmentIndexChange() {
-        PadData data = padModel.getAssignmentData();
+        PadData data = padModel.getSelectedAssignmentData();
         int toneIndex = data.getToneIndex();
-        reseting = true;
+        //reseting = true;
         for (Node node : machineToggleButtons.getChildren()) {
             ToggleButton button = (ToggleButton)node;
+            button.disarm();
             button.setSelected(false);
+            button.arm();
         }
-        reseting = false;
+        //reseting = false;
+
+        LibraryPhrase phrase = soundModel.getLibrary().findPhraseById(data.getPhraseId());
+        if (phrase != null) {
+            phraseList.getSelectionModel().select(phrase);
+            phraseList.scrollTo(phraseList.getItems().indexOf(phrase));
+        }
 
         if (toneIndex != -1) {
             ToggleButton button = (ToggleButton)machineToggleButtons.getChildren().get(toneIndex);
+            button.disarm();
             button.setSelected(true);
+            button.arm();
         }
     }
 
@@ -164,9 +218,8 @@ public class ToolBarMediator extends DesktopMediatorBase {
             return;
         // set the tone index
         // this has to update the pad text view
-        PadData data = padModel.getAssignmentData();
         int toneIndex = (int)button.getProperties().get("index");
-        data.setToneIndex(toneIndex);
+        padModel.setAssignmentToneIndex(toneIndex);
     }
 
     protected void onMachineViewClick() {

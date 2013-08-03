@@ -32,16 +32,17 @@ public class SoundModel extends ModelBase implements ISoundModel {
         Library library = null;
         try {
             library = getController().getLibraryManager().createLibrary("Foo");
-            File causticFile = new File(
-                    "C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
-            getController().getLibraryManager().importSong(library, causticFile);
+//            File causticFile = new File(
+//                    "C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
+//            getController().getLibraryManager().importSong(library, causticFile);
             getController().getLibraryManager().setSelectedLibrary(library);
             getController().getLibraryManager().saveLibrary(library);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (CausticException e) {
-            e.printStackTrace();
         }
+//        } catch (CausticException e) {
+//            e.printStackTrace();
+//        }
 
         //        File causticFile = new File("C:\\Users\\Work\\Documents\\caustic\\songs\\ARPTEST1.caustic");
         //        try {

@@ -2,9 +2,10 @@
 package com.teotigraphix.causticlive.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.teotigraphix.caustic.model.ICaustkModel;
-import com.teotigraphix.causticlive.model.PadModel.PadData;
+import com.teotigraphix.causticlive.model.vo.PadData;
 
 public interface IPadModel extends ICaustkModel {
 
@@ -69,7 +70,16 @@ public interface IPadModel extends ICaustkModel {
      * Returns the current {@link PadData} using the
      * {@link #getAssignmentIndex()} and {@link #getSelectedBank()}.
      */
-    PadData getAssignmentData();
+    PadData getSelectedAssignmentData();
+
+    /**
+     * Returns the {@link PadData} in the current view of 16 pads using the
+     * local index.
+     * 
+     * @param localIndex The local index 0-15 to retrieve data based on the
+     *            current bank.
+     */
+    PadData getAssignmentDataAt(int localIndex);
 
     //----------------------------------
     // padDataView
@@ -100,9 +110,31 @@ public interface IPadModel extends ICaustkModel {
      */
     void select(int index, boolean selected);
 
+    /**
+     * @see OnPadModelPadDataRefresh
+     * @param index
+     */
+    void setAssignmentToneIndex(int index);
+
+    void setAssignmentPhraseId(UUID id);
+
     //--------------------------------------------------------------------------
     // Event API
     //--------------------------------------------------------------------------
+
+    public static class OnPadModelPadDataDeselect {
+
+        private PadData data;
+
+        public PadData getData() {
+            return data;
+        }
+
+        public OnPadModelPadDataDeselect(PadData data) {
+            this.data = data;
+        }
+
+    }
 
     public static class OnPadModelPadDataRefresh {
     }
@@ -139,4 +171,5 @@ public interface IPadModel extends ICaustkModel {
     public enum PadDataState {
         IDLE, SELECTED, QUEUED
     }
+
 }

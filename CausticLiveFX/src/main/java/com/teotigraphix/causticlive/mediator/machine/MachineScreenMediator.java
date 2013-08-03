@@ -23,6 +23,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelLibraryImportComplete;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
@@ -94,16 +95,7 @@ public class MachineScreenMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-
-        Library library = getController().getLibraryManager().getSelectedLibrary();
-
-        List<LibraryScene> phrases = library.getScenes();
-        ObservableList<LibraryScene> items1 = FXCollections.observableArrayList(phrases);
-        sceneList.setItems(items1);
-
-        List<LibraryPatch> patches = library.getPatches();
-        ObservableList<LibraryPatch> items2 = FXCollections.observableArrayList(patches);
-        patchList.setItems(items2);
+        fillLists();
 
         patchList.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<LibraryPatch>() {
@@ -177,6 +169,26 @@ public class MachineScreenMediator extends DesktopMediatorBase {
                     }
                 });
 
+        // OnSoundModelLibraryImportComplete
+        soundModel.getDispatcher().register(OnSoundModelLibraryImportComplete.class,
+                new EventObserver<OnSoundModelLibraryImportComplete>() {
+                    @Override
+                    public void trigger(OnSoundModelLibraryImportComplete object) {
+                        fillLists();
+                    }
+                });
+    }
+
+    protected void fillLists() {
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+
+        List<LibraryScene> phrases = library.getScenes();
+        ObservableList<LibraryScene> items1 = FXCollections.observableArrayList(phrases);
+        sceneList.setItems(items1);
+
+        List<LibraryPatch> patches = library.getPatches();
+        ObservableList<LibraryPatch> items2 = FXCollections.observableArrayList(patches);
+        patchList.setItems(items2);
     }
 
     protected void updateSelectedTone(OnSoundModelSelectedToneChange object) {

@@ -28,7 +28,7 @@
         <ToggleButton layoutX="0.0" layoutY="211.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="bank-button" text="D" toggleGroup="$bankGroup" />
       </children>
     </AnchorPane>
-    <AnchorPane id="padButtonPane" layoutX="650.0" layoutY="116.0" prefHeight="551.5" prefWidth="547.0">
+    <AnchorPane id="padButtonPane" layoutX="650.0" layoutY="116.0" prefHeight="551.5" prefWidth="547.0" visible="true">
       <children>
         <ToggleButton layoutX="0.0" layoutY="434.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="115.0" styleClass="pad-button" text="1" />
         <ToggleButton layoutX="144.0" layoutY="434.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="115.0" styleClass="pad-button" text="2" />
@@ -48,10 +48,8 @@
         <ToggleButton layoutX="431.0" layoutY="0.0" mnemonicParsing="false" prefHeight="116.0" prefWidth="115.0" styleClass="pad-button" text="16" />
       </children>
     </AnchorPane>
-    <ToggleButton layoutX="75.0" layoutY="80.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="89.0" text="Phrase" />
-    <ToggleButton layoutX="175.0" layoutY="80.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="89.0" text="Patch" />
-    <Button id="machineViewButton" layoutX="274.0" layoutY="80.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="100.0" text="Machines" />
-    <AnchorPane id="functionButtonGroup" layoutX="650.0" layoutY="50.0" prefHeight="30.0">
+    <Button id="machineViewButton" layoutX="157.0" layoutY="80.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="82.0" text="Machines" />
+    <AnchorPane id="functionButtonGroup" layoutX="650.0" layoutY="50.0" prefHeight="30.0" visible="true">
       <children>
         <ToggleButton layoutX="0.0" layoutY="0.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="115.0" text="Pattern">
           <toggleGroup>
@@ -61,7 +59,7 @@
         <ToggleButton layoutX="144.0" layoutY="0.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="115.0" text="Assign" toggleGroup="$functionGroup" />
       </children>
     </AnchorPane>
-    <AnchorPane id="padSelectionOverlay" disable="false" layoutX="650.0" layoutY="116.0" prefHeight="550.0" prefWidth="546.0" visible="false">
+    <AnchorPane id="padSelectionOverlay" disable="false" layoutX="650.0" layoutY="116.0" prefHeight="550.0" prefWidth="546.0" visible="true">
       <children>
         <Button layoutX="0.0" layoutY="435.0" mnemonicParsing="false" prefHeight="115.0" prefWidth="115.0" text="1" />
         <Button layoutX="144.0" layoutY="435.0" mnemonicParsing="false" prefHeight="115.0" prefWidth="115.0" text="2" />
@@ -81,7 +79,7 @@
         <Button layoutX="431.0" layoutY="0.0" mnemonicParsing="false" prefHeight="115.0" prefWidth="115.0" text="16" />
       </children>
     </AnchorPane>
-    <ListView id="phraseList" layoutX="75.0" layoutY="119.0" prefHeight="403.0" prefWidth="336.0" />
+    <ListView id="phraseList" layoutX="75.0" layoutY="119.0" prefHeight="403.0" prefWidth="336.0" style="" />
     <HBox id="machineToggleButtons" layoutX="650.0" layoutY="679.0" prefHeight="37.0" prefWidth="547.0" spacing="10.0">
       <children>
         <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="-1.0" text="1" HBox.hgrow="ALWAYS">
@@ -105,6 +103,9 @@
         <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="-1.0" text="12" toggleGroup="$machineGroup" HBox.hgrow="ALWAYS" HBox.margin="$x1" />
       </children>
     </HBox>
+    <Pane id="padFocusOverlay" layoutX="1222.0" layoutY="28.0" prefHeight="22.0" prefWidth="30.0" style="-fx-border-color:#7BDA00;&#10;-fx-border-radius:4;&#10;-fx-border-width:2;" />
+    <ToggleButton id="playPauseButton" layoutX="75.0" layoutY="614.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="82.0" text="Play" />
+    <Button id="loadButton" layoutX="75.0" layoutY="80.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Load" />
   </children>
   <stylesheets>
     <URL value="@MainScreen.css" />

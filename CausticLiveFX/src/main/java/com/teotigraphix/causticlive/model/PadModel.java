@@ -8,10 +8,10 @@ import java.util.UUID;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.model.ModelBase;
+import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.PatternSequencerComponent;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
@@ -43,14 +43,14 @@ public class PadModel extends ModelBase implements IPadModel {
     // assignmentIndex
     //----------------------------------
 
-    private int assignmentIndex;
+    private int assignmentIndex = -1;
 
     @Override
     public void setAssignmentIndex(int value) {
         if (value == assignmentIndex)
             return;
         assignmentIndex = value;
-        trigger(new OnPadModelAssignmentIndexChange());
+        trigger(new OnPadModelAssignmentIndexChange(assignmentIndex));
     }
 
     @Override
@@ -59,13 +59,32 @@ public class PadModel extends ModelBase implements IPadModel {
     }
 
     @Override
-    public PadData getAssignmentData() {
+    public final PadData getSelectedAssignmentData() {
         int localIndex = getAssignmentIndex();
-        PadData data = getPadDataView().get(localIndex);
+        PadData data = getAssignmentDataAt(localIndex);
         return data;
     }
 
+    @Override
+    public final PadData getAssignmentDataAt(int localIndex) {
+        return getPadDataView().get(localIndex);
+    }
+
     public static class OnPadModelAssignmentIndexChange {
+
+        private int index;
+
+        public int getIndex() {
+            return index;
+        }
+
+        public OnPadModelAssignmentIndexChange(int index) {
+            this.index = index;
+        }
+
+        public boolean isNoSelection() {
+            return index == -1;
+        }
 
     }
 
@@ -99,17 +118,44 @@ public class PadModel extends ModelBase implements IPadModel {
         List<PadData> list = getPadDataView();
         PadData data = list.get(index);
         Tone tone = PadModelUtils.getTone(getController(), data);
+        if (tone == null) {
+            // the pattern phrase has not been assigned to the button
+            // XXX the buttons should be disabled, this shouldn't happen
+            return;
+        }
+
+        if (selected)
+            deselectOthersOfSameTone(data.getToneIndex(), data);
+
         PatternSequencerComponent component = tone.getComponent(PatternSequencerComponent.class);
         if (selected) {
-            data.state = PadDataState.SELECTED;
+            data.setState(PadDataState.SELECTED);
             component.setSelectedPattern(data.getBank(), data.getLocalIndex());
         } else {
-            data.state = PadDataState.IDLE;
+            data.setState(PadDataState.IDLE);
             component.setSelectedPattern(3, 15);
         }
         // this call always comes from a view so the UI is already updated.
 
         // need to create a way that updates the ui based on a load etc.
+    }
+
+    private void deselectOthersOfSameTone(int toneIndex, PadData exclude) {
+        for (PadData data : datas) {
+            if (data == exclude)
+                continue;
+
+            if (data.getToneIndex() == toneIndex)
+                deselect(data);
+        }
+    }
+
+    private void deselect(PadData data) {
+        data.setState(PadDataState.IDLE);
+        trigger(new OnPadModelPadDataDeselect(data));
+        //Tone tone = PadModelUtils.getTone(getController(), data);
+        //PatternSequencerComponent component = tone.getComponent(PatternSequencerComponent.class);
+        //component.setSelectedPattern(3, 15);
     }
 
     @Override
@@ -123,7 +169,7 @@ public class PadModel extends ModelBase implements IPadModel {
         setSelectedFunction(PadFunction.PATTERN);
         setSelectedBank(0);
 
-        getController().getSystemSequencer().play(SequencerMode.PATTERN);
+        //getController().getSystemSequencer().play(SequencerMode.PATTERN);
     }
 
     /**
@@ -133,7 +179,7 @@ public class PadModel extends ModelBase implements IPadModel {
     public List<PadData> getPadDataView() {
         List<PadData> result = new ArrayList<PadData>();
         for (PadData data : datas) {
-            if (data.bank == selectedBank)
+            if (data.getBank() == selectedBank)
                 result.add(data);
         }
         return result;
@@ -173,82 +219,33 @@ public class PadModel extends ModelBase implements IPadModel {
         }
     }
 
-    public class PadData {
-
-        private int index;
-
-        private int bank;
-
-        private int localIndex;
-
-        private int toneIndex = -1;
-
-        public final int getToneIndex() {
-            return toneIndex;
-        }
-
-        public final void setToneIndex(int toneIndex) {
-            this.toneIndex = toneIndex;
-            PadModel.this.trigger(new OnPadModelPadDataRefresh());
-        }
-
-        public final int getIndex() {
-            return index;
-        }
-
-        private UUID patchId;
-
-        private UUID phraseId;
-
-        public final int getBank() {
-            return bank;
-        }
-
-        public final int getLocalIndex() {
-            return localIndex;
-        }
-
-        public final PadDataState getState() {
-            return state;
-        }
-
-        private PadDataState state = PadDataState.IDLE;
-
-        public PadData(int index, int bank, int localIndex) {
-            this.index = index;
-            this.bank = bank;
-            this.localIndex = localIndex;
-        }
-
-        @Override
-        public String toString() {
-            return index + " " + bank + " " + localIndex;
-        }
-
-        public UUID getPhraseId() {
-            return phraseId;
-        }
-
-        public void setPhraseId(UUID phraseId) {
-            this.phraseId = phraseId;
-            updatePhrase(this, phraseId);
-        }
-
-        public UUID getPatchId() {
-            return patchId;
-        }
-
-        public void setPatchId(UUID patchId) {
-            this.patchId = patchId;
-        }
-    }
-
     public void updatePhrase(PadData data, UUID phraseId) {
         try {
             PadModelUtils.updatePhrase(getController(), data, phraseId);
         } catch (CausticException e) {
             e.printStackTrace();
         }
+        trigger(new OnPadModelPadDataRefresh());
+    }
+
+    @Override
+    public void setAssignmentToneIndex(int index) {
+        // use selected data
+        PadData data = getSelectedAssignmentData();
+        data.setToneIndex(index);
+        trigger(new OnPadModelPadDataRefresh());
+    }
+
+    @Override
+    public void setAssignmentPhraseId(UUID id) {
+        PadData data = getSelectedAssignmentData();
+
+        try {
+            PadModelUtils.updatePhrase(getController(), data, id);
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+
         trigger(new OnPadModelPadDataRefresh());
     }
 
