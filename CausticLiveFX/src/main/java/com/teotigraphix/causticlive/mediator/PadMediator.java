@@ -4,8 +4,6 @@ package com.teotigraphix.causticlive.mediator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.androidtransfuse.event.EventObserver;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -13,6 +11,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+
+import org.androidtransfuse.event.EventObserver;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -25,7 +25,6 @@ import com.teotigraphix.causticlive.model.PadModel.PadDataState;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.PatternUtils;
-import com.teotigraphix.caustk.core.components.PatternSequencerComponent;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.tone.Tone;
 
@@ -151,8 +150,6 @@ public class PadMediator extends DesktopMediatorBase {
     public void onRegister() {
         super.onRegister();
         CtkDebug.view("   Register: PadMediator");
-
-        padModel.setSelectedBank(0);
     }
 
     protected void updatePadView(OnPadModelSelectedBankChange object) {

@@ -23,11 +23,15 @@ public final class ApplicationConstants {
 
     //public static final String I18L_RESOURCES = "Bassline303Application.properties";
 
+    public static final String SCREEN_MACHINE_VIEW = "/com/teotigraphix/causticlive/view/MachineScreen.fxml";
+
+    public static final String SCREEN_MAIN_VIEW = "/com/teotigraphix/causticlive/view/MainScreeen.fxml";
+
     public static final String PANE_ROOT = "/com/teotigraphix/causticlive/view/RootLayout.fxml";
 
     public static final String IMAGE_BACKGROUND = "/images/CausticLiveBackground.png";
-    
+
     //public static final String ID_STOP_BUTTON = "stop-button";
-    
+
     //public static final String ID_PLAY_PAUSE_BUTTON = "play-pause-button";
 }

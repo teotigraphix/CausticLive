@@ -2,9 +2,7 @@
 package com.teotigraphix.causticlive.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import com.google.inject.Inject;
@@ -13,15 +11,107 @@ import com.teotigraphix.caustic.model.ModelBase;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.PatternSequencerComponent;
-import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.library.Library;
-import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
 public class PadModel extends ModelBase {
+
+    @Inject
+    SoundModel soundModel;
+
+    public enum PadFunction {
+        PATTERN(0), ASSIGN(1);
+
+        private int value;
+
+        public final int getValue() {
+            return value;
+        }
+
+        PadFunction(int value) {
+            this.value = value;
+        }
+
+        public static PadFunction fromInt(int value) {
+            for (PadFunction function : values()) {
+                if (function.getValue() == value)
+                    return function;
+            }
+            return null;
+        }
+    }
+
+    //----------------------------------
+    // selectedFunction
+    //----------------------------------
+
+    private PadFunction selectedFunction;
+
+    public PadFunction getSelectedFunction() {
+        return selectedFunction;
+    }
+
+    /**
+     * @see OnPadModelSelectedFunctionChange
+     * @param value
+     */
+    public void setSelectedFunction(PadFunction value) {
+        if (value == selectedFunction)
+            return;
+        selectedFunction = value;
+        trigger(new OnPadModelSelectedFunctionChange());
+    }
+
+    public static class OnPadModelSelectedFunctionChange {
+
+    }
+
+    //----------------------------------
+    // assignmentIndex
+    //----------------------------------
+
+    private int assignmentIndex;
+
+    /**
+     * Sets the current assignment index when in {@link PadFunction#ASSIGN}
+     * mode.
+     * 
+     * @param value
+     */
+    public void setAssignmentIndex(int value) {
+        if (value == assignmentIndex)
+            return;
+        assignmentIndex = value;
+        trigger(new OnPadModelAssignmentIndexChange());
+    }
+
+    /**
+     * The assignment index is used in conjunction with the
+     * {@link #getSelectedBank()} index to locate the current {@link PadData} to
+     * be edited.
+     * 
+     * @see #getSelectedBank()
+     */
+    public int getAssignmentIndex() {
+        return assignmentIndex;
+    }
+
+    /**
+     * Returns the current {@link PadData} using the
+     * {@link #getAssignmentIndex()} and {@link #getSelectedBank()}.
+     */
+    public PadData getAssignmentData() {
+        int localIndex = getAssignmentIndex();
+        PadData data = getPadDataView().get(localIndex);
+        return data;
+    }
+
+    public static class OnPadModelAssignmentIndexChange {
+
+    }
 
     //----------------------------------
     // selectedBank
@@ -42,8 +132,7 @@ public class PadModel extends ModelBase {
             return;
         CtkDebug.model("Set selectedBank " + value);
         selectedBank = value;
-        getController().getDispatcher().trigger(
-                new OnPadModelSelectedBankChange(selectedBank, getPadDataView()));
+        trigger(new OnPadModelSelectedBankChange(selectedBank, getPadDataView()));
     }
 
     @Inject
@@ -89,68 +178,71 @@ public class PadModel extends ModelBase {
     protected void onShow() {
         super.onShow();
 
-        // assign patches and phrases to pad data
-        Library library = getController().getLibraryManager().getSelectedLibrary();
-        List<LibraryPatch> patches = library.getPatches();
-        List<LibraryPhrase> phrases = library.getPhrases();
+        setSelectedFunction(PadFunction.PATTERN);
+        setSelectedBank(0);
 
-        Random rand = new Random();
-        int min = 0;
-        int max = getController().getSoundSource().getToneCount();
-        Collection<Tone> tones = getController().getSoundSource().getTones();
-        List<Tone> list = new ArrayList<>(tones);
-
-        // assign tones
-        for (PadData data : datas) {
-            // nextInt is normally exclusive of the top value,
-            // so add 1 to make it inclusive
-            int randomNum = rand.nextInt(max - min) + min;
-            CtkDebug.err(randomNum + "");
-            data.setToneIndex(list.get(randomNum).getIndex());
-        }
-
-        rand = new Random();
-        min = 0;
-        max = phrases.size();
-
-        // assign patches
-        for (PadData data : datas) {
-            // nextInt is normally exclusive of the top value,
-            // so add 1 to make it inclusive
-            int randomNum = rand.nextInt(max - min) + min;
-            CtkDebug.err(randomNum + "");
-            data.setPhraseId(phrases.get(randomNum).getId());
-        }
-
-        // init the patterns in the tones
-        // assign patches
-        for (PadData data : datas) {
-            Tone tone = getController().getSoundSource().getTone(data.getToneIndex());
-            PatternSequencerComponent sequencer = tone
-                    .getComponent(PatternSequencerComponent.class);
-            LibraryPhrase phrase = getController().getLibraryManager().getSelectedLibrary()
-                    .findPhraseById(data.getPhraseId());
-            if(data.getBank() == 3 && data.getLocalIndex() == 15)
-                continue;
-            
-            sequencer.setSelectedPattern(data.getBank(), data.getLocalIndex());
-            sequencer.initializeData(phrase.getNoteData());
-
-            trigger(new OnPadModelPadAssign(data));
-        }
-        
-        for (Tone tone : list) {
-            PatternSequencerComponent sequencer = tone
-                    .getComponent(PatternSequencerComponent.class);
-            sequencer.setSelectedPattern(3, 15);
-            SynthComponent synthComponent = tone.getComponent(SynthComponent.class);
-            
-            List<LibraryPatch> patchList = library.findPatchByTag(tone.getName());
-            
-            String path = library.getPresetFile(patchList.get(0).getPresetFile()).getPath();
-            synthComponent.loadPreset(path);
-        }
-        
+        //        // assign patches and phrases to pad data
+        //        Library library = getController().getLibraryManager().getSelectedLibrary();
+        //        List<LibraryPatch> patches = library.getPatches();
+        //        List<LibraryPhrase> phrases = library.getPhrases();
+        //
+        //        Random rand = new Random();
+        //        int min = 0;
+        //        int max = getController().getSoundSource().getToneCount();
+        //        Collection<Tone> tones = getController().getSoundSource().getTones();
+        //        List<Tone> list = new ArrayList<>(tones);
+        //
+        //        // assign tones
+        //        for (PadData data : datas) {
+        //            // nextInt is normally exclusive of the top value,
+        //            // so add 1 to make it inclusive
+        //            int randomNum = rand.nextInt(max - min) + min;
+        //            CtkDebug.err(randomNum + "");
+        //            data.setToneIndex(list.get(randomNum).getIndex());
+        //        }
+        //
+        //        rand = new Random();
+        //        min = 0;
+        //        max = phrases.size();
+        //
+        //        // assign patches
+        //        for (PadData data : datas) {
+        //            // nextInt is normally exclusive of the top value,
+        //            // so add 1 to make it inclusive
+        //            int randomNum = rand.nextInt(max - min) + min;
+        //            CtkDebug.err(randomNum + "");
+        //            data.setPhraseId(phrases.get(randomNum).getId());
+        //        }
+        //
+        //        // init the patterns in the tones
+        //        // assign patches
+        //        for (PadData data : datas) {
+        //            Tone tone = getController().getSoundSource().getTone(data.getToneIndex());
+        //            PatternSequencerComponent sequencer = tone
+        //                    .getComponent(PatternSequencerComponent.class);
+        //            LibraryPhrase phrase = getController().getLibraryManager().getSelectedLibrary()
+        //                    .findPhraseById(data.getPhraseId());
+        //            if(data.getBank() == 3 && data.getLocalIndex() == 15)
+        //                continue;
+        //            
+        //            sequencer.setSelectedPattern(data.getBank(), data.getLocalIndex());
+        //            sequencer.initializeData(phrase.getNoteData());
+        //
+        //            trigger(new OnPadModelPadAssign(data));
+        //        }
+        //        
+        //        for (Tone tone : list) {
+        //            PatternSequencerComponent sequencer = tone
+        //                    .getComponent(PatternSequencerComponent.class);
+        //            sequencer.setSelectedPattern(3, 15);
+        //            SynthComponent synthComponent = tone.getComponent(SynthComponent.class);
+        //            
+        //            List<LibraryPatch> patchList = library.findPatchByTag(tone.getName());
+        //            
+        //            String path = library.getPresetFile(patchList.get(0).getPresetFile()).getPath();
+        //            synthComponent.loadPreset(path);
+        //        }
+        //        
         getController().getSystemSequencer().play(SequencerMode.PATTERN);
     }
 
@@ -200,7 +292,7 @@ public class PadModel extends ModelBase {
         }
     }
 
-    public static class PadData {
+    public class PadData {
 
         private int index;
 
@@ -208,7 +300,7 @@ public class PadModel extends ModelBase {
 
         private int localIndex;
 
-        private int toneIndex;
+        private int toneIndex = -1;
 
         public final int getToneIndex() {
             return toneIndex;
@@ -216,6 +308,7 @@ public class PadModel extends ModelBase {
 
         public final void setToneIndex(int toneIndex) {
             this.toneIndex = toneIndex;
+            PadModel.this.trigger(new OnPadModelPadDataRefresh());
         }
 
         public final int getIndex() {
@@ -257,6 +350,7 @@ public class PadModel extends ModelBase {
 
         public void setPhraseId(UUID phraseId) {
             this.phraseId = phraseId;
+            updatePhrase(this, phraseId);
         }
 
         public UUID getPatchId() {
@@ -270,6 +364,10 @@ public class PadModel extends ModelBase {
 
     public enum PadDataState {
         IDLE, SELECTED, QUEUED
+    }
+
+    public static class OnPadModelPadDataRefresh {
+
     }
 
     public static class OnPadModelSelectedBankChange {
@@ -291,4 +389,26 @@ public class PadModel extends ModelBase {
         }
 
     }
+
+    public void updatePhrase(PadData data, UUID phraseId) {
+        Library library = soundModel.getLibrary();
+        LibraryPhrase phrase = library.findPhraseById(phraseId);
+
+        phrase.getToneType();
+
+        Tone tone = getController().getSoundSource().getTone(data.getToneIndex());
+        if (tone == null)
+            return; // XXX HACK
+        PatternSequencerComponent sequencer = tone.getComponent(PatternSequencerComponent.class);
+        if (data.getBank() == 3 && data.getLocalIndex() == 15)
+            return;
+
+        sequencer.setSelectedPattern(data.getBank(), data.getLocalIndex());
+        sequencer.clearIndex(data.getLocalIndex());
+        sequencer.setLength(phrase.getLength());
+        sequencer.initializeData(phrase.getNoteData());
+
+        trigger(new OnPadModelPadDataRefresh());
+    }
+
 }

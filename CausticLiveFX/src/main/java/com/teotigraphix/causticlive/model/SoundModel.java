@@ -3,6 +3,8 @@ package com.teotigraphix.causticlive.model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -10,12 +12,18 @@ import com.teotigraphix.caustic.model.ModelBase;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
+import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.library.Library;
+import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
+import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
 public class SoundModel extends ModelBase {
+
+    public final Library getLibrary() {
+        return getController().getLibraryManager().getSelectedLibrary();
+    }
 
     @Inject
     public SoundModel(ICaustkApplicationProvider provider) {
@@ -29,15 +37,10 @@ public class SoundModel extends ModelBase {
         Library library = null;
         try {
             library = getController().getLibraryManager().createLibrary("Foo");
-            File causticFile = new File("C:\\Users\\Work\\Documents\\caustic\\songs\\DRIVE.caustic");
+            File causticFile = new File("C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
             getController().getLibraryManager().importSong(library, causticFile);
             getController().getLibraryManager().setSelectedLibrary(library);
             getController().getLibraryManager().saveLibrary(library);
-
-            // Load the scene to create the machines
-            LibraryScene libraryScene = library.getScenes().get(1);
-            getController().getSoundSource().createScene(libraryScene);
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (CausticException e) {
@@ -52,4 +55,134 @@ public class SoundModel extends ModelBase {
         //        }
         //        getController().getSystemSequencer().play(SequencerMode.PATTERN);
     }
+
+    public void loadScene(LibraryScene libraryScene) {
+        // Load the scene to create the machines
+        getController().getSoundSource().clearAndReset();
+
+        toneMap.clear();
+
+        try {
+            getController().getSoundSource().createScene(libraryScene);
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+
+        for (Tone tone : getController().getSoundSource().getTones()) {
+            ToneData data = new ToneData(tone);
+
+            toneMap.put(tone.getIndex(), data);
+        }
+
+        trigger(new OnSoundModelSceneLoad());
+
+        setSelectedTone(-1);
+    }
+
+    /**
+     * @see SoundModel#loadScene(LibraryScene)
+     * @see SoundModel#getDispatcher()
+     */
+    public static class OnSoundModelSceneLoad {
+
+    }
+
+    private int selectedTone;
+
+    public final int getSelectedTone() {
+        return selectedTone;
+    }
+
+    public ToneData getSelectedToneData() {
+        return toneMap.get(selectedTone);
+    }
+    
+    /**
+     * @see OnSoundModelSelectedToneChange
+     * @param value
+     */
+    public final void setSelectedTone(int value) {
+        // clear the selection
+        if (value == -1) {
+            selectedTone = -1;
+            trigger(new OnSoundModelSelectedToneChange(null, null));
+            return;
+        }
+        if (value == selectedTone)
+            return;
+        ToneData oldTone = toneMap.get(selectedTone);
+        selectedTone = value;
+        ToneData tone = toneMap.get(selectedTone);
+        trigger(new OnSoundModelSelectedToneChange(tone, oldTone));
+    }
+
+    private Map<Integer, ToneData> toneMap = new HashMap<Integer, ToneData>();
+
+    public static class ToneData {
+
+        private Tone tone;
+
+        public Tone getTone() {
+            return tone;
+        }
+
+        public final int getIndex() {
+            return tone.getIndex();
+        }
+
+        private LibraryPatch libraryPatch;
+
+        public final LibraryPatch getLibraryPatch() {
+            return libraryPatch;
+        }
+
+        void setLibraryPatch(LibraryPatch value) {
+            libraryPatch = value;
+        }
+
+        public ToneData(Tone tone) {
+            this.tone = tone;
+        }
+    }
+
+    public static class OnSoundModelSelectedToneChange {
+
+        private ToneData tone;
+
+        private ToneData oldTone;
+
+        public final ToneData getTone() {
+            return tone;
+        }
+
+        public final ToneData getOldTone() {
+            return oldTone;
+        }
+
+        public OnSoundModelSelectedToneChange(ToneData tone, ToneData oldTone) {
+            this.tone = tone;
+            this.oldTone = oldTone;
+        }
+
+    }
+
+    public boolean setPatch(ToneData data, LibraryPatch patch) {
+        if (data == null)
+            return false;
+
+        Tone tone = data.getTone();
+
+        if (tone.getToneType() != patch.getToneType())
+            return false;
+
+        data.setLibraryPatch(patch);
+
+        SynthComponent component = tone.getComponent(SynthComponent.class);
+        File presetFile = patch.getPresetFile();
+        File fullPresetFile = getLibrary().getPresetFile(presetFile);
+        component.loadPreset(fullPresetFile.getPath());
+
+        return true;
+    }
+
 }

@@ -31,6 +31,8 @@ import com.teotigraphix.caustic.model.ApplicationModel;
 import com.teotigraphix.caustic.model.IApplicationModel;
 import com.teotigraphix.caustic.model.IStageModel;
 import com.teotigraphix.caustic.model.StageModel;
+import com.teotigraphix.caustic.screen.IScreenManager;
+import com.teotigraphix.caustic.screen.ScreenManager;
 import com.teotigraphix.causticlive.CausticLiveApplication;
 import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.application.ICaustkConfiguration;
@@ -42,7 +44,9 @@ public class ApplicationModule extends AbstractModule {
         // Core 
         bind(IApplicationModel.class).to(ApplicationModel.class).in(Singleton.class);
         bind(IApplicationController.class).to(ApplicationController.class).in(Singleton.class);
-
+        
+        bind(IScreenManager.class).to(ScreenManager.class).in(Singleton.class);
+        
         // JavaFX
         bind(IStageModel.class).to(StageModel.class).in(Singleton.class);
 

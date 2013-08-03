@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <!-- TODO Add Nodes -->
+  <children>
+    <Pane prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <Button id="backButton" layoutX="1156.0" layoutY="14.0" mnemonicParsing="false" prefHeight="45.9609375" prefWidth="110.0" text="Back" />
+        <AnchorPane id="machineButtonPane" layoutX="399.0" layoutY="224.0" opacity="1.0" prefHeight="353.0">
+          <children>
+            <ToggleButton layoutX="0.0" layoutY="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="1">
+              <toggleGroup>
+                <ToggleGroup fx:id="machineGroup" />
+              </toggleGroup>
+            </ToggleButton>
+            <ToggleButton layoutX="129.0" layoutY="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="2" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="255.0" layoutY="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="3" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="383.0" layoutY="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="4" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="0.0" layoutY="126.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="5" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="129.0" layoutY="126.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="6" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="255.0" layoutY="126.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="7" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="383.0" layoutY="126.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="8" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="0.0" layoutY="252.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="9" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="129.0" layoutY="252.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="10" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="255.0" layoutY="252.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="11" toggleGroup="$machineGroup" />
+            <ToggleButton layoutX="383.0" layoutY="252.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" text="12" toggleGroup="$machineGroup" />
+          </children>
+          <effect>
+            <DropShadow>
+              <input>
+                <Reflection fraction="0.5198412698412699" topOpacity="0.40476190476190477" />
+              </input>
+            </DropShadow>
+          </effect>
+        </AnchorPane>
+        <ListView id="sceneList" layoutX="68.0" layoutY="137.0" prefHeight="353.0" prefWidth="230.0" />
+        <ListView id="patchList" layoutX="971.0" layoutY="137.0" prefHeight="353.0" prefWidth="230.0" />
+        <Label layoutX="68.0" layoutY="110.0" style="-fx-text-fill:#FFFFFF;&#10;-fx-font-size:20;&#10;-fx-font-weight:bold;" text="Scenes" />
+        <Label layoutX="971.0" layoutY="110.0" style="-fx-text-fill:#FFFFFF;&#10;-fx-font-size:20;&#10;-fx-font-weight:bold;" text="Patches" />
+        <Button id="loadSceneButton" layoutX="225.0" layoutY="111.0" mnemonicParsing="false" prefWidth="73.0" text="Load" />
+      </children>
+    </Pane>
+  </children>
+</AnchorPane>
