@@ -8,7 +8,6 @@ import java.util.UUID;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.model.ModelBase;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.PatternSequencerComponent;
@@ -90,9 +89,8 @@ public class PadModel extends ModelBase implements IPadModel {
         trigger(new OnPadModelSelectedBankChange(selectedBank, getPadDataView()));
     }
 
-    @Inject
-    public PadModel(ICaustkApplicationProvider provider) {
-        super(provider);
+    public PadModel() {
+        super();
     }
 
     @Override
@@ -116,14 +114,11 @@ public class PadModel extends ModelBase implements IPadModel {
 
     @Override
     public void onRegister() {
-        super.onRegister();
-
         createPadData();
     }
 
     @Override
-    protected void onShow() {
-        super.onShow();
+    public void onShow() {
 
         setSelectedFunction(PadFunction.PATTERN);
         setSelectedBank(0);
@@ -256,6 +251,5 @@ public class PadModel extends ModelBase implements IPadModel {
         }
         trigger(new OnPadModelPadDataRefresh());
     }
-
 
 }

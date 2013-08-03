@@ -6,12 +6,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.model.ModelBase;
-import com.teotigraphix.caustk.application.ICaustkApplicationProvider;
 import com.teotigraphix.caustk.core.CausticException;
-import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
@@ -26,19 +23,17 @@ public class SoundModel extends ModelBase implements ISoundModel {
         return getController().getLibraryManager().getSelectedLibrary();
     }
 
-    @Inject
-    public SoundModel(ICaustkApplicationProvider provider) {
-        super(provider);
+    public SoundModel() {
+        super();
     }
 
     @Override
     public void onRegister() {
-        super.onRegister();
-        CtkDebug.model(" Register: SoundModel");
         Library library = null;
         try {
             library = getController().getLibraryManager().createLibrary("Foo");
-            File causticFile = new File("C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
+            File causticFile = new File(
+                    "C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
             getController().getLibraryManager().importSong(library, causticFile);
             getController().getLibraryManager().setSelectedLibrary(library);
             getController().getLibraryManager().saveLibrary(library);
@@ -55,6 +50,12 @@ public class SoundModel extends ModelBase implements ISoundModel {
         //            e.printStackTrace();
         //        }
         //        getController().getSystemSequencer().play(SequencerMode.PATTERN);
+    }
+
+    @Override
+    public void onShow() {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -100,7 +101,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
     public ToneData getSelectedToneData() {
         return toneMap.get(selectedTone);
     }
-    
+
     /**
      * @see OnSoundModelSelectedToneChange
      * @param value
