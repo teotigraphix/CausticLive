@@ -23,11 +23,11 @@ import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
 import com.teotigraphix.causticlive.model.ISoundModel;
-import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelLibraryImportComplete;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
+import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
@@ -170,10 +170,18 @@ public class MachineScreenMediator extends DesktopMediatorBase {
                 });
 
         // OnSoundModelLibraryImportComplete
-        soundModel.getDispatcher().register(OnSoundModelLibraryImportComplete.class,
-                new EventObserver<OnSoundModelLibraryImportComplete>() {
+        //        soundModel.getDispatcher().register(OnSoundModelLibraryImportComplete.class,
+        //                new EventObserver<OnSoundModelLibraryImportComplete>() {
+        //                    @Override
+        //                    public void trigger(OnSoundModelLibraryImportComplete object) {
+        //                        fillLists();
+        //                    }
+        //                });
+
+        getController().getDispatcher().register(OnLibraryManagerSelectedLibraryChange.class,
+                new EventObserver<OnLibraryManagerSelectedLibraryChange>() {
                     @Override
-                    public void trigger(OnSoundModelLibraryImportComplete object) {
+                    public void trigger(OnLibraryManagerSelectedLibraryChange object) {
                         fillLists();
                     }
                 });

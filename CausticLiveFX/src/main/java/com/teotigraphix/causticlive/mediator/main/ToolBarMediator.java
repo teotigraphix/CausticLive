@@ -2,7 +2,6 @@
 package com.teotigraphix.causticlive.mediator.main;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -17,7 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 
 import org.androidtransfuse.event.EventObserver;
 
@@ -31,11 +30,10 @@ import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelLibraryImportC
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
 import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
-import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
-import com.teotigraphix.caustk.utils.RuntimeUtils;
+import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 
 public class ToolBarMediator extends DesktopMediatorBase {
 
@@ -108,21 +106,25 @@ public class ToolBarMediator extends DesktopMediatorBase {
 
     protected void onLoadClick() {
         System.out.println("onLoadClick");
-        FileChooser chooser = FileUtil.createDefaultFileChooser(RuntimeUtils
-                .getCausticSongsDirectory().getAbsolutePath(), "Caustic song file", "*.caustic");
-        File causticFile = chooser.showOpenDialog(null);
+        //        FileChooser chooser = FileUtil.createDefaultFileChooser(RuntimeUtils
+        //                .getCausticSongsDirectory().getAbsolutePath(), "Caustic song file", "*.caustic");
+        //        File causticFile = chooser.showOpenDialog(null);
+        //
+        //        // if no current library open error dialog
+        //        Library library = getController().getLibraryManager().getSelectedLibrary();
+        //        try {
+        //            getController().getLibraryManager().importSong(library, causticFile);
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        } catch (CausticException e) {
+        //            e.printStackTrace();
+        //        }
 
-        // if no current library open error dialog
-        Library library = getController().getLibraryManager().getSelectedLibrary();
-        try {
-            getController().getLibraryManager().importSong(library, causticFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CausticException e) {
-            e.printStackTrace();
-        }
-
-        soundModel.getDispatcher().trigger(new OnSoundModelLibraryImportComplete());
+        DirectoryChooser chooser = FileUtil.createDefaultDirectoryChooser(null,
+                "Choose library directory");
+        File file = chooser.showDialog(null);
+        Library library = getController().getLibraryManager().loadLibrary(file.getName());
+        getController().getLibraryManager().setSelectedLibrary(library);
     }
 
     @Override
@@ -169,6 +171,14 @@ public class ToolBarMediator extends DesktopMediatorBase {
                 new EventObserver<OnSoundModelLibraryImportComplete>() {
                     @Override
                     public void trigger(OnSoundModelLibraryImportComplete object) {
+                        fillPhraseList();
+                    }
+                });
+
+        getController().getDispatcher().register(OnLibraryManagerSelectedLibraryChange.class,
+                new EventObserver<OnLibraryManagerSelectedLibraryChange>() {
+                    @Override
+                    public void trigger(OnLibraryManagerSelectedLibraryChange object) {
                         fillPhraseList();
                     }
                 });
