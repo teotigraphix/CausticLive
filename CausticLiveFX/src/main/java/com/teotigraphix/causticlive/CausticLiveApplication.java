@@ -23,48 +23,19 @@ import java.util.List;
 
 import javafx.application.Application;
 
-import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.teotigraphix.caustic.application.JavaFXApplication;
-import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenView;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
 import com.teotigraphix.causticlive.config.ApplicationModule;
-import com.teotigraphix.causticlive.model.PadModel;
-import com.teotigraphix.causticlive.model.SoundModel;
 import com.teotigraphix.causticlive.sceen.MachineScreenView;
 import com.teotigraphix.causticlive.sceen.MainScreenView;
 
 public class CausticLiveApplication extends JavaFXApplication {
 
-    //@Inject
-    //MainScreenView mainScreenView;
-
-    //@Inject
-    //BackgroundThemeMediator backgroundThemeMediator;
-
-    //@Inject
-    //PadMediator padMediator;
-
-    //@Inject
-    //LibraryItemListMediator libraryItemListMediator;
-
-    @Inject
-    SoundModel soundModel;
-
-    @Inject
-    PadModel padModel;
-
     @Override
     protected String getRootPane() {
         return ApplicationConstants.PANE_ROOT;
-    }
-
-    @Override
-    protected void initMediators(List<DesktopMediatorBase> mediators) {
-        //mediators.add(backgroundThemeMediator);
-        //mediators.add(padMediator);
-        //mediators.add(libraryItemListMediator);
     }
 
     @Override
