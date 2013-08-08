@@ -123,8 +123,10 @@ public class ToolBarMediator extends DesktopMediatorBase {
         DirectoryChooser chooser = FileUtil.createDefaultDirectoryChooser(null,
                 "Choose library directory");
         File file = chooser.showDialog(null);
-        Library library = getController().getLibraryManager().loadLibrary(file.getName());
-        getController().getLibraryManager().setSelectedLibrary(library);
+        // check for .ctk file, validate!
+        Library library = getController().getLibraryManager().loadLibrary(file);
+        if (library != null)
+            getController().getLibraryManager().setSelectedLibrary(library);
     }
 
     @Override
@@ -144,6 +146,8 @@ public class ToolBarMediator extends DesktopMediatorBase {
 
     private void fillPhraseList() {
         Library library = getController().getLibraryManager().getSelectedLibrary();
+        if (library == null)
+            return;
         List<LibraryPhrase> phrases = library.getPhrases();
         ObservableList<LibraryPhrase> items1 = FXCollections.observableArrayList(phrases);
         phraseList.setItems(items1);

@@ -33,6 +33,7 @@ import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.PatternUtils;
+import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.tone.Tone;
 
@@ -261,8 +262,11 @@ public class PadMediator extends DesktopMediatorBase {
     }
 
     private String getButtonText(PadData data) {
-        LibraryPhrase phrase = getController().getLibraryManager().getSelectedLibrary()
-                .findPhraseById(data.getPhraseId());
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+        if (library == null)
+            return "not loaded";
+
+        LibraryPhrase phrase = library.findPhraseById(data.getPhraseId());
         //        if (phrase == null)
         Tone tone = getController().getSoundSource().getTone(data.getToneIndex());
         if (tone == null)

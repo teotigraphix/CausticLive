@@ -189,7 +189,9 @@ public class MachineScreenMediator extends DesktopMediatorBase {
 
     protected void fillLists() {
         Library library = getController().getLibraryManager().getSelectedLibrary();
-
+        if (library == null)
+            return;
+        
         List<LibraryScene> phrases = library.getScenes();
         ObservableList<LibraryScene> items1 = FXCollections.observableArrayList(phrases);
         sceneList.setItems(items1);
