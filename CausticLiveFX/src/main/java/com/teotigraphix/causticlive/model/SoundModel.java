@@ -2,7 +2,6 @@
 package com.teotigraphix.causticlive.model;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,19 +29,19 @@ public class SoundModel extends ModelBase implements ISoundModel {
     @Override
     public void onRegister() {
         Library library = null;
-//        try {
-//            library = getController().getLibraryManager().createLibrary("Foo");
-////            File causticFile = new File(
-////                    "C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
-////            getController().getLibraryManager().importSong(library, causticFile);
-//            getController().getLibraryManager().setSelectedLibrary(library);
-//            getController().getLibraryManager().saveLibrary(library);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        } catch (CausticException e) {
-//            e.printStackTrace();
-//        }
+        //        try {
+        //            library = getController().getLibraryManager().createLibrary("Foo");
+        ////            File causticFile = new File(
+        ////                    "C:\\Users\\Work\\Documents\\caustic\\songs\\HARDDESERT1.caustic");
+        ////            getController().getLibraryManager().importSong(library, causticFile);
+        //            getController().getLibraryManager().setSelectedLibrary(library);
+        //            getController().getLibraryManager().saveLibrary(library);
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
+        //        } catch (CausticException e) {
+        //            e.printStackTrace();
+        //        }
 
         //        File causticFile = new File("C:\\Users\\Work\\Documents\\caustic\\songs\\ARPTEST1.caustic");
         //        try {

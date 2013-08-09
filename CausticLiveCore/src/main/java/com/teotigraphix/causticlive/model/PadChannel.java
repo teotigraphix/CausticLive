@@ -4,8 +4,8 @@ package com.teotigraphix.causticlive.model;
 import java.util.UUID;
 
 import com.teotigraphix.caustk.controller.ICaustkController;
-import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.caustk.sequencer.ChannelPhrase;
 import com.teotigraphix.caustk.service.ISerialize;
 import com.teotigraphix.caustk.tone.Tone;
 
@@ -53,7 +53,7 @@ public class PadChannel implements ISerialize {
     //----------------------------------
     // bankIndex
     //----------------------------------
-    
+
     /**
      * Returns the pattern sequencer bank index this channel is assigned to.
      */
@@ -64,7 +64,7 @@ public class PadChannel implements ISerialize {
     //----------------------------------
     // patternIndex
     //----------------------------------
-    
+
     /**
      * Returns the pattern sequencer pattern index this channel is assigned to.
      */
@@ -102,20 +102,20 @@ public class PadChannel implements ISerialize {
     // libraryId
     //----------------------------------
 
-    private UUID libraryId;
+    private UUID ownerLibraryId;
 
-    public UUID getLibraryId() {
-        return libraryId;
+    public UUID getOwnerLibraryId() {
+        return ownerLibraryId;
     }
 
     //----------------------------------
     // phraseId
     //----------------------------------
 
-    private UUID phraseId;
+    private UUID ownerPhraseId;
 
-    public UUID getPhraseId() {
-        return phraseId;
+    public UUID getOwnerPhraseId() {
+        return ownerPhraseId;
     }
 
     private ChannelPhrase channelPhrase;
@@ -149,17 +149,44 @@ public class PadChannel implements ISerialize {
         return controller.getSoundSource().getTone(index);
     }
 
-    public void setPhrase(Library library, LibraryPhrase phrase) {
+    public void assignPhrase(LibraryPhrase phrase) {
+        if (phrase == null) {
+            clearPhrase();
+            return;
+        }
         // save original the libraryId and phraseId if ever this
         // channel wants to try and reset its phrase data
         // but we copy the whole thing so there is no dependencies
         // between this project and library since they could get disconnected
-        libraryId = library.getId();
-        phraseId = phrase.getId();
-        ChannelPhrase newPhrase = controller.getSerializeService()
-                .copy(phrase, ChannelPhrase.class);
+        ownerLibraryId = phrase.getLibrary().getId();
+        ownerPhraseId = phrase.getId();
+        LibraryPhrase newPhrase = controller.getSerializeService()
+                .copy(phrase, LibraryPhrase.class);
+        
+        // update the decoration to hold our position
+        // the original ID from the library can always get the original bank/pattern locations
         newPhrase.setId(UUID.randomUUID());
-        channelPhrase = newPhrase;
+        newPhrase.setBankIndex(getBankIndex());
+        newPhrase.setPatternIndex(getPatternIndex());
+        
+        channelPhrase = new ChannelPhrase(newPhrase);
+        
+        String data = channelPhrase.getNoteData();
+        int oldBank = getTone().getPatternSequencer().getSelectedBank();
+        int oldPattern = getTone().getPatternSequencer().getSelectedIndex();
+        getTone().getPatternSequencer().setSelectedPattern(getBankIndex(), getPatternIndex());
+        getTone().getPatternSequencer().initializeData(data);
+        getTone().getPatternSequencer().setSelectedPattern(oldBank, oldPattern);
+    }
+
+    private void clearPhrase() {
+        ownerLibraryId = null;
+        ownerPhraseId = null;
+        if (channelPhrase != null) {
+            // remove note data from machines pattern sequencer
+            getTone().getPatternSequencer().clearIndex(getBankIndex(), getPatternIndex());
+        }
+        channelPhrase = null;
     }
 
 }

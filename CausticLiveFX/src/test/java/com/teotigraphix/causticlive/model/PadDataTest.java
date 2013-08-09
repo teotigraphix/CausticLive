@@ -12,6 +12,10 @@ import org.junit.Test;
 import com.teotigraphix.caustk.CaustkTestBase;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.Library;
+import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
+import com.teotigraphix.caustk.sequencer.Track;
+import com.teotigraphix.caustk.sequencer.TrackSong;
 import com.teotigraphix.caustk.sound.ISoundSource;
 import com.teotigraphix.caustk.tone.BeatboxTone;
 import com.teotigraphix.caustk.tone.ModularTone;
@@ -51,7 +55,7 @@ public class PadDataTest extends CaustkTestBase {
         map = new PadMap(controller);
         map.initialize(4, 16);
 
-        File libraryFile = new File("src/test/resources/unit_test/libraries/PadDataTest");
+        File libraryFile = new File("src/test/resources/libraries/PadDataTest");
         library = controller.getLibraryManager().loadLibrary(libraryFile);
 
     }
@@ -62,30 +66,50 @@ public class PadDataTest extends CaustkTestBase {
     }
 
     @Test
-    public void test_init() {
+    public void test_setPhrase() throws IOException, CausticException {
+        LibraryPhrase libraryPhrase = library.getPhrases().get(0);
+        PadData pad = map.getPad(3, 4);
+        // get the channel for the PadSynth
+        PadChannel channel = pad.getChannel(track13.getIndex());
+
+        channel.assignPhrase(libraryPhrase);
+
+        TrackSong song = controller.getSongManager().create("foo");
+        song.setNumTracks(14);
+        Track track = song.getTrack(13);
+        track.addPhrase(10, channel.getChannelPhrase());
+
+        // assert the trackItemId is the same as the channel phraseId
+        assertEquals(track.getTrackItem(0).getPhraseId(), channel.getChannelPhrase().getId());
+
+        String prettyString1 = controller.getSerializeService().toPrettyString(pad);
+        String prettyString2 = controller.getSerializeService().toPrettyString(song);
+
+        controller.getSystemSequencer().play(SequencerMode.SONG);
+    }
+
+    @Test
+    public void test_getChannel() {
 
         PadData pad = map.getPad(3, 4);
         // get the channel for the PadSynth
         PadChannel channel = pad.getChannel(track13.getIndex());
-        
+
         assertSame(track13, channel.getTone());
         assertEquals(3, channel.getBankIndex());
         assertEquals(4, channel.getPatternIndex());
         assertEquals(13, channel.getIndex());
 
-        
         ///--------------------------
-        
-        channel.setPhrase(library, library.getPhrases().get(0));
-        
+
         String string = controller.getSerializeService().toPrettyString(map);
 
         PadMap map2 = controller.getSerializeService().fromString(string, PadMap.class);
-        String string2 = controller.getSerializeService().toPrettyString(map);
+        String string2 = controller.getSerializeService().toPrettyString(map2);
         assertEquals(string, string2);
-        
+
         PadChannel channel2 = map2.getPad(0, 0).getChannel(13);
-        
+
         assertSame(track13, channel2.getTone());
     }
 }
