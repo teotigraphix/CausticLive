@@ -29,7 +29,7 @@ import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelLibraryImportComplete;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
 import com.teotigraphix.causticlive.model.vo.PadData;
-import com.teotigraphix.causticlive.sceen.MachineScreenView;
+import com.teotigraphix.causticlive.screen.MachineScreenView;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;

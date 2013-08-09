@@ -1,5 +1,5 @@
 
-package com.teotigraphix.causticlive.sceen;
+package com.teotigraphix.causticlive.screen;
 
 import javafx.scene.layout.Pane;
 

@@ -20,6 +20,7 @@ local.properties
 .project
 .settings/
 
+unit_test/
 libs/
 CausticCore.dll
 CausticCore.lib

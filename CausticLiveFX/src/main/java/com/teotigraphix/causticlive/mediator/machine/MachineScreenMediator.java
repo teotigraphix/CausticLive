@@ -26,7 +26,7 @@ import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
-import com.teotigraphix.causticlive.sceen.MachineScreenView;
+import com.teotigraphix.causticlive.screen.MachineScreenView;
 import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
