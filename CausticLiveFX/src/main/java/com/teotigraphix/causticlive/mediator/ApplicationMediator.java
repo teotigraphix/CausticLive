@@ -4,8 +4,11 @@ package com.teotigraphix.causticlive.mediator;
 import java.io.File;
 import java.io.IOException;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.MediatorBase;
+import com.teotigraphix.causticlive.model.IPadMapModel;
+import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.project.Project;
 
@@ -13,14 +16,20 @@ import com.teotigraphix.caustk.project.Project;
 public class ApplicationMediator extends MediatorBase {
 
     private Integer numStarts;
-
+    
+    @Inject
+    ISoundModel soundModel;
+   
+    @Inject
+    IPadMapModel padMapModel;
+    
     public ApplicationMediator() {
     }
 
     @Override
     protected void onProjectLoad() {
         Project project = getController().getProjectManager().getProject();
-        numStarts = project.getInterger("numStarts");
+        numStarts = project.getInteger("numStarts");
         if (numStarts == null)
             numStarts = 0;
         numStarts++;
@@ -33,7 +42,6 @@ public class ApplicationMediator extends MediatorBase {
 
     @Override
     protected void onProjectSave() {
-        
         saveCausticFile();
     }
 

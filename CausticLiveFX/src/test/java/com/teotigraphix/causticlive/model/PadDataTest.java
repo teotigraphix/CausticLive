@@ -45,7 +45,7 @@ public class PadDataTest extends CaustkTestBase {
     @Override
     protected void start() throws CausticException, IOException {
         soundSource = controller.getSoundSource();
-
+        
         track0 = soundSource.createTone(0, "track0", SubSynthTone.class);
         track3 = soundSource.createTone(3, "track3", PCMSynthTone.class);
         track5 = soundSource.createTone(5, "track5", ModularTone.class);
@@ -64,6 +64,19 @@ public class PadDataTest extends CaustkTestBase {
     protected void end() {
 
     }
+    
+    /*
+     * - Load library
+     * - Put model into ASSIGN state
+     * - Select Pad
+     * - Handle button action
+     * - Show pad assignment popup
+     * - popup.setPadData(padMap.getData(bank, localIndex)
+     * 
+     * 
+     * 
+     * 
+     */
 
     @Test
     public void test_setPhrase() throws IOException, CausticException {
@@ -74,10 +87,12 @@ public class PadDataTest extends CaustkTestBase {
 
         channel.assignPhrase(libraryPhrase);
 
-        TrackSong song = controller.getSongManager().create("foo");
+        File songFile = new File("C:/Users/Work/Documents/git/CausticLive/CausticLiveFX/src/test/resources/PadDataTestSong.ctks");
+        TrackSong song = controller.getSongManager().create(songFile);
         song.setNumTracks(14);
         Track track = song.getTrack(13);
         track.addPhrase(10, channel.getChannelPhrase());
+        controller.getSongManager().save();
 
         // assert the trackItemId is the same as the channel phraseId
         assertEquals(track.getTrackItem(0).getPhraseId(), channel.getChannelPhrase().getId());

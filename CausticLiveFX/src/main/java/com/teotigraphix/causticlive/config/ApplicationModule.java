@@ -26,8 +26,10 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.teotigraphix.caustic.config.JavaFXRuntimeModule;
 import com.teotigraphix.causticlive.CausticLiveApplication;
+import com.teotigraphix.causticlive.model.IPadMapModel;
 import com.teotigraphix.causticlive.model.IPadModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.PadMapModel;
 import com.teotigraphix.causticlive.model.PadModel;
 import com.teotigraphix.causticlive.model.SoundModel;
 import com.teotigraphix.caustk.application.CaustkConfigurationBase;
@@ -47,6 +49,7 @@ public class ApplicationModule extends JavaFXRuntimeModule {
 
         // Application
         bind(IPadModel.class).to(PadModel.class).in(Singleton.class);
+        bind(IPadMapModel.class).to(PadMapModel.class).in(Singleton.class);
         bind(ISoundModel.class).to(SoundModel.class).in(Singleton.class);
     }
 

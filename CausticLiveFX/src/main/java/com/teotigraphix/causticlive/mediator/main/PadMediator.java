@@ -20,6 +20,7 @@ import org.androidtransfuse.event.EventObserver;
 import com.google.inject.Inject;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.utils.UIUtils;
+import com.teotigraphix.causticlive.model.IPadMapModel;
 import com.teotigraphix.causticlive.model.IPadModel;
 import com.teotigraphix.causticlive.model.IPadModel.OnPadModelPadDataDeselect;
 import com.teotigraphix.causticlive.model.IPadModel.OnPadModelPadDataRefresh;
@@ -29,7 +30,7 @@ import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
 import com.teotigraphix.causticlive.model.IPadModel.PadFunction;
 import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChange;
-import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
+import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelLibrarySceneChange;
 import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.PatternUtils;
@@ -45,6 +46,9 @@ public class PadMediator extends DesktopMediatorBase {
 
     @Inject
     IPadModel padModel;
+    
+    @Inject
+    IPadMapModel padMapModel;
 
     @Inject
     ISoundModel soundModel;
@@ -176,10 +180,10 @@ public class PadMediator extends DesktopMediatorBase {
                 });
 
         // OnSoundModelSceneLoad
-        soundModel.getDispatcher().register(OnSoundModelSceneLoad.class,
-                new EventObserver<OnSoundModelSceneLoad>() {
+        soundModel.getDispatcher().register(OnSoundModelLibrarySceneChange.class,
+                new EventObserver<OnSoundModelLibrarySceneChange>() {
                     @Override
-                    public void trigger(OnSoundModelSceneLoad object) {
+                    public void trigger(OnSoundModelLibrarySceneChange object) {
                         padSelectionOverlay.setDisable(false);
                         updateEnabledForActivePads();
                     }

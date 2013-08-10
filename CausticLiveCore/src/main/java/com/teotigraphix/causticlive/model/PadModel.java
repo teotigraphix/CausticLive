@@ -20,5 +20,4 @@ public class PadModel extends ModelBase implements IPadModel {
         // TODO Auto-generated method stub
 
     }
-
 }

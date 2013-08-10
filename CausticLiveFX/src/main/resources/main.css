@@ -13,3 +13,16 @@
      */
     -fx-focus-color: #4F7620;
 }
+
+.machine-button {
+    -fx-background-color: transparent, transparent, transparent, transparent;
+    -fx-background-radius: 10.0px;
+    -fx-border-color: white;
+    -fx-border-radius: 10.0px;
+    -fx-text-fill: white;
+    -fx-padding: 4px 2px 4px 2px
+}
+.machine-button:selected {
+	-fx-effect: dropshadow( three-pass-box , #3F922C , 5 , 0.8 , 0 , 0 );
+	-fx-border-radius: 10px;
+}

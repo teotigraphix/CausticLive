@@ -31,9 +31,9 @@ import com.teotigraphix.causticlive.model.PadModel.OnPadModelAssignmentIndexChan
 import com.teotigraphix.causticlive.model.vo.PadData;
 import com.teotigraphix.causticlive.screen.MachineScreenView;
 import com.teotigraphix.caustk.core.CtkDebug;
+import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
-import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 
 public class ToolBarMediator extends DesktopMediatorBase {
 
@@ -123,10 +123,9 @@ public class ToolBarMediator extends DesktopMediatorBase {
         DirectoryChooser chooser = FileUtil.createDefaultDirectoryChooser(null,
                 "Choose library directory");
         File file = chooser.showDialog(null);
-        // check for .ctk file, validate!
-        Library library = getController().getLibraryManager().loadLibrary(file);
-        if (library != null)
-            getController().getLibraryManager().setSelectedLibrary(library);
+        if (file == null)
+            return;
+        soundModel.loadLibrary(file);
     }
 
     @Override
@@ -202,6 +201,9 @@ public class ToolBarMediator extends DesktopMediatorBase {
     }
 
     protected void onPadModelAssignmentIndexChange() {
+        if (soundModel.getLibrary() == null)
+            return;
+
         PadData data = padModel.getSelectedAssignmentData();
         int toneIndex = data.getToneIndex();
         //reseting = true;

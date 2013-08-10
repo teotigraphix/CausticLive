@@ -50,6 +50,7 @@ public class PadModel extends ModelBase implements IPadModel {
         if (value == assignmentIndex)
             return;
         assignmentIndex = value;
+        getController().getProjectManager().getProject().put("assignmentIndex", assignmentIndex);
         trigger(new OnPadModelAssignmentIndexChange(assignmentIndex));
     }
 
@@ -92,7 +93,7 @@ public class PadModel extends ModelBase implements IPadModel {
     // selectedBank
     //----------------------------------
 
-    private int selectedBank = -1;
+    private int selectedBank = 0;
 
     @Override
     public final int getSelectedBank() {
@@ -248,5 +249,4 @@ public class PadModel extends ModelBase implements IPadModel {
 
         trigger(new OnPadModelPadDataRefresh());
     }
-
 }

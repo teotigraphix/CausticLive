@@ -11,8 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -23,7 +26,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.caustic.screen.IScreenManager;
 import com.teotigraphix.causticlive.model.ISoundModel;
-import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSceneLoad;
+import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelLibrarySceneChange;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelSelectedToneChange;
 import com.teotigraphix.causticlive.model.SoundModel.ToneData;
 import com.teotigraphix.causticlive.screen.MachineScreenView;
@@ -82,11 +85,10 @@ public class MachineScreenMediator extends DesktopMediatorBase {
     protected void onLoadScene() {
         LibraryScene item = sceneList.getSelectionModel().getSelectedItem();
         if (item == null) {
-
             return;
         }
 
-        soundModel.loadScene(item);
+        soundModel.loadScene(item, true);
     }
 
     protected void onBackClick() {
@@ -138,8 +140,23 @@ public class MachineScreenMediator extends DesktopMediatorBase {
         }
     }
 
+    private void assignMachineIcon(Tone tone, ToggleButton button) {
+        final ImageView imageView = new ImageView(getMachineImage(tone));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(70);
+        button.setGraphic(imageView);
+        button.setContentDisplay(ContentDisplay.TOP);
+    }
+
+    private Image getMachineImage(Tone tone) {
+        String name = tone.getToneType().name();
+        Image result = new Image(getClass().getResourceAsStream("/images/" + name + "Assign.png"));
+        return result;
+    }
+
     protected void onMachineButtonSelected(ToggleButton button) {
         int toneIndex = (int)button.getProperties().get("index");
+
         if (button.isSelected()) {
             soundModel.setSelectedTone(toneIndex);
         }
@@ -152,10 +169,10 @@ public class MachineScreenMediator extends DesktopMediatorBase {
         // SoundModel
 
         // OnSoundModelSceneLoad
-        soundModel.getDispatcher().register(OnSoundModelSceneLoad.class,
-                new EventObserver<OnSoundModelSceneLoad>() {
+        soundModel.getDispatcher().register(OnSoundModelLibrarySceneChange.class,
+                new EventObserver<OnSoundModelLibrarySceneChange>() {
                     @Override
-                    public void trigger(OnSoundModelSceneLoad object) {
+                    public void trigger(OnSoundModelLibrarySceneChange object) {
                         updateMachineButtons();
                     }
                 });
@@ -191,7 +208,7 @@ public class MachineScreenMediator extends DesktopMediatorBase {
         Library library = getController().getLibraryManager().getSelectedLibrary();
         if (library == null)
             return;
-        
+
         List<LibraryScene> phrases = library.getScenes();
         ObservableList<LibraryScene> items1 = FXCollections.observableArrayList(phrases);
         sceneList.setItems(items1);
@@ -207,24 +224,28 @@ public class MachineScreenMediator extends DesktopMediatorBase {
         // clear selection
         if (data == null)
             return;
-        LibraryPatch libraryPatch = data.getLibraryPatch();
+
+        // update tone button
+        // XXX this is causing recursion
+        ToggleButton button = (ToggleButton)machineButtonPane.getChildren().get(data.getToneIndex());
+        if (!button.isSelected())
+            button.setSelected(true);
+
+        LibraryPatch libraryPatch = soundModel.getLibrary().findPatchById(data.getPatchId());
         if (libraryPatch == null) {
             patchList.getSelectionModel().clearSelection();
             return;
         }
 
         patchList.getSelectionModel().select(libraryPatch);
-
-        // update tone button
-        // XXX this is causing recursion
-        //ToggleButton button = (ToggleButton)machineButtonPane.getChildren().get(data.getIndex());
-        //button.setSelected(true);
     }
 
     /**
      * Updates the machine button when a new {@link LibraryScene} is loaded.
      */
     protected void updateMachineButtons() {
+        sceneList.getSelectionModel().select(soundModel.getLibraryScene());
+
         for (Node node : machineButtonPane.getChildren()) {
             ToggleButton button = (ToggleButton)node;
             String name = "";
@@ -234,6 +255,7 @@ public class MachineScreenMediator extends DesktopMediatorBase {
             if (tone != null) {
                 name = tone.getName();
                 button.setDisable(false);
+                assignMachineIcon(tone, button);
             }
             button.setText(name);
 
