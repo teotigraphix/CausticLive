@@ -79,7 +79,6 @@
         <Button layoutX="431.0" layoutY="0.0" mnemonicParsing="false" prefHeight="115.0" prefWidth="115.0" text="16" />
       </children>
     </AnchorPane>
-    <ListView id="phraseList" layoutX="75.0" layoutY="119.0" prefHeight="403.0" prefWidth="336.0" style="" />
     <HBox id="machineToggleButtons" layoutX="650.0" layoutY="679.0" prefHeight="37.0" prefWidth="547.0" spacing="10.0">
       <children>
         <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefWidth="-1.0" text="1" HBox.hgrow="ALWAYS">

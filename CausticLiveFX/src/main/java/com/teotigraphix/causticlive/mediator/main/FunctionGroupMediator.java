@@ -63,9 +63,9 @@ public class FunctionGroupMediator extends DesktopMediatorBase {
                 new EventObserver<OnPadModelSelectedFunctionChange>() {
                     @Override
                     public void trigger(OnPadModelSelectedFunctionChange object) {
-                        if (padModel.getSelectedFunction() == PadFunction.ASSIGN) {
+                        if (object.getFunction() == PadFunction.ASSIGN) {
                             assignButton.setSelected(true);
-                        } else if (padModel.getSelectedFunction() == PadFunction.PATTERN) {
+                        } else if (object.getFunction() == PadFunction.PATTERN) {
                             patternButton.setSelected(true);
                         }
                     }
@@ -74,8 +74,6 @@ public class FunctionGroupMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-        // TODO Auto-generated method stub
-        
     }
 
 }

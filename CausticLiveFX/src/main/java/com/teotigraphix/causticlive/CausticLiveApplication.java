@@ -30,6 +30,7 @@ import com.teotigraphix.caustic.screen.IScreenView;
 import com.teotigraphix.causticlive.config.ApplicationConstants;
 import com.teotigraphix.causticlive.config.ApplicationModule;
 import com.teotigraphix.causticlive.mediator.ApplicationMediator;
+import com.teotigraphix.causticlive.screen.AssignmentScreenView;
 import com.teotigraphix.causticlive.screen.MachineScreenView;
 import com.teotigraphix.causticlive.screen.MainScreenView;
 
@@ -47,6 +48,7 @@ public class CausticLiveApplication extends JavaFXApplication {
     protected void initScreens(List<Class<? extends IScreenView>> screens) {
         screens.add(MainScreenView.class);
         screens.add(MachineScreenView.class);
+        screens.add(AssignmentScreenView.class);
     }
 
     @Override

@@ -134,8 +134,6 @@ public class PadData implements ISerialize {
 
     @Override
     public void sleep() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -147,4 +145,8 @@ public class PadData implements ISerialize {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Data[" + bank + "," + localIndex + "]";
+    }
 }

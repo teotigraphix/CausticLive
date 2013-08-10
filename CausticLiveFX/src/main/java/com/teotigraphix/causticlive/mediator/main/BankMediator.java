@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
 import com.teotigraphix.causticlive.model.IPadModel;
-import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedBankChange;
+import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedDataChange;
 import com.teotigraphix.caustk.core.CtkDebug;
 
 @Singleton
@@ -59,18 +59,18 @@ public class BankMediator extends DesktopMediatorBase {
 
     protected void onBankButtonSelected(ToggleButton button) {
         CtkDebug.ui("Bank pressed " + button + ":" + button.isSelected());
-        padModel.setSelectedBank((int)button.getProperties().get("index"));
+        padModel.select((int)button.getProperties().get("index"));
     }
 
     @Override
     protected void registerObservers() {
         super.registerObservers();
 
-        padModel.getDispatcher().register(OnPadModelSelectedBankChange.class,
-                new EventObserver<OnPadModelSelectedBankChange>() {
+        padModel.getDispatcher().register(OnPadModelSelectedDataChange.class,
+                new EventObserver<OnPadModelSelectedDataChange>() {
                     @Override
-                    public void trigger(OnPadModelSelectedBankChange object) {
-                        int bank = object.getBank();
+                    public void trigger(OnPadModelSelectedDataChange object) {
+                        int bank = object.getData().getBank();
                         ToggleButton button = (ToggleButton)bankButtonPane.getChildren().get(bank);
                         button.setSelected(true);
                     }
@@ -79,7 +79,5 @@ public class BankMediator extends DesktopMediatorBase {
 
     @Override
     public void onRegister() {
-        // TODO Auto-generated method stub
-        
     }
 }

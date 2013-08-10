@@ -96,13 +96,13 @@ public class SoundModel extends ModelBase implements ISoundModel {
             loadLibrary(file);
         }
 
-        // XXX get rid of this
-        Integer index = getController().getProjectManager().getProject()
-                .getInteger("assignmentIndex");
-        if (index == null)
-            index = 0;
-
-        padModel.setAssignmentIndex(index);
+        //        // XXX get rid of this
+        //        Integer index = getController().getProjectManager().getProject()
+        //                .getInteger("assignmentIndex");
+        //        if (index == null)
+        //            index = 0;
+        //
+        //        padModel.setAssignmentIndex(index);
 
         UUID sceneId = getState().getSelectedScene();
         if (sceneId != null) {

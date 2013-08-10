@@ -25,6 +25,8 @@ public final class ApplicationConstants {
 
     public static final String SCREEN_MAIN_VIEW = "/com/teotigraphix/causticlive/view/MainScreeen.fxml";
 
+    public static final String SCREEN_ASSIGNMENT_VIEW = "/com/teotigraphix/causticlive/view/AssignmentScreen.fxml";
+
     public static final String PANE_ROOT = "/com/teotigraphix/causticlive/view/RootLayout.fxml";
 
     public static final String IMAGE_BACKGROUND = "/images/CausticLiveBackground.png";
