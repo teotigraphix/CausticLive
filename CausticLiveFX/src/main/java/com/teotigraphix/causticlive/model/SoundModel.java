@@ -2,6 +2,7 @@
 package com.teotigraphix.causticlive.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,15 +13,174 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.model.ICaustkModelState;
 import com.teotigraphix.caustic.model.ModelBase;
+import com.teotigraphix.causticlive.mediator.SongMediator;
+import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
+import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
+import com.teotigraphix.caustk.sequencer.Track;
+import com.teotigraphix.caustk.sequencer.TrackItem;
+import com.teotigraphix.caustk.sequencer.TrackSong;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
 public class SoundModel extends ModelBase implements ISoundModel {
+
+    @Inject
+    IPadMapModel padMapModel;
+
+    private List<PadData> queue = new ArrayList<PadData>();
+
+    public void beatChange(int measure, int beat) {
+        getSong().nextBeat();
+
+        //CtkDebug.model(">> Beat:" + measure + ", " + beat);
+
+        int isNewMeasure = beat % 4;
+
+        lockAndExtendPlayingTracks();
+
+        if (isNewMeasure == 0) {
+            updateTracks();
+        }
+    }
+
+    private void updateTracks() {
+        CtkDebug.log("Setup queued ");
+        final int currentMeasure = getSong().getCurrentMeasure();
+        // loop through the queue and add queued items
+        for (PadData data : queue) {
+            if (data.getState() == PadDataState.QUEUED) {
+                // add to sequencer
+                addChannelTracks(data, getSong(), currentMeasure);
+                data.setState(PadDataState.SELECTED);
+            } else if (data.getState() == PadDataState.SELECTED) {
+
+            }
+        }
+    }
+
+    private void lockAndExtendPlayingTracks() {
+        final int beat = getSong().getCurrentBeat();
+        final int currentMeasure = getSong().getCurrentMeasure();
+        final int isNewMeasure = beat % 4;
+
+        // from here on, we have everything correct with current beat and measure
+        // the TrackSong's cursor is correct.
+        // Check to see if there are any tracks that are in their last beat
+        // All tracks in the last beat get extended their length
+
+        for (Track track : getSong().getTracks()) {
+
+            // First try an find a track item at the current measure
+            List<TrackItem> list = track.getItemsOnMeasure(getCurrentMeasure());
+            for (TrackItem item : list) {
+                //String name = PatternUtils.toString(item.getBankIndex(), item.getPatternIndex());
+
+                int numPhraseMeasures = item.getNumMeasures();
+                int numBeatsInPhrase = (4 * numPhraseMeasures);
+                int startMeasure = beat % numBeatsInPhrase;
+
+                //CtkDebug.model("XXX:" + startMeasure);
+                if (isNewMeasure == 0) {
+
+                } else if (startMeasure == numBeatsInPhrase - 1) {
+                    // one beat before changing measures
+                    // signal add crap, lock UI for patterns in their last beat
+                    // 1 measure, 3 beat, 2 measure 7 beat, 4 measure, 15 beat 8, 31
+                    PadData data = padMapModel.getPad(item.getBankIndex(), item.getPatternIndex());
+
+                    for (PadChannel channel : data.getChannels()) {
+                        if (data.getState() == PadDataState.SELECTED) {
+                            try {
+                                // add the phrase at the very next measure
+                                track.addPhraseAt(currentMeasure + 1, 1, channel.getChannelPhrase());
+                            } catch (CausticException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        } else if (data.getState() == PadDataState.UNQUEUED) {
+                            // remove the item from the que
+                            queue.remove(data);
+                            data.setState(PadDataState.IDLE);
+                        }
+                    }
+
+                    //CtkDebug.model("Lock:" + beat);
+                }
+            }
+        }
+    }
+
+    public static void addChannelTracks(PadData data, TrackSong song, int currentMeasure) {
+        for (PadChannel channel : data.getChannels()) {
+            Track track = song.getTrack(channel.getIndex());
+            try {
+                track.addPhraseAt(currentMeasure, 1, channel.getChannelPhrase());
+            } catch (CausticException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void measureChange(int measure) {
+        //CtkDebug.model(">>>>>> Measure:" + measure);
+    }
+
+    @Override
+    public void play() throws CausticException {
+        getSong().rewind();
+
+        for (PadData data : queue) {
+            if (data.getState() == PadDataState.QUEUED) {
+                // add to sequencer
+                for (PadChannel channel : data.getChannels()) {
+                    Track track = getSong().getTrack(channel.getIndex());
+                    track.addPhrase(1, channel.getChannelPhrase());
+                }
+                data.setState(PadDataState.SELECTED);
+            } else if (data.getState() == PadDataState.SELECTED) {
+
+            }
+        }
+        //getSong().play();
+        getController().getSystemSequencer().play(SequencerMode.SONG);
+    }
+
+    @Override
+    public void stop() {
+        getController().getSystemSequencer().stop();
+        getController().getSongSequencer().playPosition(0);
+    }
+
+    @Override
+    public void queue(PadData data) {
+        if (!queue.contains(data)) {
+            CtkDebug.log("Queue:" + data);
+            data.setState(PadDataState.QUEUED);
+            queue.add(data);
+        }
+    }
+
+    @Override
+    public void unqueue(PadData data) {
+        if (queue.contains(data)) {
+            if (data.getState() == PadDataState.QUEUED) {
+                data.setState(PadDataState.IDLE);
+                queue.remove(data);
+            } else {
+                data.setState(PadDataState.UNQUEUED);
+            }
+        }
+    }
+
+    @Inject
+    SongMediator songMediator;
 
     @Inject
     IPadModel padModel;
@@ -30,9 +190,23 @@ public class SoundModel extends ModelBase implements ISoundModel {
         return (SoundModelState)super.getState();
     }
 
+    public TrackSong getSong() {
+        return getController().getSongManager().getTrackSong();
+    }
+
     //--------------------------------------------------------------------------
     // Property API
     //--------------------------------------------------------------------------
+
+    @Override
+    public int getCurrentMeasure() {
+        return getSong().getCurrentMeasure();
+    }
+
+    @Override
+    public int getCurrentBeat() {
+        return getSong().getCurrentBeat();
+    }
 
     //----------------------------------
     // Library
@@ -86,37 +260,30 @@ public class SoundModel extends ModelBase implements ISoundModel {
     //--------------------------------------------------------------------------
 
     @Override
+    protected void initalizeState() {
+        File file = getState().getSelectedSong();
+        if (file == null) {
+            file = getSong().getFile();
+            CtkDebug.model("Load song: " + file.getPath());
+            getState().setSelectedSong(file);
+        }
+        // init song stuff
+        try {
+            getController().getSongManager().load(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        TrackSong song = getSong();
+        song.setNumTracks(14);
+    }
+
+    @Override
     public void onRegister() {
     }
 
     @Override
     public void onShow() {
-        File file = getState().getSelectedLibrary();
-        if (file != null) {
-            loadLibrary(file);
-        }
-
-        //        // XXX get rid of this
-        //        Integer index = getController().getProjectManager().getProject()
-        //                .getInteger("assignmentIndex");
-        //        if (index == null)
-        //            index = 0;
-        //
-        //        padModel.setAssignmentIndex(index);
-
-        UUID sceneId = getState().getSelectedScene();
-        if (sceneId != null) {
-            Library library = getController().getLibraryManager().getSelectedLibrary();
-            if (library != null) {
-                LibraryScene scene = library.findSceneById(sceneId);
-                if (scene != null) {
-                    loadScene(scene, false);
-                }
-            }
-        }
-
-        // load patches
-        loadPatches();
 
         Integer selectedTone = getState().getSelectedTone();
         if (selectedTone != null)
@@ -134,7 +301,6 @@ public class SoundModel extends ModelBase implements ISoundModel {
             if (libraryPatch != null)
                 setPatch(data, libraryPatch);
         }
-
     }
 
     @Override
@@ -206,10 +372,23 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     public static class SoundModelState implements ICaustkModelState {
 
+        @Inject
+        private transient ISoundModel soundModel;
+
         private Map<Integer, ToneData> toneMap = new HashMap<Integer, ToneData>();
 
         public List<ToneData> getTones() {
             return new ArrayList<>(toneMap.values());
+        }
+
+        private File selectedSong;
+
+        public File getSelectedSong() {
+            return selectedSong;
+        }
+
+        public void setSelectedSong(File valeu) {
+            selectedSong = valeu;
         }
 
         private File selectedLibrary;
@@ -255,6 +434,40 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
         public ToneData getToneData(int toneIndex) {
             return toneMap.get(toneIndex);
+        }
+
+        @Override
+        public void sleep() {
+        }
+
+        @Override
+        public void wakeup(ICaustkController controller) {
+            File file = getSelectedLibrary();
+            if (file != null) {
+                soundModel.loadLibrary(file);
+            }
+
+            //        // XXX get rid of this
+            //        Integer index = getController().getProjectManager().getProject()
+            //                .getInteger("assignmentIndex");
+            //        if (index == null)
+            //            index = 0;
+            //
+            //        padModel.setAssignmentIndex(index);
+
+            UUID sceneId = getSelectedScene();
+            if (sceneId != null) {
+                Library library = controller.getLibraryManager().getSelectedLibrary();
+                if (library != null) {
+                    LibraryScene scene = library.findSceneById(sceneId);
+                    if (scene != null) {
+                        soundModel.loadScene(scene, false);
+                    }
+                }
+            }
+
+            // load patches
+            ((SoundModel)soundModel).loadPatches();
         }
 
     }

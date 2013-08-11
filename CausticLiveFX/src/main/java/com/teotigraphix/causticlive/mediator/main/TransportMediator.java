@@ -6,12 +6,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 
+import com.google.inject.Inject;
 import com.teotigraphix.caustic.mediator.DesktopMediatorBase;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
+import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.caustk.core.CausticException;
 
 public class TransportMediator extends DesktopMediatorBase {
 
     private ToggleButton playPauseButton;
+
+    @Inject
+    ISoundModel soundModel;
 
     public TransportMediator() {
     }
@@ -30,9 +35,13 @@ public class TransportMediator extends DesktopMediatorBase {
 
     protected void onPlayPuseSelected() {
         if (playPauseButton.isSelected()) {
-            getController().getSystemSequencer().play(SequencerMode.PATTERN);
+            try {
+                soundModel.play();
+            } catch (CausticException e) {
+                e.printStackTrace();
+            }
         } else {
-            getController().getSystemSequencer().stop();
+            soundModel.stop();
         }
     }
 

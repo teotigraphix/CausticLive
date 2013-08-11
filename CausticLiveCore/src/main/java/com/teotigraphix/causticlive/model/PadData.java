@@ -1,6 +1,8 @@
 
 package com.teotigraphix.causticlive.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -62,12 +64,18 @@ public class PadData implements ISerialize {
     // state
     //----------------------------------
 
-    private int viewChannel;
+    private Integer viewChannel = null;
 
     /**
-     * Returns the {@link PadChannel} index that is considered tht top view.
+     * Returns the {@link PadChannel} index that is considered the top view.
      */
     public int getViewChannel() {
+        if (viewChannel == null) {
+            for (PadChannel channel : map.values()) {
+                return channel.getIndex();
+            }
+            viewChannel = 0;
+        }
         return viewChannel;
     }
 
@@ -148,5 +156,13 @@ public class PadData implements ISerialize {
     @Override
     public String toString() {
         return "Data[" + bank + "," + localIndex + "]";
+    }
+
+    public List<PadChannel> getChannels() {
+        return new ArrayList<>(map.values());
+    }
+
+    public boolean hasChannels() {
+        return map.size() > 0;
     }
 }

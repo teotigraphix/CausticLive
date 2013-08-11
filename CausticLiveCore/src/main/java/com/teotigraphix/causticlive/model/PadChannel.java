@@ -4,6 +4,7 @@ package com.teotigraphix.causticlive.model;
 import java.util.UUID;
 
 import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.caustk.core.PatternUtils;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.ChannelPhrase;
 import com.teotigraphix.caustk.service.ISerialize;
@@ -143,6 +144,9 @@ public class PadChannel implements ISerialize {
     public void wakeup(ICaustkController controller) {
         this.controller = controller;
 
+        if (channelPhrase != null) {
+            assignNoteData(channelPhrase);
+        }
     }
 
     public Tone getTone() {
@@ -162,15 +166,19 @@ public class PadChannel implements ISerialize {
         ownerPhraseId = phrase.getId();
         LibraryPhrase newPhrase = controller.getSerializeService()
                 .copy(phrase, LibraryPhrase.class);
-        
+
         // update the decoration to hold our position
         // the original ID from the library can always get the original bank/pattern locations
         newPhrase.setId(UUID.randomUUID());
         newPhrase.setBankIndex(getBankIndex());
         newPhrase.setPatternIndex(getPatternIndex());
-        
+
         channelPhrase = new ChannelPhrase(newPhrase);
-        
+
+        assignNoteData(channelPhrase);
+    }
+
+    private void assignNoteData(ChannelPhrase channelPhrase) {
         String data = channelPhrase.getNoteData();
         int oldBank = getTone().getPatternSequencer().getSelectedBank();
         int oldPattern = getTone().getPatternSequencer().getSelectedIndex();
@@ -187,6 +195,10 @@ public class PadChannel implements ISerialize {
             getTone().getPatternSequencer().clearIndex(getBankIndex(), getPatternIndex());
         }
         channelPhrase = null;
+    }
+
+    public String getPatternName() {
+        return PatternUtils.toString(getBankIndex(), getPatternIndex());
     }
 
 }

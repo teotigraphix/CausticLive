@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustic.model.ICaustkModelState;
 import com.teotigraphix.caustic.model.ModelBase;
+import com.teotigraphix.caustk.controller.ICaustkController;
 
 @Singleton
 public class PadModel extends ModelBase implements IPadModel {
@@ -19,6 +20,11 @@ public class PadModel extends ModelBase implements IPadModel {
     @Override
     protected PadModelState getState() {
         return (PadModelState)super.getState();
+    }
+
+    @Override
+    public PadData getLocalData(int index) {
+        return padMapModel.getPad(getState().getSelectedBank(), index);
     }
 
     @Override
@@ -114,6 +120,14 @@ public class PadModel extends ModelBase implements IPadModel {
         }
 
         public PadModelState() {
+        }
+
+        @Override
+        public void sleep() {
+        }
+
+        @Override
+        public void wakeup(ICaustkController controller) {
         }
 
     }

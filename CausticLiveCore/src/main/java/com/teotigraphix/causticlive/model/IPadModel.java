@@ -29,6 +29,8 @@ public interface IPadModel extends ICaustkModel {
      */
     void select(int bank);
 
+    PadData getLocalData(int index);
+
     /**
      * @see OnPadModelSelectedDataChange
      * @return
@@ -119,7 +121,9 @@ public interface IPadModel extends ICaustkModel {
 
         SELECTED,
 
-        QUEUED
+        QUEUED,
+        
+        UNQUEUED;
     }
 
 }

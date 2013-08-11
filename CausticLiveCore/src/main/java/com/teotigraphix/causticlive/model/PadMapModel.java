@@ -32,7 +32,7 @@ public class PadMapModel extends ModelBase implements IPadMapModel {
     protected void configState(ICaustkModelState state) {
         getState().initialize(getController(), 4, 16);
     }
-
+    
     public PadData getPad(int bank, int localIndex) {
         return getState().padMap.getPad(bank, localIndex);
     }
@@ -58,6 +58,14 @@ public class PadMapModel extends ModelBase implements IPadMapModel {
 
         }
 
+        @Override
+        public void sleep() {
+        }
+
+        @Override
+        public void wakeup(ICaustkController controller) {
+            padMap.wakeup(controller);
+        }
     }
 
 }

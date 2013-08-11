@@ -39,11 +39,10 @@ public class ToolBarMediator extends DesktopMediatorBase {
     @Inject
     IPadModel padModel;
 
-    private boolean reseting;
+    //private boolean reseting;
 
     private Button loadButton;
 
-    @SuppressWarnings("unchecked")
     @Override
     public void create(Pane root) {
 

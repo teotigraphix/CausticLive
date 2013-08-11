@@ -33,6 +33,7 @@ import com.teotigraphix.causticlive.model.PadData;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelLibrarySceneChange;
 import com.teotigraphix.causticlive.screen.AssignmentScreenView;
 import com.teotigraphix.caustk.core.CtkDebug;
+import com.teotigraphix.caustk.tone.Tone;
 
 public class PadMediator extends DesktopMediatorBase {
 
@@ -118,6 +119,35 @@ public class PadMediator extends DesktopMediatorBase {
     protected void onPadButtonSelected(ToggleButton button) {
         CtkDebug.ui("Pad pressed " + button + ":" + button.isSelected());
         //padModel.select((int)button.getProperties().get("index"), button.isSelected());
+        int index = (int)button.getProperties().get("index");
+        PadData data = padModel.getLocalData(index);
+
+        if (button.isSelected()) {
+            soundModel.queue(data);
+        } else {
+            soundModel.unqueue(data);
+        }
+        //        if (button.isSelected()) {
+        //            data.setState(PadDataState.SELECTED);
+        //            if (data.hasChannels()) {
+        //                for (PadChannel channel : data.getChannels()) {
+        //                    int toneIndex = channel.getIndex();
+        //                    Tone tone = getController().getSoundSource().getTone(toneIndex);
+        //                    PatternSequencerComponent component = tone.getPatternSequencer();
+        //                    component.setSelectedPattern(channel.getBankIndex(), channel.getPatternIndex());
+        //                }
+        //            }
+        //        } else {
+        //            data.setState(PadDataState.IDLE);
+        //            if (data.hasChannels()) {
+        //                for (PadChannel channel : data.getChannels()) {
+        //                    int toneIndex = channel.getIndex();
+        //                    Tone tone = getController().getSoundSource().getTone(toneIndex);
+        //                    PatternSequencerComponent component = tone.getPatternSequencer();
+        //                    component.setSelectedPattern(3, 15);
+        //                }
+        //            }
+        //        }
     }
 
     @Override
@@ -129,7 +159,7 @@ public class PadMediator extends DesktopMediatorBase {
                 new EventObserver<OnPadModelSelectedDataChange>() {
                     @Override
                     public void trigger(OnPadModelSelectedDataChange object) {
-                        onPadModelAssignmentIndexChange();
+                        onPadModelSelectedDataChange();
                     }
                 });
 
@@ -139,6 +169,7 @@ public class PadMediator extends DesktopMediatorBase {
                     public void trigger(OnPadModelSelectedBankChange object) {
                         ToggleButton button = getButtonForData(padModel.getSelectedData());
                         layoutFocusOverlay(button);
+                        updatePadView(padModel.getPadDataView());
                     }
                 });
 
@@ -154,6 +185,7 @@ public class PadMediator extends DesktopMediatorBase {
                             padSelectionOverlay.setVisible(false);
                             padFocusOverlay.setVisible(false);
                         }
+                        updatePadView(padModel.getPadDataView());
                     }
                 });
 
@@ -169,25 +201,28 @@ public class PadMediator extends DesktopMediatorBase {
     }
 
     protected void updateEnabledForActivePads() {
-        //        // loop through all the 16 pads, get the data for each and
-        //        // enable ONLY if the tone index and phrase have been assigned
-        //        ObservableList<Node> children = padButtonPane.getChildren();
-        //        for (Node node : children) {
-        //            boolean disabled = true;
-        //            int localIndex = (int)node.getProperties().get("index");
-        //            PadData data = padModel.getAssignmentDataAt(localIndex);
-        //            if (data.isEnabled()) {
-        //                disabled = false;
-        //            }
-        //            node.setDisable(disabled);
-        //        }
+        if (!padModel.isInitialized())
+            return;
+
+        // loop through all the 16 pads, get the data for each and
+        // enable ONLY if the tone index and phrase have been assigned
+        ObservableList<Node> children = padButtonPane.getChildren();
+        for (Node node : children) {
+            boolean disabled = true;
+            int localIndex = (int)node.getProperties().get("index");
+            PadData data = padModel.getPadDataView().get(localIndex);
+            if (data.hasChannels()) {
+                disabled = false;
+            }
+            node.setDisable(disabled);
+        }
 
     }
 
     @Inject
     IScreenManager screenManager;
 
-    protected void onPadModelAssignmentIndexChange() {
+    protected void onPadModelSelectedDataChange() {
         // the current PadData for the assignment pad pressed
         PadData data = padModel.getSelectedData();
         if (data == null) {
@@ -227,6 +262,7 @@ public class PadMediator extends DesktopMediatorBase {
             ToggleButton padButton = pads.get(localIndex);
             Button overlayButton = (Button)padSelectionOverlay.getChildren().get(localIndex);
             padButton.disarm();
+            padButton.setDisable(!data.hasChannels());
             if (data.getState() == PadDataState.IDLE) {
                 padButton.setSelected(false);
             } else if (data.getState() == PadDataState.SELECTED) {
@@ -240,28 +276,14 @@ public class PadMediator extends DesktopMediatorBase {
     }
 
     private String getButtonText(PadData data) {
-        //        Library library = getController().getLibraryManager().getSelectedLibrary();
-        //        if (library == null)
-        //            return "not loaded";
-        //
-        //        LibraryPhrase phrase = library.findPhraseById(data.getPhraseId());
-        //        //        if (phrase == null)
-        //        Tone tone = getController().getSoundSource().getTone(data.getToneIndex());
-        //        if (tone == null)
-        //            return "not loaded";
-        //
-        //        StringBuilder sb = new StringBuilder();
-        //        sb.append(tone.getName());
-        //        if (phrase == null)
-        //            sb.append(":[-1,-1]");
-        //        else {
-        //            String pat = PatternUtils.toString(phrase.getBankIndex(), phrase.getPatternIndex());
-        //            sb.append(":[" + pat + "]");
-        //        }
-        //
-        //        //sb.append(PatternUtils.toString(phrase.getBankIndex(), phrase.getPatternIndex()));
-        //        //PatternSequencerComponent component = tone.getComponent(PatternSequencerComponent.class);
-
-        return ""; //sb.toString();
+        if (!data.hasChannels())
+            return "Unassigned";
+        int viewChannel = data.getViewChannel();
+        Tone tone = getController().getSoundSource().getTone(viewChannel);
+        StringBuilder sb = new StringBuilder();
+        sb.append(tone.getName());
+        sb.append(" ");
+        sb.append(data.getChannel(viewChannel).getPatternName());
+        return sb.toString();
     }
 }
