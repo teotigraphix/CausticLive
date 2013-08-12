@@ -52,6 +52,20 @@ public class PadChannel implements ISerialize {
     }
 
     //----------------------------------
+    // currentBeat
+    //----------------------------------
+
+    private int currentBeat;
+
+    public int getCurrentBeat() {
+        return currentBeat;
+    }
+
+    public void setCurrentBeat(int value) {
+        currentBeat = value;
+    }
+
+    //----------------------------------
     // bankIndex
     //----------------------------------
 
@@ -125,6 +139,20 @@ public class PadChannel implements ISerialize {
         return channelPhrase;
     }
 
+    //----------------------------------
+    // loopEnabled
+    //----------------------------------
+
+    private boolean loopEnabled = true;
+
+    public boolean isLoopEnabled() {
+        return loopEnabled;
+    }
+
+    public void setLoopEnabled(boolean value) {
+        loopEnabled = value;
+    }
+
     //--------------------------------------------------------------------------
     // Constructor
     //--------------------------------------------------------------------------
@@ -183,6 +211,7 @@ public class PadChannel implements ISerialize {
         int oldBank = getTone().getPatternSequencer().getSelectedBank();
         int oldPattern = getTone().getPatternSequencer().getSelectedIndex();
         getTone().getPatternSequencer().setSelectedPattern(getBankIndex(), getPatternIndex());
+        getTone().getPatternSequencer().setLength(channelPhrase.getLength());
         getTone().getPatternSequencer().initializeData(data);
         getTone().getPatternSequencer().setSelectedPattern(oldBank, oldPattern);
     }
@@ -199,6 +228,12 @@ public class PadChannel implements ISerialize {
 
     public String getPatternName() {
         return PatternUtils.toString(getBankIndex(), getPatternIndex());
+    }
+
+    @Override
+    public String toString() {
+        return "Channel[" + getIndex() + PatternUtils.toString(getBankIndex(), getPatternIndex())
+                + "]";
     }
 
 }

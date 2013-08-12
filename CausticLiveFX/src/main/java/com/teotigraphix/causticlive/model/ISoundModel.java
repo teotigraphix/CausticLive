@@ -32,9 +32,9 @@ public interface ISoundModel extends ICaustkModel {
     LibraryScene getLibraryScene();
 
     void loadLibrary(File file);
-    
+
     void play() throws CausticException;
-    
+
     void queue(PadData data);
 
     void unqueue(PadData data);
@@ -50,4 +50,21 @@ public interface ISoundModel extends ICaustkModel {
     void stop();
 
     void beatChange(int measure, int beat);
+
+    /**
+     * Triggered every beat change after the model has been updated.
+     */
+    public static class OnSoundModelRefresh {
+
+        private int beat;
+
+        public int getBeat() {
+            return beat;
+        }
+
+        public OnSoundModelRefresh(int beat) {
+            this.beat = beat;
+        }
+
+    }
 }

@@ -4,6 +4,7 @@ package com.teotigraphix.causticlive.mediator.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import org.androidtransfuse.event.EventObserver;
 
@@ -29,6 +31,7 @@ import com.teotigraphix.causticlive.model.IPadModel.OnPadModelSelectedFunctionCh
 import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
 import com.teotigraphix.causticlive.model.IPadModel.PadFunction;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.ISoundModel.OnSoundModelRefresh;
 import com.teotigraphix.causticlive.model.PadData;
 import com.teotigraphix.causticlive.model.SoundModel.OnSoundModelLibrarySceneChange;
 import com.teotigraphix.causticlive.screen.AssignmentScreenView;
@@ -54,6 +57,8 @@ public class PadMediator extends DesktopMediatorBase {
 
     private Pane padFocusOverlay;
 
+    private Pane extrasPane;
+
     public void layoutFocusOverlay(ToggleButton button) {
         if (button == null)
             return;
@@ -75,10 +80,20 @@ public class PadMediator extends DesktopMediatorBase {
         padSelectionOverlay.setDisable(true);
 
         padButtonPane = (Pane)root.lookup("#padButtonPane");
+        extrasPane = (Pane)root.lookup("#extrasPane");
+        
         int index = 0;
-        for (Node node : padButtonPane.getChildren()) {
+        ObservableList<Node> children = padButtonPane.getChildrenUnmodifiable();
+        for (Node node : children) {
             final ToggleButton button = (ToggleButton)node;
             button.getProperties().put("index", index);
+
+            Text text = new Text("Test");
+            text.setLayoutX(button.getLayoutX() + 10);
+            text.setLayoutY(button.getLayoutY() + 20);
+            extrasPane.getChildren().add(text);
+            button.getProperties().put("text", text);
+            
             button.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 @Override
                 public void changed(ObservableValue<? extends Boolean> observable,
@@ -117,16 +132,25 @@ public class PadMediator extends DesktopMediatorBase {
     }
 
     protected void onPadButtonSelected(ToggleButton button) {
+        if (updating)
+            return;
+
         CtkDebug.ui("Pad pressed " + button + ":" + button.isSelected());
         //padModel.select((int)button.getProperties().get("index"), button.isSelected());
         int index = (int)button.getProperties().get("index");
         PadData data = padModel.getLocalData(index);
 
+        //button.disarm();
         if (button.isSelected()) {
+            //if (data.getState() != PadDataState.QUEUED) {
             soundModel.queue(data);
+            //}
         } else {
+            //if (data.getState() != PadDataState.UNQUEUED) {
             soundModel.unqueue(data);
+            //}
         }
+        //button.arm();
         //        if (button.isSelected()) {
         //            data.setState(PadDataState.SELECTED);
         //            if (data.hasChannels()) {
@@ -153,6 +177,20 @@ public class PadMediator extends DesktopMediatorBase {
     @Override
     protected void registerObservers() {
         super.registerObservers();
+
+        // OnSoundModelRefresh
+        soundModel.getDispatcher().register(OnSoundModelRefresh.class,
+                new EventObserver<OnSoundModelRefresh>() {
+                    @Override
+                    public void trigger(OnSoundModelRefresh object) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updatePadView(padModel.getPadDataView());
+                            }
+                        });
+                    }
+                });
 
         // OnPadModelSelectedDataChange
         padModel.getDispatcher().register(OnPadModelSelectedDataChange.class,
@@ -222,6 +260,8 @@ public class PadMediator extends DesktopMediatorBase {
     @Inject
     IScreenManager screenManager;
 
+    private boolean updating;
+
     protected void onPadModelSelectedDataChange() {
         // the current PadData for the assignment pad pressed
         PadData data = padModel.getSelectedData();
@@ -257,22 +297,24 @@ public class PadMediator extends DesktopMediatorBase {
     }
 
     protected void updatePadView(List<PadData> view) {
+        updating = true;
         for (PadData data : view) {
             int localIndex = data.getLocalIndex();
             ToggleButton padButton = pads.get(localIndex);
             Button overlayButton = (Button)padSelectionOverlay.getChildren().get(localIndex);
-            padButton.disarm();
             padButton.setDisable(!data.hasChannels());
             if (data.getState() == PadDataState.IDLE) {
                 padButton.setSelected(false);
             } else if (data.getState() == PadDataState.SELECTED) {
                 padButton.setSelected(true);
             }
+            Text t = (Text)padButton.getProperties().get("text");
+            t.setText("Beat: " + data.getChannel(data.getViewChannel()).getCurrentBeat());
             String text = getButtonText(data);
-            padButton.setText(text);
+            padButton.setText(text + "-" + data.getState());
             overlayButton.setText(text);
-            padButton.arm();
         }
+        updating = false;
     }
 
     private String getButtonText(PadData data) {
@@ -281,9 +323,9 @@ public class PadMediator extends DesktopMediatorBase {
         int viewChannel = data.getViewChannel();
         Tone tone = getController().getSoundSource().getTone(viewChannel);
         StringBuilder sb = new StringBuilder();
-        sb.append(tone.getName());
-        sb.append(" ");
-        sb.append(data.getChannel(viewChannel).getPatternName());
+        //sb.append(tone.getName());
+        //sb.append(" ");
+        //sb.append(data.getChannel(viewChannel).getPatternName());
         return sb.toString();
     }
 }

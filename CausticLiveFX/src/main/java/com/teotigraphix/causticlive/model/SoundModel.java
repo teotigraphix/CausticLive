@@ -22,110 +22,20 @@ import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
-import com.teotigraphix.caustk.sequencer.Track;
-import com.teotigraphix.caustk.sequencer.TrackItem;
 import com.teotigraphix.caustk.sequencer.TrackSong;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton
 public class SoundModel extends ModelBase implements ISoundModel {
 
+    SongPlayer songPlayer;
+
     @Inject
     IPadMapModel padMapModel;
 
-    private List<PadData> queue = new ArrayList<PadData>();
-
     public void beatChange(int measure, int beat) {
-        getSong().nextBeat();
-
-        //CtkDebug.model(">> Beat:" + measure + ", " + beat);
-
-        int isNewMeasure = beat % 4;
-
-        lockAndExtendPlayingTracks();
-
-        if (isNewMeasure == 0) {
-            updateTracks();
-        }
-    }
-
-    private void updateTracks() {
-        CtkDebug.log("Setup queued ");
-        final int currentMeasure = getSong().getCurrentMeasure();
-        // loop through the queue and add queued items
-        for (PadData data : queue) {
-            if (data.getState() == PadDataState.QUEUED) {
-                // add to sequencer
-                addChannelTracks(data, getSong(), currentMeasure);
-                data.setState(PadDataState.SELECTED);
-            } else if (data.getState() == PadDataState.SELECTED) {
-
-            }
-        }
-    }
-
-    private void lockAndExtendPlayingTracks() {
-        final int beat = getSong().getCurrentBeat();
-        final int currentMeasure = getSong().getCurrentMeasure();
-        final int isNewMeasure = beat % 4;
-
-        // from here on, we have everything correct with current beat and measure
-        // the TrackSong's cursor is correct.
-        // Check to see if there are any tracks that are in their last beat
-        // All tracks in the last beat get extended their length
-
-        for (Track track : getSong().getTracks()) {
-
-            // First try an find a track item at the current measure
-            List<TrackItem> list = track.getItemsOnMeasure(getCurrentMeasure());
-            for (TrackItem item : list) {
-                //String name = PatternUtils.toString(item.getBankIndex(), item.getPatternIndex());
-
-                int numPhraseMeasures = item.getNumMeasures();
-                int numBeatsInPhrase = (4 * numPhraseMeasures);
-                int startMeasure = beat % numBeatsInPhrase;
-
-                //CtkDebug.model("XXX:" + startMeasure);
-                if (isNewMeasure == 0) {
-
-                } else if (startMeasure == numBeatsInPhrase - 1) {
-                    // one beat before changing measures
-                    // signal add crap, lock UI for patterns in their last beat
-                    // 1 measure, 3 beat, 2 measure 7 beat, 4 measure, 15 beat 8, 31
-                    PadData data = padMapModel.getPad(item.getBankIndex(), item.getPatternIndex());
-
-                    for (PadChannel channel : data.getChannels()) {
-                        if (data.getState() == PadDataState.SELECTED) {
-                            try {
-                                // add the phrase at the very next measure
-                                track.addPhraseAt(currentMeasure + 1, 1, channel.getChannelPhrase());
-                            } catch (CausticException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
-                        } else if (data.getState() == PadDataState.UNQUEUED) {
-                            // remove the item from the que
-                            queue.remove(data);
-                            data.setState(PadDataState.IDLE);
-                        }
-                    }
-
-                    //CtkDebug.model("Lock:" + beat);
-                }
-            }
-        }
-    }
-
-    public static void addChannelTracks(PadData data, TrackSong song, int currentMeasure) {
-        for (PadChannel channel : data.getChannels()) {
-            Track track = song.getTrack(channel.getIndex());
-            try {
-                track.addPhraseAt(currentMeasure, 1, channel.getChannelPhrase());
-            } catch (CausticException e) {
-                e.printStackTrace();
-            }
-        }
+        songPlayer.beatChange(measure, beat);
+        trigger(new OnSoundModelRefresh(songPlayer.getSong().getCurrentBeat()));
     }
 
     public void measureChange(int measure) {
@@ -134,49 +44,24 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     @Override
     public void play() throws CausticException {
-        getSong().rewind();
-
-        for (PadData data : queue) {
-            if (data.getState() == PadDataState.QUEUED) {
-                // add to sequencer
-                for (PadChannel channel : data.getChannels()) {
-                    Track track = getSong().getTrack(channel.getIndex());
-                    track.addPhrase(1, channel.getChannelPhrase());
-                }
-                data.setState(PadDataState.SELECTED);
-            } else if (data.getState() == PadDataState.SELECTED) {
-
-            }
-        }
-        //getSong().play();
-        getController().getSystemSequencer().play(SequencerMode.SONG);
+        getController().getSongSequencer().setLoopPoints(0, 1000);
+        songPlayer.play();
     }
 
     @Override
     public void stop() {
         getController().getSystemSequencer().stop();
-        getController().getSongSequencer().playPosition(0);
+        //getController().getSongSequencer().playPosition(0);
     }
 
     @Override
     public void queue(PadData data) {
-        if (!queue.contains(data)) {
-            CtkDebug.log("Queue:" + data);
-            data.setState(PadDataState.QUEUED);
-            queue.add(data);
-        }
+        songPlayer.queue(data);
     }
 
     @Override
     public void unqueue(PadData data) {
-        if (queue.contains(data)) {
-            if (data.getState() == PadDataState.QUEUED) {
-                data.setState(PadDataState.IDLE);
-                queue.remove(data);
-            } else {
-                data.setState(PadDataState.UNQUEUED);
-            }
-        }
+        songPlayer.unqueue(data);
     }
 
     @Inject
@@ -276,6 +161,12 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
         TrackSong song = getSong();
         song.setNumTracks(14);
+
+        // Belongs in state?
+        songPlayer = new SongPlayer(getController());
+        songPlayer.setPadMap(padMapModel);
+        songPlayer.setSong(song);
+
     }
 
     @Override
@@ -284,6 +175,13 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     @Override
     public void onShow() {
+
+        for (PadData data : padMapModel.getPads()) {
+            if (data.getState() == PadDataState.SELECTED) {
+                songPlayer.queue(data);
+            }
+            // XXX might have to reset other than selected from the saved state
+        }
 
         Integer selectedTone = getState().getSelectedTone();
         if (selectedTone != null)

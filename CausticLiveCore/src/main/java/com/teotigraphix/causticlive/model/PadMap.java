@@ -2,6 +2,7 @@
 package com.teotigraphix.causticlive.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -109,5 +110,9 @@ public class PadMap implements ISerialize {
                 result.add(data);
         }
         return result;
+    }
+
+    public Collection<PadData> getPads() {
+        return map.values();
     }
 }

@@ -105,6 +105,7 @@
     <Pane id="padFocusOverlay" layoutX="1222.0" layoutY="28.0" prefHeight="22.0" prefWidth="30.0" style="-fx-border-color:#7BDA00;&#10;-fx-border-radius:4;&#10;-fx-border-width:2;" />
     <ToggleButton id="playPauseButton" layoutX="75.0" layoutY="614.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="82.0" text="Play" />
     <Button id="loadButton" layoutX="75.0" layoutY="80.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Load" />
+    <Pane id="extrasPane" layoutX="652.0" layoutY="115.0" mouseTransparent="true" prefHeight="550.0" prefWidth="546.0" />
   </children>
   <stylesheets>
     <URL value="@MainScreen.css" />

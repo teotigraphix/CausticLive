@@ -1,6 +1,7 @@
 
 package com.teotigraphix.causticlive.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.inject.Singleton;
@@ -32,7 +33,7 @@ public class PadMapModel extends ModelBase implements IPadMapModel {
     protected void configState(ICaustkModelState state) {
         getState().initialize(getController(), 4, 16);
     }
-    
+
     public PadData getPad(int bank, int localIndex) {
         return getState().padMap.getPad(bank, localIndex);
     }
@@ -66,6 +67,11 @@ public class PadMapModel extends ModelBase implements IPadMapModel {
         public void wakeup(ICaustkController controller) {
             padMap.wakeup(controller);
         }
+    }
+
+    @Override
+    public Collection<PadData> getPads() {
+        return getState().getPadMap().getPads();
     }
 
 }
