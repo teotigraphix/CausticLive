@@ -19,6 +19,7 @@ import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
 import com.teotigraphix.caustk.core.components.SynthComponent;
+import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
@@ -166,7 +167,8 @@ public class SoundModel extends ModelBase implements ISoundModel {
         songPlayer = new SongPlayer(getController());
         songPlayer.setPadMap(padMapModel);
         songPlayer.setSong(song);
-
+        
+        SequencerMessage.SONG_END_MODE.send(getController(), 0);
     }
 
     @Override
