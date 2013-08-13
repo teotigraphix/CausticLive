@@ -32,10 +32,10 @@ import com.teotigraphix.causticlive.model.PadData;
 import com.teotigraphix.causticlive.screen.AssignmentScreenView;
 import com.teotigraphix.causticlive.utils.ImageUtils;
 import com.teotigraphix.caustk.core.CtkDebug;
-import com.teotigraphix.caustk.core.PatternUtils;
 import com.teotigraphix.caustk.library.ILibraryManager.OnLibraryManagerSelectedLibraryChange;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.caustk.pattern.PatternUtils;
 import com.teotigraphix.caustk.tone.Tone;
 
 @Singleton

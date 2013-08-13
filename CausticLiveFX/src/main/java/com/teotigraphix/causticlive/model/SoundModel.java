@@ -18,13 +18,13 @@ import com.teotigraphix.causticlive.model.IPadModel.PadDataState;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.CtkDebug;
-import com.teotigraphix.caustk.core.components.SynthComponent;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryScene;
 import com.teotigraphix.caustk.sequencer.TrackSong;
 import com.teotigraphix.caustk.tone.Tone;
+import com.teotigraphix.caustk.tone.components.SynthComponent;
 
 @Singleton
 public class SoundModel extends ModelBase implements ISoundModel {
