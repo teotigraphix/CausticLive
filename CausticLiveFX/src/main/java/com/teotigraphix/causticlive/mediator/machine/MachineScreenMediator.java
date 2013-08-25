@@ -216,7 +216,8 @@ public class MachineScreenMediator extends DesktopMediatorBase {
                 .get(data.getToneIndex());
         if (!button.isSelected())
             button.setSelected(true);
-
+        if (soundModel.getLibrary() == null)
+            return;
         LibraryPatch libraryPatch = soundModel.getLibrary().findPatchById(data.getPatchId());
         if (libraryPatch == null) {
             patchList.getSelectionModel().clearSelection();

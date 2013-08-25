@@ -207,6 +207,8 @@ public class PadChannel implements ISerialize {
     }
 
     private void assignNoteData(ChannelPhrase channelPhrase) {
+        if (getTone() == null)
+            return;
         String data = channelPhrase.getNoteData();
         int oldBank = getTone().getPatternSequencer().getSelectedBank();
         int oldPattern = getTone().getPatternSequencer().getSelectedIndex();

@@ -36,6 +36,9 @@ import com.teotigraphix.causticlive.model.PadModel;
 import com.teotigraphix.causticlive.model.SoundModel;
 import com.teotigraphix.caustk.application.CaustkConfigurationBase;
 import com.teotigraphix.caustk.application.ICaustkConfiguration;
+import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.caustk.sound.DesktopSoundGenerator;
+import com.teotigraphix.caustk.sound.ISoundGenerator;
 import com.teotigraphix.caustk.utils.RuntimeUtils;
 
 public class ApplicationModule extends JavaFXRuntimeModule {
@@ -58,6 +61,8 @@ public class ApplicationModule extends JavaFXRuntimeModule {
 
     public static class ApplicationConfiguration extends CaustkConfigurationBase {
 
+        private DesktopSoundGenerator generator;
+
         @Override
         public String getApplicationId() {
             return "causticlive";
@@ -70,6 +75,18 @@ public class ApplicationModule extends JavaFXRuntimeModule {
         }
 
         public ApplicationConfiguration() {
+            generator = new DesktopSoundGenerator();
+        }
+
+        @Override
+        public ISoundGenerator createSoundGenerator(ICaustkController controller) {
+            return new DesktopSoundGenerator();
+        }
+
+        @Override
+        public void setSoundGenerator(ISoundGenerator soundGenerator) {
+            // TODO Auto-generated method stub
+            
         }
     }
 }

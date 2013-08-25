@@ -1,0 +1,12 @@
+
+game.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+splash
+  rotate: false
+  xy: 2, 2
+  size: 1200, 752
+  orig: 1200, 752
+  offset: 0, 0
+  index: -1
