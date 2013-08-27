@@ -1,11 +1,8 @@
 
 package com.teotigraphix.causticlive;
 
-import java.io.File;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.tools.imagepacker.TexturePacker2;
 import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 import com.teotigraphix.causticlive.config.CausticLiveModule;
 import com.teotigraphix.caustk.sound.DesktopSoundGenerator;

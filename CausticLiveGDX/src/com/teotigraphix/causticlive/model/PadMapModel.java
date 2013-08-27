@@ -35,10 +35,12 @@ public class PadMapModel extends ModelBase implements IPadMapModel {
         getState().initialize(getController(), 4, 16);
     }
 
+    @Override
     public PadData getPad(int bank, int localIndex) {
         return getState().padMap.getPad(bank, localIndex);
     }
 
+    @Override
     public List<PadData> getPads(int bank) {
         return getState().padMap.getPads(bank);
     }

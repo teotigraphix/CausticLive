@@ -117,6 +117,7 @@ public class PhrasePlayer {
     }
 
     private void queueTracks() {
+        @SuppressWarnings("unused")
         final int currentBeat = getSong().getCurrentBeat();
         final int currentMeasure = getSong().getCurrentMeasure();
 
@@ -191,6 +192,7 @@ public class PhrasePlayer {
     private void lockAndExtendPlayingTracks() {
         final int beat = getSong().getCurrentBeat();
         final int currentMeasure = getSong().getCurrentMeasure();
+        @SuppressWarnings("unused")
         final int isNewMeasure = beat % 4;
 
         // from here on, we have everything correct with current beat and measure

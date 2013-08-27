@@ -34,6 +34,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
     @Inject
     IPadMapModel padMapModel;
 
+    @Override
     public void setCurrentBeat(float beat) {
         phrasePlayer.beatChange( beat);
     }
@@ -68,6 +69,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
         return (SoundModelState)super.getState();
     }
 
+    @Override
     public TrackSong getSong() {
         return getController().getSongManager().getTrackSong();
     }
@@ -110,6 +112,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     private LibraryScene libraryScene;
 
+    @Override
     public LibraryScene getLibraryScene() {
         return libraryScene;
     }
@@ -182,6 +185,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
             setSelectedTone(selectedTone);
     }
 
+    @SuppressWarnings("unused")
     private void loadPatches() {
         Library library = getLibrary();
         if (library == null)

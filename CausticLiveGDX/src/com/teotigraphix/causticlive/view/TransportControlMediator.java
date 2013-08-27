@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.caustk.core.CausticException;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.SequencerMode;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ToggleButton;
