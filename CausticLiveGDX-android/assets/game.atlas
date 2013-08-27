@@ -3,9 +3,48 @@ game.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-splash
+default-rect
+  rotate: false
+  xy: 2, 52
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+default-round-large
+  rotate: false
+  xy: 52, 75
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+default-scroll
+  rotate: false
+  xy: 1204, 806
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+pad_selected
+  rotate: false
+  xy: 1204, 806
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+pad_up
   rotate: false
   xy: 2, 2
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+splash
+  rotate: false
+  xy: 2, 102
   size: 1200, 752
   orig: 1200, 752
   offset: 0, 0

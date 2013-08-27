@@ -1,8 +1,11 @@
 
 package com.teotigraphix.causticlive;
 
+import java.io.File;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.tools.imagepacker.TexturePacker2;
 import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 import com.teotigraphix.causticlive.config.CausticLiveModule;
 import com.teotigraphix.caustk.sound.DesktopSoundGenerator;
@@ -19,9 +22,9 @@ public class Main {
         Settings settings = new Settings();
         settings.maxWidth = 2048;
         settings.maxHeight = 2048;
-        //        TexturePacker2.process(settings, new File(
-        //                "C:/Users/Work/Documents/git/CausticLive/CausticLiveGDX-android/assets/images")
-        //                .getPath(), "../CausticLiveGDX-android/assets", "game");
+//        TexturePacker2.process(settings, new File(
+//                "C:/Users/Work/Documents/git/CausticLive/CausticLiveGDX-android/assets/images")
+//                .getPath(), "../CausticLiveGDX-android/assets", "game");
 
         try {
             Thread.sleep(500);

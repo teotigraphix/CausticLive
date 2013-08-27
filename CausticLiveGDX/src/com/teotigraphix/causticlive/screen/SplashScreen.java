@@ -6,8 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.google.inject.Singleton;
 import com.teotigraphix.libgdx.screen.ScreenBase;
 
+@Singleton
 public class SplashScreen extends ScreenBase {
 
     private Image splashImage;
@@ -29,6 +31,8 @@ public class SplashScreen extends ScreenBase {
         //splashImage.getColor().a = 0f;
 
         stage.addActor(splashImage);
+        
+        game.setScreen(new MainScreen());
     }
 
 }
