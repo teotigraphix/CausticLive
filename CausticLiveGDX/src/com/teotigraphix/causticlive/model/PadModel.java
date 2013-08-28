@@ -65,11 +65,11 @@ public class PadModel extends ModelBase implements IPadModel {
 
     @Inject
     IDialogManager dialogManager;
-    
+
     @Override
     public void edit(int localIndex) {
         // long press
-        dialogManager.create();
+
     }
 
     @Override

@@ -22,6 +22,8 @@ import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.config.CausticRuntimeModule;
 import com.teotigraphix.libgdx.dialog.DialogManager;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
+import com.teotigraphix.libgdx.scene2d.IScreenProvider;
+import com.teotigraphix.libgdx.scene2d.ScreenProvider;
 
 public class CausticLiveModule extends CausticRuntimeModule {
 
@@ -37,6 +39,7 @@ public class CausticLiveModule extends CausticRuntimeModule {
         bind(ILibraryModel.class).to(LibraryModel.class).in(Singleton.class);
 
         bind(IDialogManager.class).to(DialogManager.class).in(Singleton.class);
+        bind(IScreenProvider.class).to(ScreenProvider.class).in(Singleton.class);
 
         bind(IPadModel.class).to(PadModel.class).in(Singleton.class);
         bind(IPadMapModel.class).to(PadMapModel.class).in(Singleton.class);
