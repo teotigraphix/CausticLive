@@ -20,7 +20,7 @@ public class MainActivity extends AndroidApplication {
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;
 
-        CausticLiveApp listener = new CausticLiveApp(new AndroidSoundGenerator());
+        CausticLiveApp listener = new CausticLiveApp(new AndroidSoundGenerator(this, 0x8A7D57E0));
         initialize(listener, cfg);
         listener.initialize(new CausticLiveModule());
         controller = listener.getController();

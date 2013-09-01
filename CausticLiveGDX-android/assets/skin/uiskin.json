@@ -22,5 +22,20 @@ com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
     default: { background: default-rect, titleFont:default-font, titleFontColor:white }
+},
+
+
+com.teotigraphix.libgdx.ui.GDXButton$ButtonStyle: {
+  default: { 
+    down: pad_selected, 
+    up: pad_up, 
+    checked:pad_selected, 
+    font: default-font, 
+    fontColor: white, 
+    checkedFontColor:red, 
+    disabledFontColor: black, 
+    downFontColor:white 
+    },   
 }
+
 }
