@@ -41,6 +41,7 @@ public class PadGridMediator extends MediatorBase {
 
             @Override
             public void onLongPress(Integer localIndex, float x, float y) {
+                System.out.println("Long Press");
                 //                List<LibraryPhrase> phrases = getController().getLibraryManager()
                 //                        .getSelectedLibrary().getPhrases();
                 //
@@ -100,7 +101,7 @@ public class PadGridMediator extends MediatorBase {
     }
 
     protected void updateView(Collection<QueueData> viewData) {
-        view.select(viewData, true);
+        view.refresh(viewData, true);
     }
 
     @Override

@@ -13,7 +13,7 @@ default-rect
   index: -1
 default-round-large
   rotate: false
-  xy: 52, 75
+  xy: 1254, 829
   size: 25, 25
   orig: 25, 25
   offset: 0, 0
@@ -34,9 +34,25 @@ pad_selected
   orig: 48, 48
   offset: 0, 0
   index: -1
-pad_up
+overlay_play
   rotate: false
   xy: 2, 2
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+overlay_queued
+  rotate: false
+  xy: 52, 52
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+pad_up
+  rotate: false
+  xy: 1204, 756
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48

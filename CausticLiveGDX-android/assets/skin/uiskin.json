@@ -36,6 +36,24 @@ com.teotigraphix.libgdx.ui.GDXButton$ButtonStyle: {
     disabledFontColor: black, 
     downFontColor:white 
     },   
+},
+
+com.teotigraphix.causticlive.view.components.PadButton$PadButtonStyle: {
+  default: { 
+    down: pad_selected, 
+    up: pad_up, 
+    checked:pad_selected, 
+    
+    queueOverlay: overlay_queued,
+    playOverlay: overlay_play,
+    lockOverlay: pad_selected,
+    
+    font: default-font, 
+    fontColor: white, 
+    checkedFontColor:red, 
+    disabledFontColor: black, 
+    downFontColor:white 
+    },   
 }
 
 }
