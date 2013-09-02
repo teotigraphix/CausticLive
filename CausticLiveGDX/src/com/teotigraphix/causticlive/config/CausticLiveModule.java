@@ -3,6 +3,8 @@ package com.teotigraphix.causticlive.config;
 
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.application.ApplicationMediator;
+import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.causticlive.model.SequencerModel;
 import com.teotigraphix.caustk.controller.ICaustkConfiguration;
 import com.teotigraphix.caustk.controller.core.CaustkConfigurationBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
@@ -23,14 +25,11 @@ public class CausticLiveModule extends CausticRuntimeModule {
     protected void configureApplicationRequirements() {
         // Config
         bind(ICaustkConfiguration.class).to(ApplicationConfiguration.class).in(Singleton.class);
-        //        bind(ILibraryModel.class).to(LibraryModel.class).in(Singleton.class);
 
         bind(IDialogManager.class).to(DialogManager.class).in(Singleton.class);
         bind(IScreenProvider.class).to(ScreenProvider.class).in(Singleton.class);
-        //
-        //        bind(IPadModel.class).to(PadModel.class).in(Singleton.class);
-        //        bind(IPadMapModel.class).to(PadMapModel.class).in(Singleton.class);
-        //        bind(ISoundModel.class).to(SoundModel.class).in(Singleton.class);
+
+        bind(ISequencerModel.class).to(SequencerModel.class).in(Singleton.class);
     }
 
     public static class ApplicationConfiguration extends CaustkConfigurationBase {

@@ -1,12 +1,20 @@
 
 package com.teotigraphix.causticlive.view.main;
 
+import org.androidtransfuse.event.EventObserver;
+
+import com.google.inject.Inject;
+import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
 
 public class BankBarMediator extends MediatorBase {
+
+    @Inject
+    ISequencerModel sequencerModel;
 
     private ButtonBar view;
 
@@ -23,8 +31,7 @@ public class BankBarMediator extends MediatorBase {
         view.setOnButtonBarListener(new OnButtonBarListener() {
             @Override
             public void onChange(int index) {
-                // TODO Auto-generated method stub
-
+                sequencerModel.setSelectedBank(index);
             }
         });
         view.setPosition(540f, 365f);
@@ -33,7 +40,21 @@ public class BankBarMediator extends MediatorBase {
     }
 
     @Override
+    protected void registerObservers() {
+        super.registerObservers();
+
+        register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
+                new EventObserver<OnSequencerModelPropertyChange>() {
+                    @Override
+                    public void trigger(OnSequencerModelPropertyChange object) {
+                        view.select(sequencerModel.getSelectedBank());
+                    }
+                });
+    }
+
+    @Override
     public void onRegister() {
+
     }
 
 }

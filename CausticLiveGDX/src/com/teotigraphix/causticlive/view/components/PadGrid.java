@@ -1,6 +1,10 @@
 
 package com.teotigraphix.causticlive.view.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,9 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 import com.teotigraphix.libgdx.ui.GDXToggleButton;
 
 public class PadGrid extends WidgetGroup {
+
+    private List<PadButton> buttons = new ArrayList<PadButton>();
 
     private Skin skin;
 
@@ -31,7 +39,7 @@ public class PadGrid extends WidgetGroup {
         int index = 0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColums; j++) {
-                final GDXToggleButton button = new GDXToggleButton(index + "", skin);
+                final PadButton button = new PadButton(index + "", skin);
                 button.getProperties().put("index", index);
                 button.addListener(new ChangeListener() {
                     @Override
@@ -53,6 +61,7 @@ public class PadGrid extends WidgetGroup {
                     }
                 });
                 addActor(button);
+                buttons.add(button);
                 index++;
             }
         }
@@ -103,4 +112,24 @@ public class PadGrid extends WidgetGroup {
         void onLongPress(Integer localIndex, float x, float y);
 
     }
+
+    public void select(Collection<QueueData> viewData, boolean selected) {
+        int index = 0;
+        for (QueueData queueData : viewData) {
+            PadButton padButton = buttons.get(index);
+            if (queueData != null
+                    && (queueData.getState() == QueueDataState.Queued || queueData.getState() == QueueDataState.Selected)) {
+                padButton.setDisabled(false);
+                padButton.setChecked(true);
+                padButton.setDisabled(false);
+            } else {
+                padButton.setDisabled(false);
+                padButton.setText("Idle");
+                padButton.setChecked(false);
+                padButton.setDisabled(false);
+            }
+            index++;
+        }
+    }
+
 }
