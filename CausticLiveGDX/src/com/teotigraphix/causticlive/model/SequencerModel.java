@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.sequencer.IQueueSequencer;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
@@ -14,6 +16,25 @@ import com.teotigraphix.libgdx.model.ModelBase;
 
 @Singleton
 public class SequencerModel extends ModelBase implements ISequencerModel {
+
+    protected IQueueSequencer getQueueSequencer() {
+        return getController().getQueueSequencer();
+    }
+
+    @Override
+    public void play() {
+        try {
+            getQueueSequencer().play();
+        } catch (CausticException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void stop() {
+
+    }
 
     @Override
     protected SequencerModelState getState() {

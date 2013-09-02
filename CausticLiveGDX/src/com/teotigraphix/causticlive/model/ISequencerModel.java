@@ -45,4 +45,8 @@ public interface ISequencerModel extends ICaustkModel {
         }
     }
 
+    void play();
+
+    void stop();
+
 }

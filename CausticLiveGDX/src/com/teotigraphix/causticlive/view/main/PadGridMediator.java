@@ -12,6 +12,7 @@ import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelProper
 import com.teotigraphix.causticlive.view.components.PadGrid;
 import com.teotigraphix.causticlive.view.components.PadGrid.OnPadGridListener;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.queue.QueueSequencer.OnQueueSequencerDataChange;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.scene2d.IScreenProvider;
@@ -85,6 +86,13 @@ public class PadGridMediator extends MediatorBase {
     @Override
     protected void registerObservers() {
         super.registerObservers();
+
+        register(OnQueueSequencerDataChange.class, new EventObserver<OnQueueSequencerDataChange>() {
+            @Override
+            public void trigger(OnQueueSequencerDataChange object) {
+                updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+            }
+        });
 
         register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
                 new EventObserver<OnSequencerModelPropertyChange>() {
