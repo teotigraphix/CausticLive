@@ -3,6 +3,7 @@ package com.teotigraphix.causticlive.model;
 
 import java.util.Collection;
 
+import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.libgdx.model.ICaustkModel;
@@ -49,4 +50,5 @@ public interface ISequencerModel extends ICaustkModel {
 
     void stop();
 
+    void assignPhrase(QueueData data, LibraryPhrase libraryPhrase);
 }

@@ -47,15 +47,6 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
             library = getController().getLibraryManager().loadLibrary(directory);
             getController().getLibraryManager().setSelectedLibrary(library);
         }
-
-        LibraryScene libraryScene = library.getScenes().get(0);
-        try {
-            getController().getSoundSource().createScene(libraryScene);
-        } catch (CausticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
         //
         //        File song = new File("C:/Users/Work/Documents/caustic/songs/C2DEMO.caustic");
         //        try {
@@ -65,6 +56,14 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
         //        } catch (CausticException e) {
         //            e.printStackTrace();
         //        }
+
+        LibraryScene libraryScene = library.getScenes().get(0);
+        try {
+            getController().getSoundSource().createScene(libraryScene);
+        } catch (CausticException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override

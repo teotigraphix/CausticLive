@@ -8,6 +8,7 @@ import java.util.Map;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
@@ -130,5 +131,16 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         public void wakeup(ICaustkController controller) {
             this.controller = controller;
         }
+    }
+
+    @Override
+    public void assignPhrase(QueueData data, LibraryPhrase libraryPhrase) {
+        data.setPhraseId(libraryPhrase.getId());
+        QueueDataChannel channel = data.getChannel(0);
+        int bankIndex = data.getBankIndex();
+        int patternIndex = data.getPatternIndex();
+
+        channel.assignPhrase(libraryPhrase);
+
     }
 }

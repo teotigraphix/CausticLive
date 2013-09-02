@@ -103,7 +103,7 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     public static class SoundModelState implements ICaustkModelState {
 
-        private ICaustkController controller;
+        private transient ICaustkController controller;
 
         private UUID selectedScene;
 
