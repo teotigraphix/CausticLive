@@ -3,6 +3,7 @@ package com.teotigraphix.causticlive;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 import com.teotigraphix.causticlive.config.CausticLiveModule;
 import com.teotigraphix.caustk.sound.core.DesktopSoundGenerator;
 
@@ -15,9 +16,9 @@ public class Main {
         cfg.height = 752;
         cfg.resizable = false;
 
-        //        Settings settings = new Settings();
-        //        settings.maxWidth = 2048;
-        //        settings.maxHeight = 2048;
+        Settings settings = new Settings();
+        settings.maxWidth = 2048;
+        settings.maxHeight = 2048;
         //        TexturePacker2.process(settings, new File(
         //                "C:/Users/Work/Documents/git/CausticLive/CausticLiveGDX-android/assets/images")
         //                .getPath(), "../CausticLiveGDX-android/assets", "game");

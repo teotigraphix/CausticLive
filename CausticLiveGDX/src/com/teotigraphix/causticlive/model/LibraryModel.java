@@ -32,10 +32,10 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
         if (path == null) {
             // create the User library
             try {
-                File resource = project.getResource("libraries");
-                library = getController().getLibraryManager().createLibrary(
-                        new File(resource, "User"));
-                project.put(USER_LIBRARY_PATH, library.getDirectory().getAbsolutePath());
+                // XXX THis has to be project specific
+                File userLib = new File("User");
+                library = getController().getLibraryManager().createLibrary(userLib);
+                project.put(USER_LIBRARY_PATH, library.getDirectory().getPath());
                 getController().getLibraryManager().setSelectedLibrary(library);
                 getController().getLibraryManager().save();
             } catch (IOException e) {
@@ -57,19 +57,20 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
         //            e.printStackTrace();
         //        }
 
-        LibraryScene libraryScene = library.getScenes().get(0);
-        try {
-            getController().getSoundSource().createScene(libraryScene);
-        } catch (CausticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //        LibraryScene libraryScene = library.getScenes().get(0);
+        //        try {
+        //            getController().getSoundSource().createScene(libraryScene);
+        //        } catch (CausticException e) {
+        //            // TODO Auto-generated catch block
+        //            e.printStackTrace();
+        //        }
     }
 
     @Override
     public void importSong(File file) throws IOException, CausticException {
         Library library = getController().getLibraryManager().getSelectedLibrary();
         Library tempLibrary = getController().getLibraryManager().createLibrary();
+        tempLibrary.setDirectory(library.getDirectory());
 
         getController().getLibraryManager().importSong(tempLibrary, file);
 

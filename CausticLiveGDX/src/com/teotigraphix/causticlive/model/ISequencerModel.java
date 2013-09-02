@@ -46,6 +46,10 @@ public interface ISequencerModel extends ICaustkModel {
         }
     }
 
+    boolean isRecordMode();
+
+    void setRecordMode(boolean value);
+
     void play();
 
     void stop();

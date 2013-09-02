@@ -16,6 +16,8 @@ public class TransportControlMediator extends MediatorBase {
 
     private GDXToggleButton playButton;
 
+    private GDXToggleButton recordButton;
+
     public TransportControlMediator() {
     }
 
@@ -37,6 +39,22 @@ public class TransportControlMediator extends MediatorBase {
         });
 
         screen.getStage().addActor(playButton);
+
+        recordButton = new GDXToggleButton("Record", screen.getSkin());
+        recordButton.setPosition(170f, 90f);
+        recordButton.setSize(83f, 50f);
+        recordButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (recordButton.isChecked()) {
+                    sequencerModel.setRecordMode(true);
+                } else {
+                    sequencerModel.setRecordMode(false);
+                }
+            }
+        });
+
+        screen.getStage().addActor(recordButton);
     }
 
     @Override

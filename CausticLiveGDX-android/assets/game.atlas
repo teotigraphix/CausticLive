@@ -5,7 +5,7 @@ filter: Nearest,Nearest
 repeat: none
 default-rect
   rotate: false
-  xy: 2, 52
+  xy: 2, 64
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -13,14 +13,14 @@ default-rect
   index: -1
 default-round-large
   rotate: false
-  xy: 1254, 829
+  xy: 1254, 841
   size: 25, 25
   orig: 25, 25
   offset: 0, 0
   index: -1
 default-scroll
   rotate: false
-  xy: 1204, 806
+  xy: 1204, 818
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -28,15 +28,23 @@ default-scroll
   index: -1
 pad_selected
   rotate: false
-  xy: 1204, 806
+  xy: 1204, 818
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
   offset: 0, 0
   index: -1
-overlay_play
+list_select_bg
   rotate: false
   xy: 2, 2
+  size: 10, 10
+  split: 4, 3, 4, 4
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+overlay_play
+  rotate: false
+  xy: 2, 14
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -44,7 +52,7 @@ overlay_play
   index: -1
 overlay_queued
   rotate: false
-  xy: 52, 52
+  xy: 52, 64
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -52,7 +60,7 @@ overlay_queued
   index: -1
 pad_up
   rotate: false
-  xy: 1204, 756
+  xy: 1204, 768
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -60,7 +68,7 @@ pad_up
   index: -1
 splash
   rotate: false
-  xy: 2, 102
+  xy: 2, 114
   size: 1200, 752
   orig: 1200, 752
   offset: 0, 0

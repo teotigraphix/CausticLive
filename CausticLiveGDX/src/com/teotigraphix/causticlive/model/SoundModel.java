@@ -5,10 +5,8 @@ import java.util.UUID;
 
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.controller.ICaustkController;
-import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.caustk.library.LibraryScene;
-import com.teotigraphix.caustk.tone.Tone;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
 import com.teotigraphix.libgdx.model.ModelBase;
 
@@ -53,30 +51,30 @@ public class SoundModel extends ModelBase implements ISoundModel {
         SequencerMessage.SONG_END_MODE.send(getController(), 0);
     }
 
-    public void loadScene(LibraryScene libraryScene, boolean reset) {
-        // Load the scene to create the machines
-        getController().getSoundSource().clearAndReset();
-
-        if (reset) {
-            getState().clear();
-        }
-        try {
-            getController().getSoundSource().createScene(libraryScene);
-        } catch (CausticException e) {
-            e.printStackTrace();
-        }
-
-        if (reset) {
-            for (Tone tone : getController().getSoundSource().getTones()) {
-                //                ToneData data = new ToneData(tone.getIndex());
-                //                getState().putTone(tone.getIndex(), data);
-            }
-        }
-
-        setLibraryScene(libraryScene);
-
-        //setSelectedTone(-1);
-    }
+    //    public void loadScene(LibraryScene libraryScene, boolean reset) {
+    //        // Load the scene to create the machines
+    //        getController().getSoundSource().clearAndReset();
+    //
+    //        if (reset) {
+    //            getState().clear();
+    //        }
+    //        try {
+    //            getController().getSoundSource().createScene(libraryScene);
+    //        } catch (CausticException e) {
+    //            e.printStackTrace();
+    //        }
+    //
+    //        if (reset) {
+    //            for (Tone tone : getController().getSoundSource().getTones()) {
+    //                //                ToneData data = new ToneData(tone.getIndex());
+    //                //                getState().putTone(tone.getIndex(), data);
+    //            }
+    //        }
+    //
+    //        setLibraryScene(libraryScene);
+    //
+    //        //setSelectedTone(-1);
+    //    }
 
     @Override
     public void onRegister() {
@@ -103,7 +101,12 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     public static class SoundModelState implements ICaustkModelState {
 
+        @SuppressWarnings("unused")
         private transient ICaustkController controller;
+
+        //----------------------------------
+        // selectedScene
+        //----------------------------------
 
         private UUID selectedScene;
 
@@ -124,14 +127,11 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
         @Override
         public void sleep() {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void wakeup(ICaustkController controller) {
             this.controller = controller;
-
         }
     }
 

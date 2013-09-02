@@ -23,18 +23,27 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
     }
 
     @Override
+    public boolean isRecordMode() {
+        return getQueueSequencer().isRecordMode();
+    }
+
+    @Override
+    public void setRecordMode(boolean value) {
+        getQueueSequencer().setRecordMode(value);
+    }
+
+    @Override
     public void play() {
         try {
             getQueueSequencer().play();
         } catch (CausticException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     @Override
     public void stop() {
-
+        getQueueSequencer().stop();
     }
 
     @Override
@@ -143,4 +152,5 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         channel.assignPhrase(libraryPhrase);
 
     }
+
 }
