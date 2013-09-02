@@ -3,8 +3,10 @@ package com.teotigraphix.causticlive.model;
 
 import java.util.UUID;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.caustk.library.LibraryScene;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
@@ -13,9 +15,22 @@ import com.teotigraphix.libgdx.model.ModelBase;
 @Singleton
 public class SoundModel extends ModelBase implements ISoundModel {
 
+    @Inject
+    ILibraryModel libraryModel;
+
     @Override
     protected SoundModelState getState() {
         return (SoundModelState)super.getState();
+    }
+
+    @Override
+    public void loadScene(LibraryScene item) {
+        try {
+            getController().getSoundSource().createScene(item);
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+        getState().setSelectedScene(item.getId());
     }
 
     //----------------------------------
@@ -78,7 +93,12 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     @Override
     public void onRegister() {
-
+        UUID uuid = getState().getSelectedScene();
+        if (uuid != null) {
+            LibraryScene scene = getController().getLibraryManager().getSelectedLibrary()
+                    .findSceneById(uuid);
+            loadScene(scene);
+        }
     }
 
     @Override

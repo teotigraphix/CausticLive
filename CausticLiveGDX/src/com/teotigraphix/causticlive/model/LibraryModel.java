@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.badlogic.gdx.utils.Array;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.Library;
@@ -18,6 +19,14 @@ import com.teotigraphix.libgdx.model.ModelBase;
 public class LibraryModel extends ModelBase implements ILibraryModel {
 
     private static final String USER_LIBRARY_PATH = "userLibraryPath";
+
+    @Override
+    public Array<LibraryScene> getScenes() {
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+        List<LibraryScene> scenes = library.getScenes();
+        Array<LibraryScene> result = new Array<LibraryScene>(scenes.toArray(new LibraryScene[] {}));
+        return result;
+    }
 
     public LibraryModel() {
     }
@@ -47,15 +56,6 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
             library = getController().getLibraryManager().loadLibrary(directory);
             getController().getLibraryManager().setSelectedLibrary(library);
         }
-        //
-        //        File song = new File("C:/Users/Work/Documents/caustic/songs/C2DEMO.caustic");
-        //        try {
-        //            importSong(song);
-        //        } catch (IOException e) {
-        //            e.printStackTrace();
-        //        } catch (CausticException e) {
-        //            e.printStackTrace();
-        //        }
 
         //        LibraryScene libraryScene = library.getScenes().get(0);
         //        try {
@@ -85,11 +85,13 @@ public class LibraryModel extends ModelBase implements ILibraryModel {
         library.getPhrases().addAll(phrases);
 
         getController().getLibraryManager().saveLibrary(library);
+
+        getDispatcher().trigger(new OnLibraryModelLibraryChange());
     }
 
     @Override
     public void onShow() {
-
+        getDispatcher().trigger(new OnLibraryModelLibraryChange());
     }
 
 }

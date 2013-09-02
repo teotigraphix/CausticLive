@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
+import com.teotigraphix.causticlive.view.main.LibraryItemSelectMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
 import com.teotigraphix.causticlive.view.main.SongListMediator;
 import com.teotigraphix.causticlive.view.main.TransportControlMediator;
@@ -30,6 +31,9 @@ public class MainScreen extends ScreenBase {
     @Inject
     SongListMediator SongListMediator;
 
+    @Inject
+    LibraryItemSelectMediator LibraryItemSelectMediator;
+
     private Image splashImage;
 
     public MainScreen() {
@@ -42,6 +46,7 @@ public class MainScreen extends ScreenBase {
         addMediator(TransportControlMediator);
         addMediator(BankMediator);
         addMediator(SongListMediator);
+        addMediator(LibraryItemSelectMediator);
     }
 
     @Override
