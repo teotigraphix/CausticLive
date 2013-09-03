@@ -1,11 +1,17 @@
 
 package com.teotigraphix.causticlive.view.assign;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.google.inject.Inject;
+import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
+import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.model.IApplicationModel;
 import com.teotigraphix.libgdx.screen.IScreen;
@@ -16,7 +22,25 @@ public class BackButtonMediator extends MediatorBase {
     @Inject
     IApplicationModel applicationModel;
 
+    @Inject
+    ISequencerModel sequencerModel;
+
+    private Label titleLabel;
+
     public BackButtonMediator() {
+    }
+
+    @Override
+    protected void registerObservers() {
+        super.registerObservers();
+
+        register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
+                new EventObserver<OnSequencerModelPropertyChange>() {
+                    @Override
+                    public void trigger(OnSequencerModelPropertyChange object) {
+                        refreshTitle();
+                    }
+                });
     }
 
     @Override
@@ -32,10 +56,23 @@ public class BackButtonMediator extends MediatorBase {
             }
         });
         stage.addActor(button);
+
+        titleLabel = new Label("Hello", screen.getSkin());
+        titleLabel.setPosition(10f, 720f);
+        stage.addActor(titleLabel);
     }
 
     @Override
     public void onRegister() {
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        refreshTitle();
+    }
+
+    protected void refreshTitle() {
+        QueueData activeData = sequencerModel.getActiveData();
+        titleLabel.setText(activeData.toString());
+    }
 }

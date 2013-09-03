@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.teotigraphix.causticlive.view.components.PadButton.OnPadButtonListener;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 
 public class PadGrid extends WidgetGroup {
 
@@ -47,6 +46,7 @@ public class PadGrid extends WidgetGroup {
                         PadButton button = (PadButton)actor;
                         listener.onChange((Integer)button.getProperties().get("index"),
                                 button.isSelected());
+                        System.out.println("Selected:" + button.isSelected());
                     }
                 });
                 button.setOnPadButtonListener(new OnPadButtonListener() {
@@ -109,20 +109,15 @@ public class PadGrid extends WidgetGroup {
     }
 
     public void refresh(Collection<QueueData> viewData, boolean selected) {
+        for (PadButton button : buttons) {
+            button.setData(null);
+        }
+
         int index = 0;
         for (QueueData queueData : viewData) {
             PadButton padButton = buttons.get(index);
-            if (queueData != null
-                    && (queueData.getState() == QueueDataState.Queued
-                            || queueData.getState() == QueueDataState.Selected || queueData
-                            .getState() == QueueDataState.UnQueued)) {
-                padButton.setState(queueData.getState());
-                padButton.setSelected(true, true);
-                padButton.setText(queueData.toString());
-            } else {
-                padButton.setText("Idle");
-                padButton.setState(null);
-                padButton.setSelected(false, true);
+            if (queueData != null) {
+                padButton.setData(queueData);
             }
             index++;
         }

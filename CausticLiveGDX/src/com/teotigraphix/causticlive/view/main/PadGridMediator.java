@@ -84,8 +84,6 @@ public class PadGridMediator extends MediatorBase {
                 } else {
                     sequencerModel.unqueue(data);
                 }
-
-                updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
             }
         });
 
@@ -114,6 +112,10 @@ public class PadGridMediator extends MediatorBase {
                                 updateView(sequencerModel.getViewData(sequencerModel
                                         .getSelectedBank()));
                                 break;
+                            case ActiveData:
+                                break;
+                            default:
+                                break;
                         }
                     }
                 });
@@ -128,4 +130,8 @@ public class PadGridMediator extends MediatorBase {
 
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+    }
 }

@@ -57,4 +57,8 @@ public class BankBarMediator extends MediatorBase {
 
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        view.select(sequencerModel.getSelectedBank());
+    }
 }

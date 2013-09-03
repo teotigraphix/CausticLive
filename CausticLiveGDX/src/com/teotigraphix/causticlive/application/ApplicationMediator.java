@@ -9,6 +9,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.IToneModel;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
@@ -24,6 +25,9 @@ public class ApplicationMediator extends MediatorBase implements IApplicationMed
 
     @Inject
     ISequencerModel sequencerModel;
+
+    @Inject
+    IToneModel toneModel;
 
     public ApplicationMediator() {
     }

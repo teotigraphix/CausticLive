@@ -30,7 +30,9 @@ public interface ISequencerModel extends ICaustkModel {
     QueueDataChannel getChannel(int bankIndex, int patternIndex, int toneIndex);
 
     public enum PropertyChangeKind {
-        Bank;
+        Bank,
+
+        ActiveData;
     }
 
     public static class OnSequencerModelPropertyChange {

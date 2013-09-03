@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.utils.Array;
@@ -12,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.IToneModel;
+import com.teotigraphix.causticlive.model.IToneModel.OnToneModelPropertyChange;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.MediatorBase;
@@ -33,6 +36,26 @@ public class PatchListMediator extends MediatorBase {
     private GDXButton assignButton; // this should be in the view
 
     public PatchListMediator() {
+    }
+
+    @Override
+    protected void registerObservers() {
+        super.registerObservers();
+
+        register(toneModel.getDispatcher(), OnToneModelPropertyChange.class,
+                new EventObserver<OnToneModelPropertyChange>() {
+                    @Override
+                    public void trigger(OnToneModelPropertyChange object) {
+                        switch (object.getKind()) {
+                            case ChannelIndex:
+                                updateSelection();
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                });
     }
 
     @Override
@@ -60,11 +83,15 @@ public class PatchListMediator extends MediatorBase {
     @Override
     public void onShow(IScreen screen) {
         view.setItems(getPatchItems());
+        updateSelection();
+    }
+
+    private void updateSelection() {
         // set the selected index
-        QueueData activeData = sequencerModel.getActiveData();
-        UUID phraseId = activeData.getPhraseId();
-        if (phraseId != null) {
-            int index = findPatchIndex(phraseId);
+        int toneIndex = sequencerModel.getActiveData().getViewChannel();
+        UUID patchId = toneModel.getPatchId(toneIndex);
+        if (patchId != null) {
+            int index = findPatchIndex(patchId);
             if (index != -1) {
                 view.setSelectedIndex(index);
             }
@@ -72,6 +99,8 @@ public class PatchListMediator extends MediatorBase {
     }
 
     private int findPatchIndex(UUID patchId) {
+        if (view.getItems() == null)
+            return -1;
         Iterator<?> i = view.getItems().iterator();
         int index = 0;
         while (i.hasNext()) {

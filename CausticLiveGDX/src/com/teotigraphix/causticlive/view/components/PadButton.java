@@ -11,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
-import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
+import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.tone.Tone;
 import com.teotigraphix.libgdx.ui.GDXToggleButton;
 
 public class PadButton extends GDXToggleButton {
@@ -24,18 +25,17 @@ public class PadButton extends GDXToggleButton {
     }
 
     //----------------------------------
-    // state
+    // data
     //----------------------------------
 
-    // Idle, Queued, Playing, Plsying/Lock (last measure)
-    private QueueDataState state;
+    private QueueData data;
 
-    public QueueDataState getState() {
-        return state;
+    public QueueData getData() {
+        return data;
     }
 
-    public void setState(QueueDataState value) {
-        state = value;
+    public void setData(QueueData value) {
+        data = value;
         invalidate();
     }
 
@@ -69,11 +69,12 @@ public class PadButton extends GDXToggleButton {
         if (selected == value)
             return;
         selected = value;
-        //CtkDebug.log("Button:" + selected);
+        // CtkDebug.log("Button:" + selected);
         if (!noEvent && !isDisabled()) {
             ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
-            if (fire(changeEvent))
+            if (fire(changeEvent)) {
                 selected = !value;
+            }
             Pools.free(changeEvent);
         }
     }
@@ -123,6 +124,7 @@ public class PadButton extends GDXToggleButton {
                 }
                 if (isDisabled())
                     return;
+                //System.out.println("CSelected:" + !selected);
                 setSelected(!selected);
             }
         });
@@ -150,20 +152,27 @@ public class PadButton extends GDXToggleButton {
         @SuppressWarnings("unused")
         Drawable lockOverlay = getStyle().lockOverlay;
 
-        if (getState() != null) {
-            switch (getState()) {
-                case Queued:
+        if (data != null) {
+            switch (data.getState()) {
+                case Queue:
                     queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
-                case Selected:
+                case Play:
                     playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case UnQueued:
-                    //queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+                    queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 default:
                     break;
             }
+            int channel = data.getViewChannel();
+            if (channel != -1) {
+                Tone tone = data.getController().getSoundSource().getTone(channel);
+                setText(tone.getName());
+            }
+        } else {
+            setText("Unassigned");
         }
 
     }

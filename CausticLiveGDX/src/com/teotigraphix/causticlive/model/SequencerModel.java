@@ -28,6 +28,7 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
     @Override
     public void setActiveData(QueueData value) {
         activeData = value;
+        getDispatcher().trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.ActiveData));
     }
 
     protected IQueueSequencer getQueueSequencer() {
