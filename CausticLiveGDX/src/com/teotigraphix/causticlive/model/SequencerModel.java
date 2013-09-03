@@ -157,7 +157,7 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
     @Override
     public void assignPhrase(QueueData data, LibraryPhrase libraryPhrase) {
         data.setPhraseId(libraryPhrase.getId());
-        QueueDataChannel channel = data.getChannel(0);
+        QueueDataChannel channel = data.getChannel(data.getViewChannel());
         int bankIndex = data.getBankIndex();
         int patternIndex = data.getPatternIndex();
 
