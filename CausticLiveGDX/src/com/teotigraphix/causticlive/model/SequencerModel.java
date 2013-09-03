@@ -18,6 +18,18 @@ import com.teotigraphix.libgdx.model.ModelBase;
 @Singleton
 public class SequencerModel extends ModelBase implements ISequencerModel {
 
+    private QueueData activeData;
+
+    @Override
+    public QueueData getActiveData() {
+        return activeData;
+    }
+
+    @Override
+    public void setActiveData(QueueData value) {
+        activeData = value;
+    }
+
     protected IQueueSequencer getQueueSequencer() {
         return getController().getQueueSequencer();
     }

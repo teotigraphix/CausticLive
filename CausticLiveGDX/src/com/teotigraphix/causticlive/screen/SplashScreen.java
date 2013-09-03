@@ -31,8 +31,8 @@ public class SplashScreen extends ScreenBase {
         //splashImage.getColor().a = 0f;
 
         stage.addActor(splashImage);
-        
-        game.setScreen(new MainScreen());
+
+        game.setScreen(ICausticLiveScreen.MAIN_SCREEN);
     }
 
 }

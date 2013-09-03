@@ -51,16 +51,18 @@ public class MainScreen extends ScreenBase {
 
     @Override
     public void show() {
-        AtlasRegion splashRegion = getAtlas().findRegion("splash");
-        Drawable splashDrawable = new TextureRegionDrawable(splashRegion);
+        if (splashImage == null) {
+            AtlasRegion splashRegion = getAtlas().findRegion("splash");
+            Drawable splashDrawable = new TextureRegionDrawable(splashRegion);
 
-        // here we create the splash image actor; its size is set when the
-        // resize() method gets called
-        splashImage = new Image(splashDrawable, Scaling.stretch);
-        splashImage.setFillParent(true);
-        //splashImage.getColor().a = 0f;
+            // here we create the splash image actor; its size is set when the
+            // resize() method gets called
+            splashImage = new Image(splashDrawable, Scaling.stretch);
+            splashImage.setFillParent(true);
+            //splashImage.getColor().a = 0f;
 
-        stage.addActor(splashImage);
+            //stage.addActor(splashImage);
+        }
 
         super.show();
     }

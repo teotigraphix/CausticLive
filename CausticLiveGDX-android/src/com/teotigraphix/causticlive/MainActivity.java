@@ -13,6 +13,8 @@ public class MainActivity extends AndroidApplication {
 
     ICaustkController controller;
 
+    private CausticLiveApp listener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,39 +22,9 @@ public class MainActivity extends AndroidApplication {
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;
 
-        CausticLiveApp listener = new CausticLiveApp(new AndroidSoundGenerator(this, 0x8A7D57E0));
+        listener = new CausticLiveApp(new AndroidSoundGenerator(this, 0x8A7D57E0),
+                new CausticLiveModule());
         initialize(listener, cfg);
-        listener.initialize(new CausticLiveModule());
-        controller = listener.getController();
-    }
 
-    @Override
-    protected void onStart() {
-        controller.onStart();
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        controller.onResume();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        controller.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        controller.onStop();
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        controller.onDestroy();
-        super.onDestroy();
     }
 }

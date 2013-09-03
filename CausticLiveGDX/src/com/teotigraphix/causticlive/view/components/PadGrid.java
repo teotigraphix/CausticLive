@@ -6,12 +6,11 @@ import java.util.Collection;
 import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.teotigraphix.causticlive.view.components.PadButton.OnPadButtonListener;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 
@@ -45,25 +44,15 @@ public class PadGrid extends WidgetGroup {
                 button.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
-                        if (longPressed) {
-                            longPressed = false;
-                            return;
-                        }
                         PadButton button = (PadButton)actor;
                         listener.onChange((Integer)button.getProperties().get("index"),
                                 button.isSelected());
                     }
                 });
-                button.addListener(new ActorGestureListener() {
+                button.setOnPadButtonListener(new OnPadButtonListener() {
                     @Override
-                    public void tap(InputEvent event, float x, float y, int count, int button) {
-                    }
-
-                    @Override
-                    public boolean longPress(Actor actor, float x, float y) {
-                        longPressed = true;
-                        listener.onLongPress((Integer)button.getProperties().get("index"), x, y);
-                        return true;
+                    public void onLongPress(Integer index, float x, float y) {
+                        listener.onLongPress(index, x, y);
                     }
                 });
                 addActor(button);

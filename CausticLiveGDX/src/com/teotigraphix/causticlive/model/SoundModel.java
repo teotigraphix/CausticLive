@@ -93,16 +93,17 @@ public class SoundModel extends ModelBase implements ISoundModel {
 
     @Override
     public void onRegister() {
+
+    }
+
+    @Override
+    public void onShow() {
         UUID uuid = getState().getSelectedScene();
         if (uuid != null) {
             LibraryScene scene = getController().getLibraryManager().getSelectedLibrary()
                     .findSceneById(uuid);
             loadScene(scene);
         }
-    }
-
-    @Override
-    public void onShow() {
         //        for (QueueData data : padMapModel.getPads()) {
         //            if (data.getState() == QueueDataState.SELECTED) {
         //                phrasePlayer.queue(data);

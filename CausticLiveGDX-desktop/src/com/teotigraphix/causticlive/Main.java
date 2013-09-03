@@ -29,8 +29,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        CausticLiveApp listener = new CausticLiveApp(new DesktopSoundGenerator());
+        CausticLiveApp listener = new CausticLiveApp(new DesktopSoundGenerator(),
+                new CausticLiveModule());
         new LwjglApplication(listener, cfg);
-        listener.initialize(new CausticLiveModule());
     }
 }

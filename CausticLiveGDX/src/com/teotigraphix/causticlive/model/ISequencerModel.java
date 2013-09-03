@@ -55,4 +55,8 @@ public interface ISequencerModel extends ICaustkModel {
     void stop();
 
     void assignPhrase(QueueData data, LibraryPhrase libraryPhrase);
+
+    QueueData getActiveData();
+
+    void setActiveData(QueueData queueData);
 }

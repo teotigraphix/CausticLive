@@ -3,8 +3,10 @@ package com.teotigraphix.causticlive.view.components;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -13,6 +15,8 @@ import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 import com.teotigraphix.libgdx.ui.GDXToggleButton;
 
 public class PadButton extends GDXToggleButton {
+
+    protected boolean longPressed;
 
     @Override
     public PadButtonStyle getStyle() {
@@ -50,6 +54,7 @@ public class PadButton extends GDXToggleButton {
     //----------------------------------
     // selected
     //----------------------------------
+
     private boolean selected;
 
     public boolean isSelected() {
@@ -64,6 +69,7 @@ public class PadButton extends GDXToggleButton {
         if (selected == value)
             return;
         selected = value;
+        //CtkDebug.log("Button:" + selected);
         if (!noEvent && !isDisabled()) {
             ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
             if (fire(changeEvent))
@@ -96,15 +102,37 @@ public class PadButton extends GDXToggleButton {
     @SuppressWarnings("unused")
     private ClickListener clickListener;
 
+    private OnPadButtonListener listener;
+
     @Override
     protected void init() {
-        // TODO Auto-generated method stub
         addListener(clickListener = new ClickListener() {
+            //            @Override
+            //            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            //                if (isDisabled())
+            //                    return false;
+            //                setSelected(!selected);
+            //                return true;
+            //            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (longPressed) {
+                    longPressed = false;
+                    return;
+                }
                 if (isDisabled())
                     return;
                 setSelected(!selected);
+            }
+        });
+
+        addListener(new ActorGestureListener() {
+            @Override
+            public boolean longPress(Actor actor, float x, float y) {
+                longPressed = true;
+                listener.onLongPress((Integer)getProperties().get("index"), x, y);
+                return true;
             }
         });
     }
@@ -138,6 +166,15 @@ public class PadButton extends GDXToggleButton {
             }
         }
 
+    }
+
+    public void setOnPadButtonListener(OnPadButtonListener l) {
+        listener = l;
+
+    }
+
+    public interface OnPadButtonListener {
+        void onLongPress(Integer index, float x, float y);
     }
 
     //--------------------------------------------------------------------------
