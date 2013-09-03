@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ILibraryModel;
+import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.controller.MediatorBase;
@@ -20,6 +21,9 @@ public class ApplicationMediator extends MediatorBase implements IApplicationMed
 
     @Inject
     ISoundModel soundModel;
+
+    @Inject
+    ISequencerModel sequencerModel;
 
     public ApplicationMediator() {
     }

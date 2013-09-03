@@ -124,7 +124,9 @@ public class PadGrid extends WidgetGroup {
         for (QueueData queueData : viewData) {
             PadButton padButton = buttons.get(index);
             if (queueData != null
-                    && (queueData.getState() == QueueDataState.Queued || queueData.getState() == QueueDataState.Selected)) {
+                    && (queueData.getState() == QueueDataState.Queued
+                            || queueData.getState() == QueueDataState.Selected || queueData
+                            .getState() == QueueDataState.UnQueued)) {
                 padButton.setState(queueData.getState());
                 padButton.setSelected(true, true);
                 padButton.setText(queueData.toString());
@@ -133,7 +135,6 @@ public class PadGrid extends WidgetGroup {
                 padButton.setState(null);
                 padButton.setSelected(false, true);
             }
-
             index++;
         }
     }

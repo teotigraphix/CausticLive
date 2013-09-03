@@ -15,6 +15,7 @@ public class CausticLiveApp extends GDXGame {
 
     @Override
     public void create() {
+        super.create();
         setScreen(new SplashScreen());
     }
 
