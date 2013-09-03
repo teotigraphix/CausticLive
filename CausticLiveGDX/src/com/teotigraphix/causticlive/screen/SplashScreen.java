@@ -2,6 +2,8 @@
 package com.teotigraphix.causticlive.screen;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -29,10 +31,15 @@ public class SplashScreen extends ScreenBase {
         splashImage = new Image(splashDrawable, Scaling.stretch);
         splashImage.setFillParent(true);
         //splashImage.getColor().a = 0f;
+        splashImage.addAction(Actions.delay(0.01f, new Action() {
+            @Override
+            public boolean act(float delta) {
+                game.setScreen(ICausticLiveScreen.MAIN_SCREEN);
+                return true;
+            }
+        }));
 
         stage.addActor(splashImage);
-
-        game.setScreen(ICausticLiveScreen.MAIN_SCREEN);
     }
 
 }
