@@ -154,6 +154,7 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         }
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void assignPhrase(QueueData data, LibraryPhrase libraryPhrase) {
         data.setPhraseId(libraryPhrase.getId());

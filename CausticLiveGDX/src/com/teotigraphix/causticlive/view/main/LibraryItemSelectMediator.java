@@ -57,8 +57,6 @@ public class LibraryItemSelectMediator extends MediatorBase implements ICaustkMe
         mediators.add(songListToolMediator);
         mediators.add(sceneListToolMediator);
 
-        float sheight = screen.getStage().getHeight();
-
         float x = 65f;
         float y = 235f;
         float width = 330f;
