@@ -11,7 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
-import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.causticlive.model.IToneModel;
+import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
@@ -19,22 +20,25 @@ import com.teotigraphix.libgdx.ui.GDXButton;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
 @Singleton
-public class PhraseListMediator extends MediatorBase {
+public class PatchListMediator extends MediatorBase {
 
     @Inject
     ISequencerModel sequencerModel;
+
+    @Inject
+    IToneModel toneModel;
 
     private ScrollList view; // need composite component
 
     private GDXButton assignButton; // this should be in the view
 
-    public PhraseListMediator() {
+    public PatchListMediator() {
     }
 
     @Override
     public void create(IScreen screen) {
         view = new ScrollList(screen.getSkin());
-        view.setPosition(25f, 100f);
+        view.setPosition(775f, 100f);
         view.setSize(400f, 400f);
         screen.getStage().addActor(view);
 
@@ -43,54 +47,55 @@ public class PhraseListMediator extends MediatorBase {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 final QueueData data = sequencerModel.getActiveData();
-                LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
-                sequencerModel.assignPhrase(data, libraryPhrase);
+                LibraryPatch libraryPatch = (LibraryPatch)view.getSelectedItem();
+                toneModel.assignPatch(data, libraryPatch);
             }
         });
-        assignButton.setPosition(325f, 510f);
+        assignButton.setPosition(1075f, 510f);
         assignButton.setSize(100f, 40f);
 
         screen.getStage().addActor(assignButton);
     }
 
-    private Array<?> getPhraseItems() {
-        final List<LibraryPhrase> phrases = getController().getLibraryManager()
-                .getSelectedLibrary().getPhrases();
-        Array<LibraryPhrase> result = new Array<LibraryPhrase>();
-        for (LibraryPhrase libraryPhrase : phrases) {
-            result.add(libraryPhrase);
-        }
-        return result;
-    }
-
-    @Override
-    public void onRegister() {
-    }
-
     @Override
     public void onShow(IScreen screen) {
-        view.setItems(getPhraseItems());
+        view.setItems(getPatchItems());
         // set the selected index
         QueueData activeData = sequencerModel.getActiveData();
         UUID phraseId = activeData.getPhraseId();
         if (phraseId != null) {
-            int index = findPhraseIndex(phraseId);
+            int index = findPatchIndex(phraseId);
             if (index != -1) {
                 view.setSelectedIndex(index);
             }
         }
     }
 
-    private int findPhraseIndex(UUID phraseId) {
+    private int findPatchIndex(UUID patchId) {
         Iterator<?> i = view.getItems().iterator();
         int index = 0;
         while (i.hasNext()) {
-            LibraryPhrase libraryPhrase = (LibraryPhrase)i.next();
-            if (libraryPhrase.getId().equals(phraseId))
+            LibraryPatch item = (LibraryPatch)i.next();
+            if (item.getId().equals(patchId))
                 return index;
             index++;
         }
         return -1;
     }
 
+    @Override
+    public void onRegister() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private Array<?> getPatchItems() {
+        final List<LibraryPatch> patches = getController().getLibraryManager().getSelectedLibrary()
+                .getPatches();
+        Array<LibraryPatch> result = new Array<LibraryPatch>();
+        for (LibraryPatch item : patches) {
+            result.add(item);
+        }
+        return result;
+    }
 }
