@@ -35,7 +35,7 @@ public class ApplicationMediator extends MediatorBase implements IApplicationMed
     @Override
     protected void onProjectCreate() {
         try {
-            getController().getTrackSequencer().create(new File("songs/UntitledSong.ctks"));
+            getController().getTrackSequencer().createSong(new File("UntitledSong.ctks"));
             getController().getTrackSequencer().setCurrentTrack(0);
         } catch (IOException e) {
             e.printStackTrace();
