@@ -46,7 +46,6 @@ public class PadGrid extends WidgetGroup {
                         PadButton button = (PadButton)actor;
                         listener.onChange((Integer)button.getProperties().get("index"),
                                 button.isSelected());
-                        System.out.println("Selected:" + button.isSelected());
                     }
                 });
                 button.setOnPadButtonListener(new OnPadButtonListener() {

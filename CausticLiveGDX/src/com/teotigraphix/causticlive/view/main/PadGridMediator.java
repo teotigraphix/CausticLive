@@ -99,7 +99,7 @@ public class PadGridMediator extends MediatorBase {
                 OnQueueSequencerDataChange.class, new EventObserver<OnQueueSequencerDataChange>() {
                     @Override
                     public void trigger(OnQueueSequencerDataChange object) {
-                        updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+                        //updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
                     }
                 });
 

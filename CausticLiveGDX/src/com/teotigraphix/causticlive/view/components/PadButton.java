@@ -149,7 +149,6 @@ public class PadButton extends GDXToggleButton {
 
         Drawable queueOverlay = getStyle().queueOverlay;
         Drawable playOverlay = getStyle().playOverlay;
-        @SuppressWarnings("unused")
         Drawable lockOverlay = getStyle().lockOverlay;
 
         if (data != null) {
@@ -161,7 +160,7 @@ public class PadButton extends GDXToggleButton {
                     playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case UnQueued:
-                    queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+                    lockOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 default:
                     break;
