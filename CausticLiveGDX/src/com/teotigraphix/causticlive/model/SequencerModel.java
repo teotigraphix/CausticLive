@@ -12,6 +12,8 @@ import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
+import com.teotigraphix.caustk.sequencer.track.TrackChannel;
+import com.teotigraphix.caustk.sequencer.track.TrackPhrase;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
 import com.teotigraphix.libgdx.model.ModelBase;
 
@@ -155,16 +157,15 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         }
     }
 
-    @SuppressWarnings("unused")
     @Override
-    public void assignPhrase(QueueData data, LibraryPhrase libraryPhrase) {
-        data.setPhraseId(libraryPhrase.getId());
-        QueueDataChannel channel = data.getChannel(data.getViewChannel());
-        int bankIndex = data.getBankIndex();
-        int patternIndex = data.getPatternIndex();
-
-        channel.assignPhrase(libraryPhrase);
-
+    public void assignPhrase(QueueData data, TrackChannel trackChannel, LibraryPhrase libraryPhrase) {
+        QueueDataChannel channel = data.getChannel(trackChannel.getIndex());
+        TrackPhrase trackPhrase = trackChannel.getPhrase(channel.getBankIndex(),
+                channel.getPatternIndex());
+        // TrackSequencerHandlers sets this on the pattern sequencer
+        trackPhrase.setPhraseId(libraryPhrase.getId());
+        trackPhrase.setLength(libraryPhrase.getLength());
+        trackPhrase.setNoteData(libraryPhrase.getNoteData());
+        channel.assignPhrase(trackPhrase);
     }
-
 }

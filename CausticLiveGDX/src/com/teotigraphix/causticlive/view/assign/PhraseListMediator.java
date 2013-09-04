@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.track.TrackChannel;
 import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.GDXButton;
@@ -44,7 +45,9 @@ public class PhraseListMediator extends MediatorBase {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 final QueueData data = sequencerModel.getActiveData();
                 LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
-                sequencerModel.assignPhrase(data, libraryPhrase);
+                TrackChannel channel = getController().getTrackSequencer().getTrack(
+                        data.getViewChannel());
+                sequencerModel.assignPhrase(data, channel, libraryPhrase);
             }
         });
         assignButton.setPosition(325f, 510f);
@@ -71,16 +74,17 @@ public class PhraseListMediator extends MediatorBase {
     public void onShow(IScreen screen) {
         view.setItems(getPhraseItems());
         // set the selected index
-        QueueData activeData = sequencerModel.getActiveData();
-        UUID phraseId = activeData.getPhraseId();
-        if (phraseId != null) {
-            int index = findPhraseIndex(phraseId);
-            if (index != -1) {
-                view.setSelectedIndex(index);
-            }
-        }
+        //        QueueData activeData = sequencerModel.getActiveData();
+        //        UUID phraseId = activeData.getPhraseId();
+        //        if (phraseId != null) {
+        //            int index = findPhraseIndex(phraseId);
+        //            if (index != -1) {
+        //                view.setSelectedIndex(index);
+        //            }
+        //        }
     }
 
+    @SuppressWarnings("unused")
     private int findPhraseIndex(UUID phraseId) {
         Iterator<?> i = view.getItems().iterator();
         int index = 0;
