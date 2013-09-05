@@ -33,7 +33,7 @@ public class LibraryItemSelectMediator extends MediatorBase implements ICaustkMe
     Injector injector;
 
     private String[] items = new String[] {
-            "Import", "Scene", "Patch", "Phrase"
+            "Import", "Scene"
     };
 
     private Array<ScrollList> lists = new Array<ScrollList>();

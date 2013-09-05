@@ -70,6 +70,9 @@ public class PatchListMediator extends MediatorBase {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 final QueueData data = sequencerModel.getActiveData();
+                // if -1 set to 0 since it has not been assigned(this is temp)
+                if (data.getViewChannelIndex() == -1)
+                    data.setViewChannelIndex(0);
                 LibraryPatch libraryPatch = (LibraryPatch)view.getSelectedItem();
                 toneModel.assignPatch(data, libraryPatch);
             }

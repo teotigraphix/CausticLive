@@ -79,10 +79,24 @@ public class PadGridMediator extends MediatorBase {
             public void onChange(int localIndex, boolean selected) {
                 QueueData data = sequencerModel.getQueueData(sequencerModel.getSelectedBank(),
                         localIndex);
-                if (selected) {
-                    sequencerModel.queue(data);
-                } else {
-                    sequencerModel.unqueue(data);
+                switch (data.getState()) {
+                    case Idle:
+                        sequencerModel.queue(data);
+                        break;
+
+                    case Play:
+                        sequencerModel.unqueue(data);
+                        break;
+
+                    case PlayUnqueued:
+                        break;
+
+                    case Queue:
+                        sequencerModel.unqueue(data);
+                        break;
+
+                    case UnQueued:
+                        break;
                 }
             }
         });
