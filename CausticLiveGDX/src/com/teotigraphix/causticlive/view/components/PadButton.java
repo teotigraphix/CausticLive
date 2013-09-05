@@ -150,12 +150,12 @@ public class PadButton extends GDXToggleButton {
                     playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case PlayUnqueued:
+                case UnQueued:
                     lockOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case Idle:
                     break;
-                case UnQueued:
-                    break;
+
             }
             int channel = data.getViewChannelIndex();
             if (channel != -1) {
