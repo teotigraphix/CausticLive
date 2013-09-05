@@ -87,16 +87,8 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         getDispatcher().trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
     }
 
-    @Override
-    public boolean queue(QueueData data) {
-        boolean result = getController().getQueueSequencer().queue(data);
-        return result;
-    }
-
-    @Override
-    public boolean unqueue(QueueData data) {
-        boolean result = getController().getQueueSequencer().unqueue(data);
-        return result;
+    public boolean touch(QueueData data) {
+        return getController().getQueueSequencer().touch(data);
     }
 
     @Override

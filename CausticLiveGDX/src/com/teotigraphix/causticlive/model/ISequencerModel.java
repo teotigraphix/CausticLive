@@ -20,9 +20,7 @@ public interface ISequencerModel extends ICaustkModel {
      */
     void setSelectedBank(int value);
 
-    boolean queue(QueueData data);
-
-    boolean unqueue(QueueData data);
+    boolean touch(QueueData data);
 
     Collection<QueueData> getViewData(int bankIndex);
 

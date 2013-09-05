@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
@@ -100,36 +99,29 @@ public class PadButton extends GDXToggleButton {
         super(text, skin, styleName);
     }
 
-    @SuppressWarnings("unused")
-    private ClickListener clickListener;
-
     private OnPadButtonListener listener;
 
     @Override
     protected void init() {
-        addListener(clickListener = new ClickListener() {
-            //            @Override
-            //            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            //                if (isDisabled())
-            //                    return false;
-            //                setSelected(!selected);
-            //                return true;
-            //            }
 
+        addListener(new ActorGestureListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (longPressed) {
                     longPressed = false;
                     return;
                 }
-                if (isDisabled())
+                if (isDisabled() || data == null)
                     return;
                 //System.out.println("CSelected:" + !selected);
-                setSelected(!selected);
+                //setSelected(!selected);
+                ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
+                if (fire(changeEvent)) {
+                    //selected = !value;
+                }
+                Pools.free(changeEvent);
             }
-        });
 
-        addListener(new ActorGestureListener() {
             @Override
             public boolean longPress(Actor actor, float x, float y) {
                 longPressed = true;
@@ -160,9 +152,10 @@ public class PadButton extends GDXToggleButton {
                     playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case UnQueued:
+                case PlayUnqueued:
                     lockOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
-                default:
+                case Idle:
                     break;
             }
             int channel = data.getViewChannelIndex();
