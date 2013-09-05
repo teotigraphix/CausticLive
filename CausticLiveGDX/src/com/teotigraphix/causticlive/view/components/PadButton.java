@@ -165,7 +165,7 @@ public class PadButton extends GDXToggleButton {
                 default:
                     break;
             }
-            int channel = data.getViewChannel();
+            int channel = data.getViewChannelIndex();
             if (channel != -1) {
                 Tone tone = data.getController().getSoundSource().getTone(channel);
                 setText(tone.getName());

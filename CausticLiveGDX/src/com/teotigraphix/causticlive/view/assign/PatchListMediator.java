@@ -88,7 +88,7 @@ public class PatchListMediator extends MediatorBase {
 
     private void updateSelection() {
         // set the selected index
-        int toneIndex = sequencerModel.getActiveData().getViewChannel();
+        int toneIndex = sequencerModel.getActiveData().getViewChannelIndex();
         UUID patchId = toneModel.getPatchId(toneIndex);
         if (patchId != null) {
             int index = findPatchIndex(patchId);

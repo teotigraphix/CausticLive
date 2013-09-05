@@ -38,13 +38,13 @@ public class ToneModel extends ModelBase implements IToneModel {
 
     @Override
     public void assignTone(int toneIndex, QueueData queueData) {
-        queueData.setViewChannel(toneIndex);
+        queueData.setViewChannelIndex(toneIndex);
         getDispatcher().trigger(new OnToneModelMachineIndexChange());
     }
 
     @Override
     public void assignPatch(QueueData data, LibraryPatch libraryPatch) {
-        int toneIndex = data.getViewChannel();
+        int toneIndex = data.getViewChannelIndex();
         Library library = getController().getLibraryManager().getSelectedLibrary();
         File presetFile = library.getPresetFile(libraryPatch.getPresetFile());
         Tone tone = getController().getSoundSource().getTone(toneIndex);

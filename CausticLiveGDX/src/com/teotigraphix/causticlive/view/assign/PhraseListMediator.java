@@ -46,7 +46,7 @@ public class PhraseListMediator extends MediatorBase {
                 final QueueData data = sequencerModel.getActiveData();
                 LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
                 TrackChannel channel = getController().getTrackSequencer().getTrack(
-                        data.getViewChannel());
+                        data.getViewChannelIndex());
                 sequencerModel.assignPhrase(data, channel, libraryPhrase);
             }
         });

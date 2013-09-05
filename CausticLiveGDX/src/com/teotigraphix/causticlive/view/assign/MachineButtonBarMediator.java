@@ -44,7 +44,7 @@ public class MachineButtonBarMediator extends MediatorBase {
 
     @Override
     public void onShow(IScreen screen) {
-        view.select(sequencerModel.getActiveData().getViewChannel());
+        view.select(sequencerModel.getActiveData().getViewChannelIndex());
     }
 
 }
