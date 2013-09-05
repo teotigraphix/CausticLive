@@ -68,7 +68,6 @@ public class PadButton extends GDXToggleButton {
         if (selected == value)
             return;
         selected = value;
-        // CtkDebug.log("Button:" + selected);
         if (!noEvent && !isDisabled()) {
             ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
             if (fire(changeEvent)) {
@@ -111,13 +110,12 @@ public class PadButton extends GDXToggleButton {
                     longPressed = false;
                     return;
                 }
+
                 if (isDisabled() || data == null)
                     return;
-                //System.out.println("CSelected:" + !selected);
-                //setSelected(!selected);
+
                 ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
                 if (fire(changeEvent)) {
-                    //selected = !value;
                 }
                 Pools.free(changeEvent);
             }
@@ -151,11 +149,12 @@ public class PadButton extends GDXToggleButton {
                 case Play:
                     playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
-                case UnQueued:
                 case PlayUnqueued:
                     lockOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case Idle:
+                    break;
+                case UnQueued:
                     break;
             }
             int channel = data.getViewChannelIndex();
