@@ -3,7 +3,7 @@ package com.teotigraphix.causticlive.model;
 
 import java.util.UUID;
 
-import com.teotigraphix.caustk.library.LibraryPatch;
+import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.libgdx.model.ICaustkModel;

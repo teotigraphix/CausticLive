@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
-import com.teotigraphix.caustk.library.LibraryPhrase;
+import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.track.TrackChannel;
 import com.teotigraphix.libgdx.controller.CaustkMediator;

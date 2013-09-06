@@ -8,10 +8,10 @@ import java.util.List;
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.core.CausticException;
-import com.teotigraphix.caustk.library.Library;
-import com.teotigraphix.caustk.library.LibraryPatch;
-import com.teotigraphix.caustk.library.LibraryPhrase;
-import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.caustk.library.core.Library;
+import com.teotigraphix.caustk.library.item.LibraryPatch;
+import com.teotigraphix.caustk.library.item.LibraryPhrase;
+import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
 import com.teotigraphix.libgdx.model.CaustkModel;
 

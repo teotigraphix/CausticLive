@@ -8,7 +8,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
-import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.libgdx.model.CaustkModel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.utils.Array;
 import com.teotigraphix.caustk.core.CausticException;
-import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.libgdx.model.ICaustkModel;
 
 public interface ILibraryModel extends ICaustkModel {

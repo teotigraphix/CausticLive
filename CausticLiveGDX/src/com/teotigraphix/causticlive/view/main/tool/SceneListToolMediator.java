@@ -10,7 +10,7 @@ import com.teotigraphix.causticlive.model.ILibraryModel.OnLibraryModelLibraryCha
 import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.view.components.tool.SceneListToolBar;
 import com.teotigraphix.causticlive.view.components.tool.SceneListToolBar.OnSceneListToolBarListener;
-import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ScrollList;
 

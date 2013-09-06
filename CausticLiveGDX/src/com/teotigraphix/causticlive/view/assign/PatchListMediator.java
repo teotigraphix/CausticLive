@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.IToneModel;
 import com.teotigraphix.causticlive.model.IToneModel.OnToneModelPropertyChange;
-import com.teotigraphix.caustk.library.LibraryPatch;
+import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
