@@ -11,11 +11,11 @@ import com.teotigraphix.caustk.library.Library;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.tone.Tone;
+import com.teotigraphix.libgdx.model.CaustkModel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
-import com.teotigraphix.libgdx.model.ModelBase;
 
 @Singleton
-public class ToneModel extends ModelBase implements IToneModel {
+public class ToneModel extends CaustkModel implements IToneModel {
 
     private int editChannel;
 

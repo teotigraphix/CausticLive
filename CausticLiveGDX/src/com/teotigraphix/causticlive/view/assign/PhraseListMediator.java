@@ -14,13 +14,13 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.track.TrackChannel;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.GDXButton;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
 @Singleton
-public class PhraseListMediator extends MediatorBase {
+public class PhraseListMediator extends CaustkMediator {
 
     @Inject
     ISequencerModel sequencerModel;

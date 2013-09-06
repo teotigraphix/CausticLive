@@ -11,11 +11,11 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.model.IToneModel;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 
 @Singleton
-public class ApplicationMediator extends MediatorBase implements IApplicationMediator {
+public class ApplicationMediator extends CaustkMediator implements IApplicationMediator {
 
     @Inject
     ILibraryModel libraryModel;

@@ -2,10 +2,10 @@
 package com.teotigraphix.causticlive.view.main.tool;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
-public abstract class ToolBarMediator extends MediatorBase {
+public abstract class ToolBarMediator extends CaustkMediator {
 
     private ScrollList list;
 

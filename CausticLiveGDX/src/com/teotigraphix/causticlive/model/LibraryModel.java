@@ -13,10 +13,10 @@ import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.library.LibraryPhrase;
 import com.teotigraphix.caustk.library.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
-import com.teotigraphix.libgdx.model.ModelBase;
+import com.teotigraphix.libgdx.model.CaustkModel;
 
 @Singleton
-public class LibraryModel extends ModelBase implements ILibraryModel {
+public class LibraryModel extends CaustkModel implements ILibraryModel {
 
     private static final String USER_LIBRARY_PATH = "userLibraryPath";
 

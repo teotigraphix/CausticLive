@@ -12,12 +12,12 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.model.IApplicationModel;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.GDXButton;
 
-public class BackButtonMediator extends MediatorBase {
+public class BackButtonMediator extends CaustkMediator {
 
     @Inject
     IApplicationModel applicationModel;

@@ -11,14 +11,14 @@ import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.view.main.tool.SceneListToolMediator;
 import com.teotigraphix.causticlive.view.main.tool.SongListToolMediator;
 import com.teotigraphix.causticlive.view.main.tool.ToolBarMediator;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.controller.ICaustkMediator;
-import com.teotigraphix.libgdx.controller.MediatorBase;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
-public class LibraryItemSelectMediator extends MediatorBase implements ICaustkMediator {
+public class LibraryItemSelectMediator extends CaustkMediator implements ICaustkMediator {
 
     @Inject
     SongListToolMediator songListToolMediator;

@@ -7,10 +7,10 @@ import com.teotigraphix.causticlive.model.IToneModel;
 import com.teotigraphix.causticlive.view.components.assign.MachineButtonBar;
 import com.teotigraphix.causticlive.view.components.assign.MachineButtonBar.OnMachineButtonBarListener;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 
-public class MachineButtonBarMediator extends MediatorBase {
+public class MachineButtonBarMediator extends CaustkMediator {
 
     MachineButtonBar view;
 

@@ -5,11 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.GDXToggleButton;
 
-public class TransportControlMediator extends MediatorBase {
+public class TransportControlMediator extends CaustkMediator {
 
     @Inject
     ISequencerModel sequencerModel;

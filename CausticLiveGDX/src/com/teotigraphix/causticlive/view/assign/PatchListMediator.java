@@ -17,13 +17,13 @@ import com.teotigraphix.causticlive.model.IToneModel;
 import com.teotigraphix.causticlive.model.IToneModel.OnToneModelPropertyChange;
 import com.teotigraphix.caustk.library.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.GDXButton;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
 @Singleton
-public class PatchListMediator extends MediatorBase {
+public class PatchListMediator extends CaustkMediator {
 
     @Inject
     ISequencerModel sequencerModel;

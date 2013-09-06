@@ -6,12 +6,12 @@ import org.androidtransfuse.event.EventObserver;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
 
-public class BankBarMediator extends MediatorBase {
+public class BankBarMediator extends CaustkMediator {
 
     @Inject
     ISequencerModel sequencerModel;

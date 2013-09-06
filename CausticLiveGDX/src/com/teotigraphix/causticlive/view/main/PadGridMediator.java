@@ -14,13 +14,13 @@ import com.teotigraphix.causticlive.view.components.PadGrid;
 import com.teotigraphix.causticlive.view.components.PadGrid.OnPadGridListener;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer.OnQueueSequencerDataChange;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.scene2d.IScreenProvider;
 import com.teotigraphix.libgdx.screen.IScreen;
 
 @Singleton
-public class PadGridMediator extends MediatorBase {
+public class PadGridMediator extends CaustkMediator {
 
     @Inject
     IDialogManager dialogManager;

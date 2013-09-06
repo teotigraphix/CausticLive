@@ -14,11 +14,11 @@ import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.caustk.sequencer.track.TrackChannel;
 import com.teotigraphix.caustk.sequencer.track.TrackPhrase;
+import com.teotigraphix.libgdx.model.CaustkModel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
-import com.teotigraphix.libgdx.model.ModelBase;
 
 @Singleton
-public class SequencerModel extends ModelBase implements ISequencerModel {
+public class SequencerModel extends CaustkModel implements ISequencerModel {
 
     private QueueData activeData;
 
@@ -87,6 +87,7 @@ public class SequencerModel extends ModelBase implements ISequencerModel {
         getDispatcher().trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
     }
 
+    @Override
     public boolean touch(QueueData data) {
         return getController().getQueueSequencer().touch(data);
     }

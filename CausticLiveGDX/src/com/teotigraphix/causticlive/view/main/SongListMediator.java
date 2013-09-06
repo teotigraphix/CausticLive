@@ -5,10 +5,10 @@ import java.io.File;
 
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ILibraryModel;
-import com.teotigraphix.libgdx.controller.MediatorBase;
+import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 
-public class SongListMediator extends MediatorBase {
+public class SongListMediator extends CaustkMediator {
 
     @Inject
     ILibraryModel libraryModel;

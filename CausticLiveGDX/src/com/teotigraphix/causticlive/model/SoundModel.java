@@ -9,11 +9,11 @@ import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.caustk.library.LibraryScene;
+import com.teotigraphix.libgdx.model.CaustkModel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
-import com.teotigraphix.libgdx.model.ModelBase;
 
 @Singleton
-public class SoundModel extends ModelBase implements ISoundModel {
+public class SoundModel extends CaustkModel implements ISoundModel {
 
     @Inject
     ILibraryModel libraryModel;
