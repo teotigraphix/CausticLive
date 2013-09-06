@@ -25,15 +25,14 @@ public class CausticLiveModule extends CausticRuntimeModule {
     @Override
     protected void configurePlatformRequirements() {
         bind(IApplicationMediator.class).to(ApplicationMediator.class).in(Singleton.class);
+        bind(IScreenProvider.class).to(ScreenProvider.class).in(Singleton.class);
+        bind(IDialogManager.class).to(DialogManager.class).in(Singleton.class);
     }
 
     @Override
     protected void configureApplicationRequirements() {
         // Config
         bind(ICaustkConfiguration.class).to(ApplicationConfiguration.class).in(Singleton.class);
-
-        bind(IDialogManager.class).to(DialogManager.class).in(Singleton.class);
-        bind(IScreenProvider.class).to(ScreenProvider.class).in(Singleton.class);
 
         bind(IToneModel.class).to(ToneModel.class).in(Singleton.class);
         bind(ISequencerModel.class).to(SequencerModel.class).in(Singleton.class);
