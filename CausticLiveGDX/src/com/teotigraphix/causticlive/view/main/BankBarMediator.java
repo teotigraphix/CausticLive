@@ -40,9 +40,7 @@ public class BankBarMediator extends CaustkMediator {
     }
 
     @Override
-    protected void registerObservers() {
-        super.registerObservers();
-
+    public void onAttach() {
         register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
                 new EventObserver<OnSequencerModelPropertyChange>() {
                     @Override
@@ -50,11 +48,6 @@ public class BankBarMediator extends CaustkMediator {
                         view.select(sequencerModel.getSelectedBank());
                     }
                 });
-    }
-
-    @Override
-    public void onRegister() {
-
     }
 
     @Override

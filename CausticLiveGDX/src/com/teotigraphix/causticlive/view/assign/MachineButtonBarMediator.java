@@ -39,10 +39,6 @@ public class MachineButtonBarMediator extends CaustkMediator {
     }
 
     @Override
-    public void onRegister() {
-    }
-
-    @Override
     public void onShow(IScreen screen) {
         view.select(sequencerModel.getActiveData().getViewChannelIndex());
     }

@@ -43,11 +43,6 @@ public class ApplicationMediator extends CaustkMediator implements IApplicationM
     }
 
     @Override
-    public void onRegister() {
-
-    }
-
-    @Override
     public void dispose() {
     }
 

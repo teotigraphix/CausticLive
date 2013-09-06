@@ -55,10 +55,6 @@ public class SongListToolMediator extends ToolBarMediator {
         setToolBar(toolBar);
     }
 
-    @Override
-    public void onRegister() {
-    }
-
     private Array<Object> getSongItems() {
         File songsDirectory = RuntimeUtils.getCausticSongsDirectory();
         Collection<File> songs = FileUtils.listFiles(songsDirectory, new String[] {

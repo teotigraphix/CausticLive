@@ -67,10 +67,6 @@ public class PhraseListMediator extends CaustkMediator {
     }
 
     @Override
-    public void onRegister() {
-    }
-
-    @Override
     public void onShow(IScreen screen) {
         view.setItems(getPhraseItems());
         // set the selected index

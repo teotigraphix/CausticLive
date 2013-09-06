@@ -39,8 +39,7 @@ public class PatchListMediator extends CaustkMediator {
     }
 
     @Override
-    protected void registerObservers() {
-        super.registerObservers();
+    public void onAttach() {
 
         register(toneModel.getDispatcher(), OnToneModelPropertyChange.class,
                 new EventObserver<OnToneModelPropertyChange>() {
@@ -113,12 +112,6 @@ public class PatchListMediator extends CaustkMediator {
             index++;
         }
         return -1;
-    }
-
-    @Override
-    public void onRegister() {
-        // TODO Auto-generated method stub
-
     }
 
     private Array<?> getPatchItems() {

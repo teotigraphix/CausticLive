@@ -93,8 +93,7 @@ public class LibraryItemSelectMediator extends CaustkMediator implements ICaustk
     private void initTools(IScreen screen) {
         for (ToolBarMediator mediator : mediators) {
             mediator.create(screen);
-            mediator.onRegisterObservers();
-            mediator.onRegister();
+            mediator.onRegister(screen);
 
             listStack.addActor(mediator.getList());
             lists.add(mediator.getList());
@@ -116,10 +115,4 @@ public class LibraryItemSelectMediator extends CaustkMediator implements ICaustk
         if (index < tools.size)
             tools.get(index).setVisible(true);
     }
-
-    @Override
-    public void onRegister() {
-
-    }
-
 }

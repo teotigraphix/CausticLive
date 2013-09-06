@@ -56,10 +56,4 @@ public class TransportControlMediator extends CaustkMediator {
 
         screen.getStage().addActor(recordButton);
     }
-
-    @Override
-    public void onRegister() {
-
-    }
-
 }

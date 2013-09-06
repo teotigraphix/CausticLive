@@ -60,10 +60,4 @@ public class SongListMediator extends CaustkMediator {
         }
 
     }
-
-    @Override
-    public void onRegister() {
-
-    }
-
 }

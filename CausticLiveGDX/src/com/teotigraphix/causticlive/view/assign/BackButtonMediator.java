@@ -31,19 +31,6 @@ public class BackButtonMediator extends CaustkMediator {
     }
 
     @Override
-    protected void registerObservers() {
-        super.registerObservers();
-
-        register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
-                new EventObserver<OnSequencerModelPropertyChange>() {
-                    @Override
-                    public void trigger(OnSequencerModelPropertyChange object) {
-                        refreshTitle();
-                    }
-                });
-    }
-
-    @Override
     public void create(IScreen screen) {
         final Stage stage = screen.getStage();
         GDXButton button = new GDXButton("Back", screen.getSkin());
@@ -63,7 +50,14 @@ public class BackButtonMediator extends CaustkMediator {
     }
 
     @Override
-    public void onRegister() {
+    public void onAttach() {
+        register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
+                new EventObserver<OnSequencerModelPropertyChange>() {
+                    @Override
+                    public void trigger(OnSequencerModelPropertyChange object) {
+                        refreshTitle();
+                    }
+                });
     }
 
     @Override

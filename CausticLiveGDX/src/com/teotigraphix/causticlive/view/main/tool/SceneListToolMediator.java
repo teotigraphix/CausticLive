@@ -45,7 +45,7 @@ public class SceneListToolMediator extends ToolBarMediator {
     }
 
     @Override
-    protected void registerObservers() {
+    public void onAttach() {
         register(libraryModel.getDispatcher(), OnLibraryModelLibraryChange.class,
                 new EventObserver<OnLibraryModelLibraryChange>() {
                     @Override
@@ -59,10 +59,4 @@ public class SceneListToolMediator extends ToolBarMediator {
         Array<LibraryScene> scenes = libraryModel.getScenes();
         sceneList.setItems(scenes);
     }
-
-    @Override
-    public void onRegister() {
-
-    }
-
 }
