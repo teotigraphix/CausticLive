@@ -5,13 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.teotigraphix.libgdx.ui.GDXButton;
+import com.teotigraphix.libgdx.ui.SelectButton;
 
 public class SongListToolBar extends Table {
 
     private Skin skin;
 
-    private GDXButton loadButton;
+    private SelectButton loadButton;
 
     private OnSongListToolBarListener listener;
 
@@ -22,7 +22,7 @@ public class SongListToolBar extends Table {
     }
 
     private void initialize() {
-        loadButton = new GDXButton("Load", skin);
+        loadButton = new SelectButton("Load", skin);
         loadButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {

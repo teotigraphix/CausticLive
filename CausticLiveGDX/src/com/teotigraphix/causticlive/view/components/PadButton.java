@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.tone.Tone;
-import com.teotigraphix.libgdx.ui.GDXToggleButton;
+import com.teotigraphix.libgdx.ui.SelectButton;
 
-public class PadButton extends GDXToggleButton {
+public class PadButton extends SelectButton {
 
     protected boolean longPressed;
 
@@ -82,7 +82,7 @@ public class PadButton extends GDXToggleButton {
     //--------------------------------------------------------------------------
 
     @Override
-    protected Class<? extends ButtonStyle> getStyleType() {
+    protected Class<? extends SelectButtonStyle> getStyleType() {
         return PadButtonStyle.class;
     }
 
@@ -90,7 +90,7 @@ public class PadButton extends GDXToggleButton {
         super(text, skin);
     }
 
-    public PadButton(String text, ButtonStyle style) {
+    public PadButton(String text, SelectButtonStyle style) {
         super(text, style);
     }
 
@@ -181,7 +181,7 @@ public class PadButton extends GDXToggleButton {
     // Style
     //--------------------------------------------------------------------------
 
-    public static class PadButtonStyle extends ButtonStyle {
+    public static class PadButtonStyle extends SelectButtonStyle {
 
         public Drawable queueOverlay;
 

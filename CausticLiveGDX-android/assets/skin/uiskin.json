@@ -31,7 +31,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 },
 
 
-com.teotigraphix.libgdx.ui.GDXButton$ButtonStyle: {
+com.teotigraphix.libgdx.ui.SelectButton$SelectButtonStyle: {
   default: { 
     down: pad_selected, 
     up: pad_up, 

@@ -19,7 +19,7 @@ import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
-import com.teotigraphix.libgdx.ui.GDXButton;
+import com.teotigraphix.libgdx.ui.SelectButton;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
 @Singleton
@@ -33,7 +33,7 @@ public class PatchListMediator extends CaustkMediator {
 
     private ScrollList view; // need composite component
 
-    private GDXButton assignButton; // this should be in the view
+    private SelectButton assignButton; // this should be in the view
 
     public PatchListMediator() {
     }
@@ -64,7 +64,7 @@ public class PatchListMediator extends CaustkMediator {
         view.setSize(400f, 400f);
         screen.getStage().addActor(view);
 
-        assignButton = new GDXButton("Assign", screen.getSkin());
+        assignButton = new SelectButton("Assign", screen.getSkin());
         assignButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
