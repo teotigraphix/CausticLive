@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.view.SkinRegistry;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
 import com.teotigraphix.causticlive.view.main.LibraryItemSelectMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
@@ -42,6 +43,7 @@ public class MainScreen extends ScreenBase {
     @Override
     public void initialize(IGame game) {
         super.initialize(game);
+        SkinRegistry.register(getSkin());
         addMediator(PadGridMediator);
         addMediator(TransportControlMediator);
         addMediator(BankMediator);

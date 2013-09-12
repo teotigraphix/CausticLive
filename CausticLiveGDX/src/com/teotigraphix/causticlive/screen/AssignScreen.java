@@ -2,6 +2,7 @@
 package com.teotigraphix.causticlive.screen;
 
 import com.google.inject.Inject;
+import com.teotigraphix.causticlive.view.SkinRegistry;
 import com.teotigraphix.causticlive.view.assign.BackButtonMediator;
 import com.teotigraphix.causticlive.view.assign.MachineButtonBarMediator;
 import com.teotigraphix.causticlive.view.assign.PatchListMediator;
@@ -29,6 +30,7 @@ public class AssignScreen extends ScreenBase {
     @Override
     public void initialize(IGame game) {
         super.initialize(game);
+        SkinRegistry.register(getSkin());
         addMediator(backButtonMediator);
         addMediator(machineButtonBarMediator);
         addMediator(phraseListMediator);

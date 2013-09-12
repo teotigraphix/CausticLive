@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.view.SkinRegistry;
+import com.teotigraphix.libgdx.application.IGame;
 import com.teotigraphix.libgdx.screen.ScreenBase;
 
 @Singleton
@@ -17,6 +19,12 @@ public class SplashScreen extends ScreenBase {
     private Image splashImage;
 
     public SplashScreen() {
+    }
+
+    @Override
+    public void initialize(IGame game) {
+        super.initialize(game);
+        SkinRegistry.register(getSkin());
     }
 
     @Override

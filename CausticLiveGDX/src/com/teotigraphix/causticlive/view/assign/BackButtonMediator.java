@@ -15,7 +15,7 @@ import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.model.IApplicationModel;
 import com.teotigraphix.libgdx.screen.IScreen;
-import com.teotigraphix.libgdx.ui.SelectButton;
+import com.teotigraphix.libgdx.ui.OldSelectButton;
 
 public class BackButtonMediator extends CaustkMediator {
 
@@ -33,7 +33,7 @@ public class BackButtonMediator extends CaustkMediator {
     @Override
     public void create(IScreen screen) {
         final Stage stage = screen.getStage();
-        SelectButton button = new SelectButton("Back", screen.getSkin());
+        OldSelectButton button = new OldSelectButton("Back", screen.getSkin());
         button.setPosition(1090f, 705f);
         button.setSize(100f, 40f);
         button.addListener(new ActorGestureListener() {

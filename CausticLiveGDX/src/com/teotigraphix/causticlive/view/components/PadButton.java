@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.tone.Tone;
-import com.teotigraphix.libgdx.ui.SelectButton;
+import com.teotigraphix.libgdx.ui.OldSelectButton;
 
-public class PadButton extends SelectButton {
+public class PadButton extends OldSelectButton {
 
     protected boolean longPressed;
 
@@ -56,6 +56,7 @@ public class PadButton extends SelectButton {
 
     private boolean selected;
 
+    //@Override
     public boolean isSelected() {
         return selected;
     }
@@ -196,7 +197,7 @@ public class PadButton extends SelectButton {
             super(up, down, checked, font);
         }
 
-        public PadButtonStyle(TextButtonStyle style) {
+        public PadButtonStyle(PadButtonStyle style) {
             super(style);
         }
 

@@ -7,16 +7,16 @@ import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
-import com.teotigraphix.libgdx.ui.SelectButton;
+import com.teotigraphix.libgdx.ui.OldSelectButton;
 
 public class TransportControlMediator extends CaustkMediator {
 
     @Inject
     ISequencerModel sequencerModel;
 
-    private SelectButton playButton;
+    private OldSelectButton playButton;
 
-    private SelectButton recordButton;
+    private OldSelectButton recordButton;
 
     public TransportControlMediator() {
     }
@@ -24,7 +24,7 @@ public class TransportControlMediator extends CaustkMediator {
     @Override
     public void create(IScreen screen) {
 
-        playButton = new SelectButton("Play", screen.getSkin());
+        playButton = new OldSelectButton("Play", screen.getSkin());
         playButton.setPosition(66f, 90f);
         playButton.setSize(83f, 50f);
         playButton.addListener(new ChangeListener() {
@@ -40,7 +40,7 @@ public class TransportControlMediator extends CaustkMediator {
 
         screen.getStage().addActor(playButton);
 
-        recordButton = new SelectButton("Record", screen.getSkin());
+        recordButton = new OldSelectButton("Record", screen.getSkin());
         recordButton.setPosition(170f, 90f);
         recordButton.setSize(83f, 50f);
         recordButton.addListener(new ChangeListener() {
