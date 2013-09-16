@@ -27,8 +27,7 @@ public class ToneModel extends CaustkModel implements IToneModel {
     @Override
     public void setEditChannel(int value) {
         editChannel = value;
-        getDispatcher().trigger(
-                new OnToneModelPropertyChange(this, ToneModelPropertyChangeKind.ChannelIndex));
+        trigger(new OnToneModelPropertyChange(this, ToneModelPropertyChangeKind.ChannelIndex));
     }
 
     @Override
@@ -39,7 +38,7 @@ public class ToneModel extends CaustkModel implements IToneModel {
     @Override
     public void assignTone(int toneIndex, QueueData queueData) {
         queueData.setViewChannelIndex(toneIndex);
-        getDispatcher().trigger(new OnToneModelMachineIndexChange());
+        trigger(new OnToneModelMachineIndexChange());
     }
 
     @Override

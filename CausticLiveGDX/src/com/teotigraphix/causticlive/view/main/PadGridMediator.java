@@ -89,15 +89,15 @@ public class PadGridMediator extends CaustkMediator {
 
     @Override
     public void onAttach() {
-        register(getController().getQueueSequencer().getDispatcher(),
-                OnQueueSequencerDataChange.class, new EventObserver<OnQueueSequencerDataChange>() {
+        register(getController().getQueueSequencer(), OnQueueSequencerDataChange.class,
+                new EventObserver<OnQueueSequencerDataChange>() {
                     @Override
                     public void trigger(OnQueueSequencerDataChange object) {
                         //updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
                     }
                 });
 
-        register(sequencerModel.getDispatcher(), OnSequencerModelPropertyChange.class,
+        register(sequencerModel, OnSequencerModelPropertyChange.class,
                 new EventObserver<OnSequencerModelPropertyChange>() {
                     @Override
                     public void trigger(OnSequencerModelPropertyChange object) {

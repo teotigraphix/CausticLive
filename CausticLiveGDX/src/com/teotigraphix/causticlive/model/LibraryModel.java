@@ -56,7 +56,7 @@ public class LibraryModel extends CaustkModel implements ILibraryModel {
 
         getController().getLibraryManager().saveLibrary(library);
 
-        getDispatcher().trigger(new OnLibraryModelLibraryChange());
+        trigger(new OnLibraryModelLibraryChange());
     }
 
     @Override
@@ -93,7 +93,7 @@ public class LibraryModel extends CaustkModel implements ILibraryModel {
         //            e.printStackTrace();
         //        }
 
-        getDispatcher().trigger(new OnLibraryModelLibraryChange());
+        trigger(new OnLibraryModelLibraryChange());
     }
 
 }

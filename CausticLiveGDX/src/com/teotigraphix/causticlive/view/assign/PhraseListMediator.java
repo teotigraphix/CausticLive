@@ -13,7 +13,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.sequencer.track.TrackChannel;
+import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.controller.CaustkMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.OldSelectButton;
@@ -45,7 +45,7 @@ public class PhraseListMediator extends CaustkMediator {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 final QueueData data = sequencerModel.getActiveData();
                 LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
-                TrackChannel channel = getController().getTrackSequencer().getTrack(
+                Track channel = getController().getTrackSequencer().getTrack(
                         data.getViewChannelIndex());
                 sequencerModel.assignPhrase(data, channel, libraryPhrase);
             }

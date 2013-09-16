@@ -41,7 +41,7 @@ public class PatchListMediator extends CaustkMediator {
     @Override
     public void onAttach() {
 
-        register(toneModel.getDispatcher(), OnToneModelPropertyChange.class,
+        register(toneModel, OnToneModelPropertyChange.class,
                 new EventObserver<OnToneModelPropertyChange>() {
                     @Override
                     public void trigger(OnToneModelPropertyChange object) {

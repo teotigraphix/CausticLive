@@ -6,7 +6,7 @@ import java.util.Collection;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
-import com.teotigraphix.caustk.sequencer.track.TrackChannel;
+import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.model.ICaustkModel;
 
 public interface ISequencerModel extends ICaustkModel {
@@ -55,7 +55,7 @@ public interface ISequencerModel extends ICaustkModel {
 
     void stop();
 
-    void assignPhrase(QueueData data, TrackChannel trackChannel, LibraryPhrase libraryPhrase);
+    void assignPhrase(QueueData data, Track trackChannel, LibraryPhrase libraryPhrase);
 
     QueueData getActiveData();
 
