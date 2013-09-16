@@ -13,7 +13,7 @@ import com.teotigraphix.caustk.sequencer.IQueueSequencer;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.caustk.sequencer.track.Track;
-import com.teotigraphix.caustk.sequencer.track.TrackPhrase;
+import com.teotigraphix.caustk.sequencer.track.Phrase;
 import com.teotigraphix.libgdx.model.CaustkModel;
 import com.teotigraphix.libgdx.model.ICaustkModelState;
 
@@ -153,7 +153,7 @@ public class SequencerModel extends CaustkModel implements ISequencerModel {
     @Override
     public void assignPhrase(QueueData data, Track trackChannel, LibraryPhrase libraryPhrase) {
         QueueDataChannel channel = data.getChannel(trackChannel.getIndex());
-        TrackPhrase trackPhrase = trackChannel.getPhrase(channel.getBankIndex(),
+        Phrase trackPhrase = trackChannel.getPhrase(channel.getBankIndex(),
                 channel.getPatternIndex());
         // TrackSequencerHandlers sets this on the pattern sequencer
         trackPhrase.setPhraseId(libraryPhrase.getId());
