@@ -1,5 +1,23 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2013 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+////////////////////////////////////////////////////////////////////////////////
 
-package com.teotigraphix.causticlive.view;
+package com.teotigraphix.causticlive.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,8 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
-import com.teotigraphix.causticlive.view.components.PadButton.PadButtonStyle;
-import com.teotigraphix.libgdx.ui.OldSelectButton.SelectButtonStyle;
+import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
 
 public class SkinRegistry {
 
@@ -67,17 +84,16 @@ public class SkinRegistry {
         skin.add("default", selectButtonStyle);
 
         //
-        PadButtonStyle padButtonStyle = new PadButtonStyle();
-        padButtonStyle.up = skin.getDrawable("pad_up");
-        padButtonStyle.down = skin.getDrawable("pad_selected");
-        padButtonStyle.checked = skin.getDrawable("pad_selected");
-        padButtonStyle.font = skin.getFont("default-font");
-        padButtonStyle.fontColor = skin.getColor("white");
-
-        padButtonStyle.queueOverlay = skin.getDrawable("overlay_queued");
-        padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
-        padButtonStyle.lockOverlay = skin.getDrawable("pad_selected");
-
-        skin.add("default", padButtonStyle);
+        //        PadButtonStyle padButtonStyle = new PadButtonStyle();
+        //        padButtonStyle.up = skin.getDrawable("pad_up");
+        //        padButtonStyle.down = skin.getDrawable("pad_selected");
+        //        padButtonStyle.checked = skin.getDrawable("pad_selected");
+        //        padButtonStyle.font = skin.getFont("default-font");
+        //        padButtonStyle.fontColor = skin.getColor("white");
+        //
+        //        padButtonStyle.queueOverlay = skin.getDrawable("overlay_queued");
+        //        padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
+        //        padButtonStyle.lockOverlay = skin.getDrawable("pad_selected");
+        //        skin.add("default", padButtonStyle);
     }
 }

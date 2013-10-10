@@ -17,13 +17,17 @@
 // mschmalle at teotigraphix dot com
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.teotigraphix.causticlive.screen;
+package com.teotigraphix.causticlive.model;
 
-public interface ICausticLiveScreen {
+import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.libgdx.model.RackApplicationState;
 
-    public static final int SPLASH_SCREEN = 0;
+public class CausticLiveApplicationState extends RackApplicationState {
 
-    public static final int MAIN_SCREEN = 1;
+    private static final long serialVersionUID = -8033613757836089213L;
 
-    public static final int ASSIGN_SCREEN = 2;
+    public CausticLiveApplicationState(ICaustkController controller) {
+        super(controller);
+    }
+
 }
