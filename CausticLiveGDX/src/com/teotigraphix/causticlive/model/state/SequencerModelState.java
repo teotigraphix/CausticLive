@@ -59,6 +59,7 @@ public class SequencerModelState implements Serializable {
 
     public SequencerModelState(ICaustkController controller) {
         queueSequencer = new QueueSequencer(controller.getRack());
+        queueSequencer.create(controller.getRack().getTrackSequencer().getTrackSong());
     }
 
 }

@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
+import com.teotigraphix.causticlive.view.main.components.PadButton.PadButtonStyle;
 import com.teotigraphix.libgdx.ui.OverlayButton.OverlayButtonStyle;
 import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
 
@@ -53,6 +54,19 @@ public class SkinRegistry {
         textButtonStyle.font = skin.getFont("default-font");
         textButtonStyle.fontColor = skin.getColor("white");
         skin.add("default", textButtonStyle);
+
+        PadButtonStyle padButtonStyle = new PadButtonStyle();
+        padButtonStyle.up = skin.getDrawable("pad_up");
+        padButtonStyle.down = skin.getDrawable("pad_selected");
+        padButtonStyle.checked = skin.getDrawable("pad_selected");
+
+        padButtonStyle.lockOverlay = skin.getDrawable("overlay_unqueued");
+        padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
+        padButtonStyle.queueOverlay = skin.getDrawable("overlay_queued");
+
+        padButtonStyle.font = skin.getFont("default-font");
+        padButtonStyle.fontColor = skin.getColor("white");
+        skin.add("default", padButtonStyle);
 
         ListStyle listStyle = new ListStyle();
         listStyle.selection = skin.getDrawable("list_select_bg");
