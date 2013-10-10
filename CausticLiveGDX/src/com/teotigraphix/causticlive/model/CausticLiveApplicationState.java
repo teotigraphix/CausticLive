@@ -19,6 +19,7 @@
 
 package com.teotigraphix.causticlive.model;
 
+import com.teotigraphix.causticlive.model.state.SequencerModelState;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.libgdx.model.RackApplicationState;
 
@@ -26,8 +27,16 @@ public class CausticLiveApplicationState extends RackApplicationState {
 
     private static final long serialVersionUID = -8033613757836089213L;
 
+    private SequencerModelState sequencerModelState;
+
+    public final SequencerModelState getSequencerModelState() {
+        return sequencerModelState;
+    }
+
     public CausticLiveApplicationState(ICaustkController controller) {
         super(controller);
+
+        sequencerModelState = new SequencerModelState(controller);
     }
 
 }

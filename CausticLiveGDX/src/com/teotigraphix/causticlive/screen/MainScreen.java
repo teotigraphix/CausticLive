@@ -6,22 +6,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.view.main.BankBarMediator;
+import com.teotigraphix.causticlive.view.main.PadGridMediator;
 import com.teotigraphix.libgdx.application.IGame;
 import com.teotigraphix.libgdx.screen.ScreenBase;
 
 @Singleton
 public class MainScreen extends ScreenBase {
 
-    //    @Inject
-    //    PadGridMediator PadGridMediator;
-    //
+    @Inject
+    PadGridMediator PadGridMediator;
+
     //    @Inject
     //    TransportControlMediator TransportControlMediator;
     //
-    //    @Inject
-    //    BankBarMediator BankMediator;
-    //
+    @Inject
+    BankBarMediator BankMediator;
+
     //    @Inject
     //    SongListMediator SongListMediator;
     //
@@ -37,9 +40,10 @@ public class MainScreen extends ScreenBase {
     public void initialize(IGame game) {
         super.initialize(game);
         SkinRegistry.register(getSkin());
-        //        addMediator(PadGridMediator);
+        addMediator(PadGridMediator);
+
         //        addMediator(TransportControlMediator);
-        //        addMediator(BankMediator);
+        addMediator(BankMediator);
         //        addMediator(SongListMediator);
         //        addMediator(LibraryItemSelectMediator);
     }

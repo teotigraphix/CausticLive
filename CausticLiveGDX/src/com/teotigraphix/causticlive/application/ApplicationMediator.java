@@ -19,8 +19,14 @@
 
 package com.teotigraphix.causticlive.application;
 
+import java.io.File;
+import java.io.IOException;
+
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
+import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.caustk.controller.IRack;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
@@ -33,9 +39,10 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     //
     //    @Inject
     //    ISoundModel soundModel;
-    //
-    //    @Inject
-    //    ISequencerModel sequencerModel;
+
+    @Inject
+    ISequencerModel sequencerModel;
+
     //
     //    @Inject
     //    IToneModel toneModel;
@@ -48,17 +55,25 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     protected void firstRun(ApplicationModelState state) {
         super.firstRun(state);
 
+        final IRack rack = getController().getRack();
+
+        try {
+            rack.getTrackSequencer().createSong(new File("UntitledSong.ctks"));
+            rack.getTrackSequencer().setCurrentTrack(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    //
-    //    @Override
-    //    protected void onProjectCreate() {
-    //        try {
-    //            getController().getTrackSequencer().createSong(new File("UntitledSong.ctks"));
-    //            getController().getTrackSequencer().setCurrentTrack(0);
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
+    @Override
+    protected void onLoad() {
+        super.onLoad();
 
+        // get any references from the deseralized rack
+
+        // setup app specific commands
+
+        // register Models
+        // applicationModel.registerModel(soundModel);
+    }
 }

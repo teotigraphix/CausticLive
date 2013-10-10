@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
+import com.teotigraphix.libgdx.ui.OverlayButton.OverlayButtonStyle;
 import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
 
 public class SkinRegistry {
@@ -83,6 +84,8 @@ public class SkinRegistry {
         selectButtonStyle.disabledFontColor = skin.getColor("white");
         skin.add("default", selectButtonStyle);
 
+        createOverlayButtonStyle(skin, "default", "pad_up", "pad_selected", "pad_selected");
+
         //
         //        PadButtonStyle padButtonStyle = new PadButtonStyle();
         //        padButtonStyle.up = skin.getDrawable("pad_up");
@@ -95,5 +98,19 @@ public class SkinRegistry {
         //        padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
         //        padButtonStyle.lockOverlay = skin.getDrawable("pad_selected");
         //        skin.add("default", padButtonStyle);
+    }
+
+    public static OverlayButtonStyle createOverlayButtonStyle(Skin skin, String name, String up,
+            String selected, String disabled) {
+        OverlayButtonStyle style = new OverlayButtonStyle();
+        style.up = skin.getDrawable(up);
+        style.down = skin.getDrawable(selected);
+        style.checked = skin.getDrawable(selected);
+        style.disabled = skin.getDrawable(disabled);
+        style.font = skin.getFont("default-font");
+        style.fontColor = skin.getColor("white");
+        style.progressOverlay = skin.getDrawable("pad_selected");
+        skin.add(name, style);
+        return style;
     }
 }
