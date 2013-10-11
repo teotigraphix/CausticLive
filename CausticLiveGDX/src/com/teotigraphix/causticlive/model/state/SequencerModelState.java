@@ -41,8 +41,11 @@ public class SequencerModelState implements Serializable {
         return selectedBank;
     }
 
-    public void setSelectedBank(int value) {
+    public boolean setSelectedBank(int value) {
+        if (value == selectedBank)
+            return false;
         selectedBank = value;
+        return true;
     }
 
     //----------------------------------

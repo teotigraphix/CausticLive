@@ -25,8 +25,10 @@ import java.io.IOException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
+import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.controller.IRack;
+import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
@@ -34,9 +36,9 @@ import com.teotigraphix.libgdx.model.ApplicationModelState;
 @Singleton
 public class ApplicationMediator extends ApplicationMediatorBase implements IApplicationMediator {
 
-    //    @Inject
-    //    ILibraryModel libraryModel;
-    //
+    @Inject
+    ILibraryModel libraryModel;
+
     //    @Inject
     //    ISoundModel soundModel;
 
@@ -74,6 +76,26 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         // setup app specific commands
 
         // register Models
-        // applicationModel.registerModel(soundModel);
+        applicationModel.registerModel(sequencerModel);
+        applicationModel.registerModel(libraryModel);
+    }
+
+    @Override
+    protected void onRun() {
+        super.onRun();
+
+        if (isFirstRun()) {
+            File file = new File("C:\\Users\\Teoti\\Documents\\caustic\\songs\\C2DEMO.caustic");
+            try {
+                libraryModel.importSong(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (CausticException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+        }
+
     }
 }

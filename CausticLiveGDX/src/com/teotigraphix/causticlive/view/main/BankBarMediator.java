@@ -36,10 +36,6 @@ public class BankBarMediator extends ScreenMediator {
 
     private ButtonBar view;
 
-    private String[] items = {
-            "A", "B", "C", "D"
-    };
-
     public BankBarMediator() {
     }
 
@@ -47,7 +43,7 @@ public class BankBarMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
 
-        view = new ButtonBar(screen.getSkin(), items, true, "default");
+        view = new ButtonBar(screen.getSkin(), sequencerModel.getBankNames(), true, "default");
         view.setOnButtonBarListener(new OnButtonBarListener() {
             @Override
             public void onChange(int index) {
@@ -67,7 +63,7 @@ public class BankBarMediator extends ScreenMediator {
                 new EventObserver<OnSequencerModelPropertyChange>() {
                     @Override
                     public void trigger(OnSequencerModelPropertyChange object) {
-                        view.select(sequencerModel.getSelectedBank(), true);
+                        //view.updateSelection(sequencerModel.getSelectedBank(), true);
                     }
                 });
     }

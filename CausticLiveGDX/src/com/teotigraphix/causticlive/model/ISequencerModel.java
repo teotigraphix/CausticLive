@@ -46,6 +46,8 @@ public interface ISequencerModel extends ICaustkModel {
      */
     void setSelectedBank(int value);
 
+    String[] getBankNames();
+
     //----------------------------------
     // activeData
     //----------------------------------

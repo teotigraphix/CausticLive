@@ -42,16 +42,20 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
     @Inject
     IApplicationModel applicationModel;
 
-    protected final CausticLiveApplicationState getState() {
-        return applicationModel.getState();
-    }
+    private CausticLiveApplicationState state;
 
     protected final SequencerModelState getSequencerModelState() {
-        return getState().getSequencerModelState();
+        return state.getSequencerModelState();
     }
 
     protected final IQueueSequencer getQueueSequencer() {
         return getSequencerModelState().getQueueSequencer();
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        state = applicationModel.getState();
     }
 
     //--------------------------------------------------------------------------
@@ -69,8 +73,18 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
 
     @Override
     public void setSelectedBank(int value) {
-        getSequencerModelState().setSelectedBank(value);
-        trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
+        boolean changed = getSequencerModelState().setSelectedBank(value);
+        if (changed)
+            trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
+    }
+
+    private final String[] items = {
+            "A", "B", "C", "D"
+    };
+
+    @Override
+    public final String[] getBankNames() {
+        return items;
     }
 
     //----------------------------------
