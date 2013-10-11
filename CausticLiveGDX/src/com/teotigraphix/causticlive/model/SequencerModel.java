@@ -158,15 +158,22 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
     }
 
     @Override
-    public void assignPhrase(QueueData data, Track trackChannel, LibraryPhrase libraryPhrase) {
-        QueueDataChannel channel = data.getChannel(trackChannel.getIndex());
-        Phrase trackPhrase = trackChannel.getPhrase(channel.getBankIndex(),
-                channel.getPatternIndex());
-        // TrackSequencerHandlers sets this on the pattern sequencer
-        trackPhrase.setPhraseId(libraryPhrase.getId());
-        trackPhrase.setLength(libraryPhrase.getLength());
-        trackPhrase.setNoteData(libraryPhrase.getNoteData());
-        channel.assignPhrase(trackPhrase);
+    public void assignPhrase(QueueData data, Track track, LibraryPhrase libraryPhrase) {
+        QueueDataChannel channel = data.getChannel(track.getIndex());
+        Phrase phrase = track.getPhrase(channel.getBankIndex(), channel.getPatternIndex());
+
+        int lastBank = track.getCurrentBank();
+        int lastPattern = track.getCurrentPattern();
+
+        phrase.getTrack().setCurrentBankPattern(channel.getBankIndex(), channel.getPatternIndex());
+
+        phrase.setPhraseId(libraryPhrase.getId());
+        phrase.setLength(libraryPhrase.getLength());
+        phrase.setNoteData(libraryPhrase.getNoteData());
+
+        channel.assignPhrase(phrase);
+
+        phrase.getTrack().setCurrentBankPattern(lastBank, lastPattern);
     }
 
 }

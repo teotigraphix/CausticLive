@@ -32,6 +32,7 @@ import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
+import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 
 @Singleton
@@ -175,4 +176,9 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         trigger(new OnLibraryModelLibraryChange());
     }
 
+    @Override
+    public void assignTone(int toneIndex, QueueData queueData) {
+        queueData.setViewChannelIndex(toneIndex);
+        //trigger(new OnToneModelMachineIndexChange());
+    }
 }

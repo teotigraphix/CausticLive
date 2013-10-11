@@ -29,6 +29,7 @@ import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.controller.IRack;
 import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.core.osc.SequencerMessage;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
@@ -103,5 +104,7 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         } catch (CausticException e) {
             e.printStackTrace();
         }
+
+        SequencerMessage.SONG_END_MODE.send(getController(), 0);
     }
 }

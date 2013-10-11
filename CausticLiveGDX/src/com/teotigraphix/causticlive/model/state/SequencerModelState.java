@@ -65,4 +65,8 @@ public class SequencerModelState implements Serializable {
         queueSequencer.create(controller.getRack().getTrackSequencer().getTrackSong());
     }
 
+    public void registerObservers() {
+        queueSequencer.registerObservers();
+    }
+
 }

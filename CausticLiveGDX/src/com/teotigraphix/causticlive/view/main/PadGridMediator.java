@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
+import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer.OnQueueSequencerDataChange;
@@ -70,6 +71,9 @@ public class PadGridMediator extends ScreenMediator {
             @Override
             public void onLongPress(Integer localIndex, float x, float y) {
                 getController().getLogger().log("PadGridMediator", "long press");
+                sequencerModel.setActiveData(sequencerModel.getQueueData(
+                        sequencerModel.getSelectedBank(), localIndex));
+                screenProvider.getScreen().getGame().setScreen(ICausticLiveScreen.ASSIGN_SCREEN);
             }
 
         });
