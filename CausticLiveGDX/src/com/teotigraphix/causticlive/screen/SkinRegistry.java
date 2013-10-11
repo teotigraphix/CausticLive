@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.teotigraphix.causticlive.view.main.components.PadButton.PadButtonStyle;
@@ -88,6 +89,7 @@ public class SkinRegistry {
         windowStyle.background = skin.getDrawable("default-rect");
         windowStyle.titleFont = skin.getFont("default-font");
         windowStyle.titleFontColor = skin.getColor("white");
+        skin.add("default", windowStyle);
 
         SelectButtonStyle selectButtonStyle = new SelectButtonStyle();
         selectButtonStyle.up = skin.getDrawable("pad_up");
@@ -127,6 +129,11 @@ public class SkinRegistry {
         ledGreenStyle.on = skin.getDrawable("led_on_green");
         ledGreenStyle.off = skin.getDrawable("led_off_green");
         skin.add("led-green", ledGreenStyle);
+
+        SliderStyle sliderStyle = new SliderStyle();
+        sliderStyle.background = skin.getDrawable("pad_up");
+        sliderStyle.knob = skin.getDrawable("pad_selected");
+        skin.add("default-vertical", sliderStyle);
     }
 
     public static OverlayButtonStyle createOverlayButtonStyle(Skin skin, String name, String up,

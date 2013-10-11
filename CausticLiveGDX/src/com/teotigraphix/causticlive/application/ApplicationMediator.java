@@ -87,7 +87,7 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         super.onRun();
 
         if (isFirstRun()) {
-            File file = new File("C:\\Users\\Teoti\\Documents\\caustic\\songs\\C2DEMO.caustic");
+            File file = new File("C:\\Users\\Teoti\\Documents\\caustic\\songs\\DRIVE.caustic");
             try {
                 libraryModel.importSong(file);
             } catch (IOException e) {

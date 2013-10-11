@@ -4,19 +4,41 @@ package com.teotigraphix.causticlive.view.main;
 import org.androidtransfuse.event.EventObserver;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.AlertDialog;
+import com.badlogic.gdx.scenes.scene2d.ui.AlertDialog.OnAlertDialogListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.google.inject.Inject;
+import com.teotigraphix.causticlive.view.main.components.PartMixer;
+import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
 import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
+import com.teotigraphix.caustk.sound.mixer.SoundMixerChannel;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
+import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Led;
 
 public class ToolBarMediator extends ScreenMediator {
 
+    @Inject
+    IDialogManager dialogManager;
+
     private Led redLed;
 
     private Led greenLed;
+
+    private TextButton mixerButton;
+
+    private Skin skin;
+
+    private PartMixer partMixer;
+
+    private IScreen screen;
 
     public ToolBarMediator() {
     }
@@ -40,16 +62,115 @@ public class ToolBarMediator extends ScreenMediator {
     @Override
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
+        this.screen = screen;
+        skin = screen.getSkin();
 
         Table table = new Table();
         table.debug();
 
         createBeatLed(table, screen.getSkin());
+        createMixerButton(table, screen.getSkin());
 
         int height = Gdx.graphics.getHeight();
         table.setPosition(0, height - 40f);
         table.setSize(Gdx.graphics.getWidth(), 40f);
         screen.getStage().addActor(table);
+    }
+
+    private void createMixerButton(Table table, Skin skin) {
+        mixerButton = new TextButton("Mixer", skin);
+        mixerButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                createOrShowMixer();
+            }
+        });
+        table.add(mixerButton);
+    }
+
+    protected void createOrShowMixer() {
+        partMixer = new PartMixer(skin);
+        partMixer.setOnPartMixerListener(new OnPartMixerListener() {
+            @Override
+            public void onSliderChange(int buttonIndex, int sliderIndex, float sliderValue) {
+                SoundMixerChannel channel = getController().getRack().getSoundMixer()
+                        .getChannel(sliderIndex);
+                switch (buttonIndex) {
+                    case 0:
+                        channel.setVolume(sliderValue);
+                        break;
+
+                    case 1:
+                        channel.setPan(sliderValue);
+                        break;
+
+                    case 2:
+                        channel.setReverbSend(sliderValue);
+                        break;
+
+                    case 3:
+                        channel.setDelaySend(sliderValue);
+                        break;
+
+                    case 4:
+                        channel.setStereoWidth(sliderValue);
+                        break;
+                }
+            }
+
+            @Override
+            public void onButtonChange(int index) {
+                updateSliders(index);
+            }
+        });
+
+        AlertDialog dialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
+        dialog.setOnAlertDialogListener(new OnAlertDialogListener() {
+            @Override
+            public void onOk() {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+        //dialog.size(500f);
+        dialog.show(screen.getStage());
+
+        updateSliders(0);
+    }
+
+    protected void updateSliders(int index) {
+        for (int i = 0; i < 6; i++) {
+            SoundMixerChannel channel = getController().getRack().getSoundMixer().getChannel(i);
+            Slider slider = partMixer.getSliderAt(i);
+            if (channel != null) {
+                switch (index) {
+                    case 0:
+                        slider.setRange(0f, 2f);
+                        slider.setValue(channel.getVolume());
+                        break;
+                    case 1:
+                        slider.setRange(-1f, 1f);
+                        slider.setValue(channel.getPan());
+                        break;
+                    case 2:
+                        slider.setRange(0f, 1f);
+                        slider.setValue(channel.getReverbSend());
+                        break;
+                    case 3:
+                        slider.setRange(0f, 1f);
+                        slider.setValue(channel.getDelaySend());
+                        break;
+                    case 4:
+                        slider.setRange(0f, 1f);
+                        slider.setValue(channel.getStereoWidth());
+                        break;
+                }
+            }
+        }
     }
 
     private void createBeatLed(Table table, Skin skin) {
