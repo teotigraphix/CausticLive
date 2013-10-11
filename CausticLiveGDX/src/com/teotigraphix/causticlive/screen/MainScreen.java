@@ -28,6 +28,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
+import com.teotigraphix.causticlive.view.main.ToolBarMediator;
 import com.teotigraphix.causticlive.view.main.TransportControlMediator;
 import com.teotigraphix.libgdx.application.IGame;
 import com.teotigraphix.libgdx.screen.ScreenBase;
@@ -50,6 +51,9 @@ public class MainScreen extends ScreenBase {
     //    @Inject
     //    LibraryItemSelectMediator LibraryItemSelectMediator;
 
+    @Inject
+    ToolBarMediator toolBarMediator;
+
     private Image splashImage;
 
     public MainScreen() {
@@ -65,6 +69,7 @@ public class MainScreen extends ScreenBase {
         addMediator(BankMediator);
         //        addMediator(SongListMediator);
         //        addMediator(LibraryItemSelectMediator);
+        addMediator(toolBarMediator);
     }
 
     @Override

@@ -1,7 +1,7 @@
 
 game.png
 format: RGBA8888
-filter: Nearest,Nearest
+filter: Linear,Linear
 repeat: none
 default-rect
   rotate: false
@@ -34,9 +34,37 @@ pad_selected
   orig: 48, 48
   offset: 0, 0
   index: -1
+led_off_green
+  rotate: false
+  xy: 52, 62
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+led_off_red
+  rotate: false
+  xy: 102, 112
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+led_on_green
+  rotate: false
+  xy: 1204, 766
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+led_on_red
+  rotate: false
+  xy: 1254, 816
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
 list_select_bg
   rotate: false
-  xy: 52, 67
+  xy: 1304, 871
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10

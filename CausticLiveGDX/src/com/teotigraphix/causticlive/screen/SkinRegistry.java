@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.teotigraphix.causticlive.view.main.components.PadButton.PadButtonStyle;
+import com.teotigraphix.libgdx.ui.Led.LedStyle;
 import com.teotigraphix.libgdx.ui.OverlayButton.OverlayButtonStyle;
 import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
 
@@ -112,6 +113,20 @@ public class SkinRegistry {
         //        padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
         //        padButtonStyle.lockOverlay = skin.getDrawable("pad_selected");
         //        skin.add("default", padButtonStyle);
+
+        LedStyle ledRedStyle = new LedStyle();
+        ledRedStyle.font = skin.getFont("default-font");
+        ledRedStyle.fontColor = skin.getColor("white");
+        ledRedStyle.on = skin.getDrawable("led_on_red");
+        ledRedStyle.off = skin.getDrawable("led_off_red");
+        skin.add("led-red", ledRedStyle);
+
+        LedStyle ledGreenStyle = new LedStyle();
+        ledGreenStyle.font = skin.getFont("default-font");
+        ledGreenStyle.fontColor = skin.getColor("white");
+        ledGreenStyle.on = skin.getDrawable("led_on_green");
+        ledGreenStyle.off = skin.getDrawable("led_off_green");
+        skin.add("led-green", ledGreenStyle);
     }
 
     public static OverlayButtonStyle createOverlayButtonStyle(Skin skin, String name, String up,

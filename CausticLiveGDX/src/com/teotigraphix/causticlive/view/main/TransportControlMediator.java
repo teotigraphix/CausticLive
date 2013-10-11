@@ -56,6 +56,6 @@ public class TransportControlMediator extends ScreenMediator {
             }
         });
 
-        screen.getStage().addActor(recordButton);
+        //screen.getStage().addActor(recordButton);
     }
 }

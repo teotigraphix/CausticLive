@@ -52,6 +52,7 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
     public ApplicationMediator() {
         stateType = CausticLiveApplicationState.class;
+        deleteCausticFile = false;
     }
 
     @Override
