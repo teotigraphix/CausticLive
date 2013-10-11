@@ -36,4 +36,6 @@ public interface ILibraryModel extends ICaustkModel {
     public static class OnLibraryModelLibraryChange {
     }
 
+    void restoreState() throws CausticException;
+
 }

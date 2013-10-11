@@ -97,5 +97,11 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
         }
 
+        // load the last scene 
+        try {
+            libraryModel.restoreState();
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
     }
 }

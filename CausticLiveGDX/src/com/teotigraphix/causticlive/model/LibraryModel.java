@@ -22,6 +22,7 @@ package com.teotigraphix.causticlive.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Singleton;
@@ -36,7 +37,25 @@ import com.teotigraphix.libgdx.model.CaustkModelBase;
 @Singleton
 public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
-    private static final String USER_LIBRARY_PATH = "userLibraryPath";
+    private static final String TAG = "LibraryModel";
+
+    private static final String USER_LIBRAY_NAME = "User";
+
+    private static final String QNAME = ILibraryModel.class.getName();
+
+    private static final String PREF_SELECTED_SCENE_ID = QNAME + "/selectedSceneId";
+
+    private static final String PREF_USER_LIBRARY_PATH = QNAME + "/userLibraryPath";
+
+    //----------------------------------
+    // selectedSceneId
+    //----------------------------------
+
+    private UUID selectedSceneId;
+
+    public UUID getSelectedSceneId() {
+        return selectedSceneId;
+    }
 
     @Override
     public Array<LibraryScene> getScenes() {
@@ -46,45 +65,91 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         return result;
     }
 
+    public void loadScene(LibraryScene item) {
+        try {
+            getController().getRack().getSoundSource().createScene(item);
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+        // set, this could be loaded from outside of the model
+        selectedSceneId = item.getId();
+        getController().getLogger().log(TAG, "Loaded LibraryScene " + item.toString());
+
+        Project project = getController().getProjectManager().getProject();
+        project.put(PREF_SELECTED_SCENE_ID, selectedSceneId.toString());
+    }
+
+    //--------------------------------------------------------------------------
+    // Constructor
+    //--------------------------------------------------------------------------
+
     public LibraryModel() {
     }
 
+    //--------------------------------------------------------------------------
+    // Overridden :: Methods 
+    //--------------------------------------------------------------------------
+
     @Override
     public void onRegister() {
+
         Project project = getController().getProjectManager().getProject();
-        String path = project.getString(USER_LIBRARY_PATH, null);
+        String uid = project.getString(PREF_SELECTED_SCENE_ID, null);
+        if (uid != null) {
+            selectedSceneId = UUID.fromString(uid);
+        }
+
+        String path = project.getString(PREF_USER_LIBRARY_PATH, null);
 
         Library library = null;
 
         if (path == null) {
+
             // create the User library
             try {
-                // XXX THis has to be project specific
-                File userLib = new File("User");
-                library = getController().getLibraryManager().createLibrary(userLib);
+                File userLibraryFile = new File(USER_LIBRAY_NAME);
+                library = getController().getLibraryManager().createLibrary(userLibraryFile);
                 // have to save the path without the 'libraries'
-                project.put(USER_LIBRARY_PATH, userLib.getPath());
+                project.put(PREF_USER_LIBRARY_PATH, userLibraryFile.getPath());
                 getController().getLibraryManager().setSelectedLibrary(library);
                 getController().getLibraryManager().save();
             } catch (IOException e) {
-                e.printStackTrace();
+                getController().getLogger().err(TAG, "Failed to create 'User' library", e);
             }
         } else {
             // load the User library
             File directory = new File(path);
-            library = getController().getLibraryManager().loadLibrary(directory);
-            getController().getLibraryManager().setSelectedLibrary(library);
+            try {
+                library = getController().getLibraryManager().loadLibrary(directory);
+                getController().getLibraryManager().setSelectedLibrary(library);
+            } catch (IOException e) {
+                getController().getLogger().err(TAG, "Failed to load '" + path + "' library", e);
+            }
         }
 
-        //        LibraryScene libraryScene = library.getScenes().get(0);
-        //        try {
-        //            getController().getSoundSource().createScene(libraryScene);
-        //        } catch (CausticException e) {
-        //            // TODO Auto-generated catch block
-        //            e.printStackTrace();
-        //        }
-
         trigger(new OnLibraryModelLibraryChange());
+    }
+
+    //--------------------------------------------------------------------------
+    // ILibraryModel API :: Methods 
+    //--------------------------------------------------------------------------
+
+    @Override
+    public void restoreState() throws CausticException {
+        // only load the scene if there is not a scene
+        // the machine state is already loaded in the App state object
+        if (selectedSceneId == null) {
+            // get the first and only scene of the demo imported
+            selectedSceneId = getScenes().get(0).getId();
+
+            LibraryScene libraryScene = getController().getLibraryManager().getSelectedLibrary()
+                    .findSceneById(selectedSceneId);
+
+            if (libraryScene == null)
+                throw new CausticException("Failure restoring initial LibraryScene");
+
+            loadScene(libraryScene);
+        }
     }
 
     @Override
