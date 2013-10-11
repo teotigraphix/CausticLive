@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.track.Phrase;
 import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
@@ -46,9 +47,13 @@ public class PhraseListMediator extends ScreenMediator {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 final QueueData data = sequencerModel.getActiveData();
                 LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
-                Track channel = getController().getRack().getTrackSequencer()
+                Track track = getController().getRack().getTrackSequencer()
                         .getTrack(data.getViewChannelIndex());
-                sequencerModel.assignPhrase(data, channel, libraryPhrase);
+                Phrase phrase = data.getPhrase();
+                if (phrase != null) {
+                    phrase.clear();
+                }
+                sequencerModel.assignPhrase(data, track, libraryPhrase);
             }
         });
         assignButton.setPosition(325f, 510f);

@@ -19,11 +19,6 @@
 
 package com.teotigraphix.causticlive.screen;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
@@ -54,7 +49,7 @@ public class MainScreen extends ScreenBase {
     @Inject
     ToolBarMediator toolBarMediator;
 
-    private Image splashImage;
+    //private Image splashImage;
 
     public MainScreen() {
     }
@@ -74,18 +69,18 @@ public class MainScreen extends ScreenBase {
 
     @Override
     public void show() {
-        if (splashImage == null) {
-            AtlasRegion splashRegion = getAtlas().findRegion("splash");
-            Drawable splashDrawable = new TextureRegionDrawable(splashRegion);
-
-            // here we create the splash image actor; its size is set when the
-            // resize() method gets called
-            splashImage = new Image(splashDrawable, Scaling.stretch);
-            splashImage.setFillParent(true);
-            //splashImage.getColor().a = 0f;
-
-            //stage.addActor(splashImage);
-        }
+        //        if (splashImage == null) {
+        //            AtlasRegion splashRegion = getAtlas().findRegion("splash");
+        //            Drawable splashDrawable = new TextureRegionDrawable(splashRegion);
+        //
+        //            // here we create the splash image actor; its size is set when the
+        //            // resize() method gets called
+        //            //splashImage = new Image(splashDrawable, Scaling.stretch);
+        //            //splashImage.setFillParent(true);
+        //            //splashImage.getColor().a = 0f;
+        //
+        //            //stage.addActor(splashImage);
+        //        }
 
         super.show();
     }

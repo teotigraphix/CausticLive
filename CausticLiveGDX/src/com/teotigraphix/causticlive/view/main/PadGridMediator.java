@@ -65,7 +65,8 @@ public class PadGridMediator extends ScreenMediator {
             public void onChange(int localIndex, boolean selected) {
                 QueueData data = sequencerModel.getQueueData(sequencerModel.getSelectedBank(),
                         localIndex);
-                sequencerModel.touch(data);
+                if (data.getViewChannelIndex() != -1)
+                    sequencerModel.touch(data);
             }
 
             @Override
@@ -77,50 +78,6 @@ public class PadGridMediator extends ScreenMediator {
             }
 
         });
-
-        //
-        //            @Override
-        //            public void onLongPress(Integer localIndex, float x, float y) {
-        //                sequencerModel.setActiveData(sequencerModel.getQueueData(
-        //                        sequencerModel.getSelectedBank(), localIndex));
-        //                screenProvider.getScreen().getGame().setScreen(ICausticLiveScreen.ASSIGN_SCREEN);
-        //
-        //                //                System.out.println("Long Press");
-        //                //                final QueueData data = sequencerModel.getQueueData(
-        //                //                        sequencerModel.getSelectedBank(), localIndex);
-        //                //
-        //                //                final List<LibraryPhrase> phrases = getController().getLibraryManager()
-        //                //                        .getSelectedLibrary().getPhrases();
-        //                //
-        //                //                final Object[] items = new String[phrases.size()];
-        //                //                for (int i = 0; i < items.length; i++) {
-        //                //                    items[i] = phrases.get(i).toString();
-        //                //                }
-        //                //                final ListDialog alert = dialogManager.createListDialog(screenProvider.getScreen(),
-        //                //                        "Choose Phrase", items);
-        //                //                alert.setOnAlertDialogListener(new OnAlertDialogListener() {
-        //                //                    @Override
-        //                //                    public void onOk() {
-        //                //                        System.out.println(items[alert.getSelectedIndex()]);
-        //                //                        LibraryPhrase libraryPhrase = phrases.get(alert.getSelectedIndex());
-        //                //                        sequencerModel.assignPhrase(data, libraryPhrase);
-        //                //                    }
-        //                //
-        //                //                    @Override
-        //                //                    public void onCancel() {
-        //                //                    }
-        //                //                });
-        //                //                alert.show(screenProvider.getScreen().getStage());
-        //            }
-        //
-        //            @Override
-        //            public void onChange(int localIndex, boolean selected) {
-        //                QueueData data = sequencerModel.getQueueData(sequencerModel.getSelectedBank(),
-        //                        localIndex);
-        //                sequencerModel.touch(data);
-        //            }
-        //        });
-        //
 
         view.setPosition(640f, 89f);
         screen.getStage().addActor(view);
@@ -164,5 +121,4 @@ public class PadGridMediator extends ScreenMediator {
     protected void updateView(Collection<QueueData> viewData) {
         view.refresh(viewData, true);
     }
-
 }

@@ -30,6 +30,7 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.controller.IRack;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
+import com.teotigraphix.caustk.utils.RuntimeUtils;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
@@ -87,7 +88,7 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         super.onRun();
 
         if (isFirstRun()) {
-            File file = new File("C:\\Users\\Teoti\\Documents\\caustic\\songs\\DRIVE.caustic");
+            File file = RuntimeUtils.getCausticSongFile("C2DEMO");
             try {
                 libraryModel.importSong(file);
             } catch (IOException e) {
