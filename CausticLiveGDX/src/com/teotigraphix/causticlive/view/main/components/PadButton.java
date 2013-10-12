@@ -19,26 +19,31 @@
 
 package com.teotigraphix.causticlive.view.main.components;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ToggleButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 import com.teotigraphix.caustk.tone.Tone;
 import com.teotigraphix.libgdx.ui.OverlayButton.OnPadButtonListener;
 
-public class PadButton extends TextButton {
+public class PadButton extends ToggleButton {
 
     protected boolean longPressed;
+
+    private Skin skin;
+
+    private Label beatLabel;
 
     //--------------------------------------------------------------------------
     // Public Property :: API
@@ -52,15 +57,17 @@ public class PadButton extends TextButton {
     }
 
     //----------------------------------
-    // properties
+    // queueData
     //----------------------------------
 
-    Map<String, Object> properties;
+    private int index;
 
-    public final Map<String, Object> getProperties() {
-        if (properties == null)
-            properties = new HashMap<String, Object>();
-        return properties;
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int value) {
+        index = value;
     }
 
     //----------------------------------
@@ -78,16 +85,13 @@ public class PadButton extends TextButton {
         invalidate();
     }
 
-    public boolean isSelected() {
-        return false;
-    }
-
     //--------------------------------------------------------------------------
     // Constructors
     //--------------------------------------------------------------------------
 
     public PadButton(String text, Skin skin) {
         super(text, skin);
+        this.skin = skin;
         style = skin.get("default", PadButtonStyle.class);
         init();
     }
@@ -113,7 +117,7 @@ public class PadButton extends TextButton {
                     return;
                 }
 
-                if (isDisabled() /*|| queueData == null*/)
+                if (isDisabled() || queueData == null)
                     return;
 
                 ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
@@ -125,10 +129,15 @@ public class PadButton extends TextButton {
             @Override
             public boolean longPress(Actor actor, float x, float y) {
                 longPressed = true;
-                listener.onLongPress((Integer)getProperties().get("index"), x, y);
+                listener.onLongPress(getIndex(), x, y);
                 return true;
             }
         });
+
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        beatLabel = new Label("beat", labelStyle);
+        beatLabel.setPosition(5f, 1);
+        addActor(beatLabel);
     }
 
     //--------------------------------------------------------------------------
@@ -142,6 +151,8 @@ public class PadButton extends TextButton {
         Drawable queueOverlay = getStyle().queueOverlay;
         Drawable playOverlay = getStyle().playOverlay;
         Drawable lockOverlay = getStyle().lockOverlay;
+
+        beatLabel.setColor(Color.WHITE);
 
         if (queueData != null) {
             switch (queueData.getState()) {
@@ -157,15 +168,27 @@ public class PadButton extends TextButton {
                     break;
                 case Idle:
                     break;
-
             }
+
             int channel = queueData.getViewChannelIndex();
             if (channel != -1) {
                 Tone tone = queueData.getRack().getSoundSource().getTone(channel);
-                setText(tone.getName());
+                if (queueData.getState() == QueueDataState.Play
+                        || queueData.getState() == QueueDataState.PlayUnqueued) {
+                    int beat = queueData.getPhrase().getLocalBeat();
+                    if (queueData.getPhrase().isLastBeat())
+                        beatLabel.setColor(Color.RED);
+                    setText(tone.getName());
+                    int numMeasures = queueData.getPhrase().getLength();
+                    beatLabel.setText((numMeasures * 4) + ":" + (beat + 1));
+                } else {
+                    setText(tone.getName());
+                    beatLabel.setText("");
+                }
             }
         } else {
             setText("Unassigned");
+            beatLabel.setText("");
         }
     }
 

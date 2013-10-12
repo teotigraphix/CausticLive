@@ -19,21 +19,18 @@
 
 package com.teotigraphix.causticlive.view.main.components;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.ui.OverlayButton.OnPadButtonListener;
 
 public class PadGrid extends WidgetGroup {
-
-    private List<PadButton> buttons = new ArrayList<PadButton>();
 
     private Skin skin;
 
@@ -57,13 +54,12 @@ public class PadGrid extends WidgetGroup {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColums; j++) {
                 final PadButton button = new PadButton(index + "", skin);
-                button.getProperties().put("index", index);
+                button.setIndex(index);
                 button.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         PadButton button = (PadButton)actor;
-                        listener.onChange((Integer)button.getProperties().get("index"),
-                                button.isSelected());
+                        listener.onChange(button.getIndex());
                         button.invalidate();
                     }
                 });
@@ -74,7 +70,6 @@ public class PadGrid extends WidgetGroup {
                     }
                 });
                 addActor(button);
-                buttons.add(button);
                 index++;
             }
         }
@@ -120,21 +115,22 @@ public class PadGrid extends WidgetGroup {
     }
 
     public interface OnPadGridListener {
-        void onChange(int localIndex, boolean selected);
+        void onChange(int localIndex);
 
         void onLongPress(Integer localIndex, float x, float y);
 
     }
 
     public void refresh(Collection<QueueData> viewData, boolean selected) {
-        for (PadButton button : buttons) {
-            button.setData(null);
+        final SnapshotArray<Actor> children = getChildren();
+        for (Actor button : children) {
+            ((PadButton)button).setData(null);
         }
 
         int index = 0;
         for (QueueData queueData : viewData) {
-            PadButton padButton = buttons.get(index);
             if (queueData != null) {
+                PadButton padButton = (PadButton)children.get(index);
                 padButton.setData(queueData);
             }
             index++;

@@ -31,6 +31,7 @@ import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer.OnQueueSequencerDataChange;
+import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
@@ -62,7 +63,7 @@ public class PadGridMediator extends ScreenMediator {
         view.setOnPadGridListener(new OnPadGridListener() {
 
             @Override
-            public void onChange(int localIndex, boolean selected) {
+            public void onChange(int localIndex) {
                 QueueData data = sequencerModel.getQueueData(sequencerModel.getSelectedBank(),
                         localIndex);
                 if (data.getViewChannelIndex() != -1)
@@ -86,6 +87,17 @@ public class PadGridMediator extends ScreenMediator {
     @Override
     public void onAttach(IScreen screen) {
         super.onAttach(screen);
+
+        register(getController(), OnSystemSequencerBeatChange.class,
+                new EventObserver<OnSystemSequencerBeatChange>() {
+                    @Override
+                    public void trigger(OnSystemSequencerBeatChange object) {
+                        //final float beat = object.getBeat();
+                        // XXX for now this is the easiest way to know the pads
+                        // will be redrawn every beat fo the ui
+                        updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+                    }
+                });
 
         register(getController(), OnQueueSequencerDataChange.class,
                 new EventObserver<OnQueueSequencerDataChange>() {

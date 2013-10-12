@@ -88,7 +88,7 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         super.onRun();
 
         if (isFirstRun()) {
-            File file = RuntimeUtils.getCausticSongFile("C2DEMO");
+            File file = RuntimeUtils.getCausticSongFile("DRIVE");
             try {
                 libraryModel.importSong(file);
             } catch (IOException e) {
