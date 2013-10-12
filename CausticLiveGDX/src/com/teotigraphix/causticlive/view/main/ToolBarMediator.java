@@ -66,14 +66,15 @@ public class ToolBarMediator extends ScreenMediator {
         skin = screen.getSkin();
 
         Table table = new Table();
-        table.debug();
+        //table.debug();
 
         createBeatLed(table, screen.getSkin());
         createMixerButton(table, screen.getSkin());
+        float prefHeight = table.getPrefHeight();
 
         int height = Gdx.graphics.getHeight();
-        table.setPosition(0, height - 40f);
-        table.setSize(Gdx.graphics.getWidth(), 40f);
+        table.setPosition(0, height - prefHeight);
+        table.setSize(Gdx.graphics.getWidth(), prefHeight);
         screen.getStage().addActor(table);
     }
 

@@ -20,6 +20,7 @@
 package com.teotigraphix.causticlive.model;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
@@ -80,7 +81,9 @@ public interface ISequencerModel extends ICaustkModel {
 
     boolean touch(QueueData data);
 
-    void assignPhrase(QueueData data, Track trackChannel, LibraryPhrase libraryPhrase);
+    void assignPhrase(QueueData data, Track track, LibraryPhrase libraryPhrase);
+
+    void assignPhrase(QueueData data, Track track, UUID phraseId);
 
     //--------------------------------------------------------------------------
     // Event API
@@ -104,4 +107,5 @@ public interface ISequencerModel extends ICaustkModel {
             this.kind = kind;
         }
     }
+
 }

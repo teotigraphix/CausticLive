@@ -22,6 +22,7 @@ package com.teotigraphix.causticlive.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -174,6 +175,13 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
         channel.assignPhrase(phrase);
 
         phrase.getTrack().setCurrentBankPattern(lastBank, lastPattern);
+    }
+
+    @Override
+    public void assignPhrase(QueueData data, Track track, UUID phraseId) {
+        LibraryPhrase libraryPhrase = getController().getLibraryManager().getSelectedLibrary()
+                .findPhraseById(phraseId);
+        assignPhrase(data, track, libraryPhrase);
     }
 
 }

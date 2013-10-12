@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.badlogic.gdx.utils.Array;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.core.Library;
@@ -33,10 +34,14 @@ import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.track.Phrase;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 
 @Singleton
 public class LibraryModel extends CaustkModelBase implements ILibraryModel {
+
+    @Inject
+    ISequencerModel sequencerModel;
 
     private static final String TAG = "LibraryModel";
 
@@ -178,7 +183,21 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
     @Override
     public void assignTone(int toneIndex, QueueData queueData) {
-        queueData.setViewChannelIndex(toneIndex);
+        int currentIndex = queueData.getViewChannelIndex();
+        if (currentIndex != toneIndex) {
+            // we are switching machines for the pad
+            // remove pattern data from the old machine and remove data from the new machine
+            // then add the old notes to the new machine
+            // probably easiest of I keep track of the library phrase that originally 
+            // created it, then its the standard remove and apply phrase
+            Phrase currentPhrase = queueData.getPhrase();
+            UUID phraseId = currentPhrase.getPhraseId();
+            currentPhrase.clear();
+            queueData.setViewChannelIndex(toneIndex);
+            currentPhrase = queueData.getPhrase();
+            sequencerModel.assignPhrase(queueData, currentPhrase.getTrack(), phraseId);
+        }
+        // queueData.setViewChannelIndex(toneIndex);
         //trigger(new OnToneModelMachineIndexChange());
     }
 }

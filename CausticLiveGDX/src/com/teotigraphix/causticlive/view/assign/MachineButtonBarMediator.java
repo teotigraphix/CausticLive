@@ -34,6 +34,8 @@ public class MachineButtonBarMediator extends ScreenMediator {
             @Override
             public void onMachineChange(int index) {
                 QueueData activeData = sequencerModel.getActiveData();
+                if (activeData.getViewChannelIndex() == index)
+                    return;
                 libraryModel.assignTone(index, activeData);
             }
         });
