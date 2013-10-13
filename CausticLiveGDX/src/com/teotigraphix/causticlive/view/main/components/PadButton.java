@@ -195,6 +195,9 @@ public class PadButton extends ToggleButton {
                 }
                 setText(queueData.getName());
                 machineLabel.setText(tone.getIndex() + ":" + tone.getName());
+            } else {
+                // was unassigned from assign screen
+                setText("Unassigned");
             }
         } else {
             setText("Unassigned");

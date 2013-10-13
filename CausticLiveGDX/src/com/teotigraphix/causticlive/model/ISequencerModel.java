@@ -85,6 +85,8 @@ public interface ISequencerModel extends ICaustkModel {
 
     void assignPhrase(QueueData data, Track track, UUID phraseId);
 
+    void unassignPhrase(QueueData data, Track track);
+
     //--------------------------------------------------------------------------
     // Event API
     //--------------------------------------------------------------------------

@@ -30,6 +30,8 @@ public class PhraseListMediator extends ScreenMediator {
 
     private OverlayButton assignButton; // this should be in the view
 
+    private OverlayButton unassignButton;
+
     public PhraseListMediator() {
     }
 
@@ -60,6 +62,21 @@ public class PhraseListMediator extends ScreenMediator {
         assignButton.setSize(100f, 40f);
 
         screen.getStage().addActor(assignButton);
+
+        unassignButton = new OverlayButton("Unassign", screen.getSkin());
+        unassignButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                final QueueData data = sequencerModel.getActiveData();
+                Track track = getController().getRack().getTrackSequencer()
+                        .getTrack(data.getViewChannelIndex());
+                sequencerModel.unassignPhrase(data, track);
+            }
+        });
+        unassignButton.setPosition(220f, 510f);
+        unassignButton.setSize(100f, 40f);
+
+        screen.getStage().addActor(unassignButton);
     }
 
     private Array<?> getPhraseItems() {
