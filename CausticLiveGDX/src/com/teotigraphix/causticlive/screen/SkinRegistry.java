@@ -27,14 +27,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.teotigraphix.causticlive.view.main.components.PadButton.PadButtonStyle;
+import com.teotigraphix.libgdx.ui.Knob.KnobStyle;
 import com.teotigraphix.libgdx.ui.Led.LedStyle;
 import com.teotigraphix.libgdx.ui.OverlayButton.OverlayButtonStyle;
 import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
+import com.teotigraphix.libgdx.ui.TextKnob.TextKnobStyle;
+import com.teotigraphix.libgdx.ui.TextSlider.TextSliderStyle;
 
 public class SkinRegistry {
 
@@ -67,6 +69,18 @@ public class SkinRegistry {
         textFieldStyle.fontColor = skin.getColor("white");
         textFieldStyle.cursor = skin.getDrawable("textfield_cursor");
         skin.add("default", textFieldStyle);
+
+        KnobStyle knobStyle = new KnobStyle();
+        knobStyle.background = skin.getDrawable("dail_background");
+        knobStyle.knob = skin.getDrawable("dail_foreground");
+        skin.add("default", knobStyle);
+
+        TextKnobStyle textKnobStyle = new TextKnobStyle();
+        textKnobStyle.background = skin.getDrawable("dail_background");
+        textKnobStyle.knob = skin.getDrawable("dail_foreground");
+        textKnobStyle.font = skin.getFont("eras-12-b");
+        textKnobStyle.fontColor = skin.getColor("white");
+        skin.add("default", textKnobStyle);
 
         PadButtonStyle padButtonStyle = new PadButtonStyle();
         padButtonStyle.up = skin.getDrawable("pad_up");
@@ -141,9 +155,11 @@ public class SkinRegistry {
         ledGreenStyle.off = skin.getDrawable("led_off_green");
         skin.add("led-green", ledGreenStyle);
 
-        SliderStyle sliderStyle = new SliderStyle();
+        TextSliderStyle sliderStyle = new TextSliderStyle();
         sliderStyle.background = skin.getDrawable("slider_background");
         sliderStyle.knob = skin.getDrawable("slider_knob");
+        sliderStyle.font = skin.getFont("default-font");
+        sliderStyle.fontColor = skin.getColor("white");
         skin.add("default-vertical", sliderStyle);
 
         SelectBoxStyle selectBoxStyle = new SelectBoxStyle();

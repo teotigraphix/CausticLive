@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -20,7 +19,9 @@ import com.teotigraphix.caustk.sound.mixer.SoundMixerChannel;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
+import com.teotigraphix.libgdx.ui.Knob;
 import com.teotigraphix.libgdx.ui.Led;
+import com.teotigraphix.libgdx.ui.TextSlider;
 
 public class ToolBarMediator extends ScreenMediator {
 
@@ -40,6 +41,8 @@ public class ToolBarMediator extends ScreenMediator {
     private IScreen screen;
 
     private Dialog mixerDialog;
+
+    private boolean updating;
 
     public ToolBarMediator() {
     }
@@ -113,6 +116,8 @@ public class ToolBarMediator extends ScreenMediator {
         partMixer.setOnPartMixerListener(new OnPartMixerListener() {
             @Override
             public void onSliderChange(int buttonIndex, int sliderIndex, float sliderValue) {
+                if (updating)
+                    return;
                 SoundMixerChannel channel = getController().getRack().getSoundMixer()
                         .getChannel(sliderIndex);
                 switch (buttonIndex) {
@@ -121,18 +126,14 @@ public class ToolBarMediator extends ScreenMediator {
                         break;
 
                     case 1:
-                        channel.setPan(sliderValue);
-                        break;
-
-                    case 2:
                         channel.setReverbSend(sliderValue);
                         break;
 
-                    case 3:
+                    case 2:
                         channel.setDelaySend(sliderValue);
                         break;
 
-                    case 4:
+                    case 3:
                         channel.setStereoWidth(sliderValue);
                         break;
                 }
@@ -142,55 +143,72 @@ public class ToolBarMediator extends ScreenMediator {
             public void onButtonChange(int index) {
                 updateSliders(index);
             }
+
+            @Override
+            public void onKnobChange(int buttonIndex, int sliderIndex, float value) {
+                if (updating)
+                    return;
+                SoundMixerChannel channel = getController().getRack().getSoundMixer()
+                        .getChannel(sliderIndex);
+                channel.setPan(value);
+            }
+
+            @Override
+            public void onMuteChange(int buttonIndex, int sliderIndex, boolean selected) {
+                if (updating)
+                    return;
+                SoundMixerChannel channel = getController().getRack().getSoundMixer()
+                        .getChannel(sliderIndex);
+                channel.setMute(selected);
+            }
+
+            @Override
+            public void onSoloChange(int buttonIndex, int sliderIndex, boolean selected) {
+                // TODO Auto-generated method stub
+
+            }
         });
 
         mixerDialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
         partMixer.validate();
         mixerDialog.getContentTable().add(partMixer).size(partMixer.getPrefWidth());
-        //        mixerDialog.setOnAlertDialogListener(new OnAlertDialogListener() {
-        //            @Override
-        //            public void onOk() {
-        //
-        //            }
-        //
-        //            @Override
-        //            public void onCancel() {
-        //
-        //            }
-        //        });
-
-        // updateSliders(0);
+        updateSliders(0);
     }
 
     protected void updateSliders(int index) {
+        updating = true;
         for (int i = 0; i < 6; i++) {
             SoundMixerChannel channel = getController().getRack().getSoundMixer().getChannel(i);
-            Slider slider = partMixer.getSliderAt(i);
+            TextSlider slider = partMixer.getSliderAt(i);
+            Knob panKnob = partMixer.getKnobAt(i);
+            panKnob.setValue(channel.getPan());
+
             if (channel != null) {
                 switch (index) {
                     case 0:
+                        getController().getLogger().log("ToolBarMediator", "Volume");
                         slider.setRange(0f, 2f);
                         slider.setValue(channel.getVolume());
                         break;
                     case 1:
-                        slider.setRange(-1f, 1f);
-                        slider.setValue(channel.getPan());
-                        break;
-                    case 2:
+                        getController().getLogger().log("ToolBarMediator", "Reverb");
                         slider.setRange(0f, 1f);
                         slider.setValue(channel.getReverbSend());
                         break;
-                    case 3:
+                    case 2:
+                        getController().getLogger().log("ToolBarMediator", "Delay");
                         slider.setRange(0f, 1f);
                         slider.setValue(channel.getDelaySend());
                         break;
-                    case 4:
+                    case 3:
+                        getController().getLogger().log("ToolBarMediator", "Width");
                         slider.setRange(0f, 1f);
                         slider.setValue(channel.getStereoWidth());
                         break;
                 }
             }
         }
+        updating = false;
     }
 
     private void createBeatLed(Table table, Skin skin) {

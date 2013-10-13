@@ -4,19 +4,19 @@ package com.teotigraphix.causticlive.view.main.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.teotigraphix.causticlive.view.main.components.PartMixerControls.OnPartMixerControlsListener;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
 import com.teotigraphix.libgdx.ui.ControlTable;
+import com.teotigraphix.libgdx.ui.Knob;
+import com.teotigraphix.libgdx.ui.TextSlider;
 
 public class PartMixer extends ControlTable {
 
     private String[] items = new String[] {
-            "Volume", "Pan", "Reverb", "Delay", "Stereo"
+            "Volume", "Reverb", "Delay", "Stereo"
     };
 
     private ButtonBar buttonBar;
@@ -30,7 +30,7 @@ public class PartMixer extends ControlTable {
         super.initialize();
     }
 
-    private List<Slider> sliders = new ArrayList<Slider>();
+    private List<PartMixerControls> partControls = new ArrayList<PartMixerControls>();
 
     private OnPartMixerListener listener;
 
@@ -41,7 +41,7 @@ public class PartMixer extends ControlTable {
     @Override
     protected void createChildren() {
         super.createChildren();
-        debug();
+        //debug();
         // column 1 volume, pan, reverb, delay, stereo
 
         buttonBar = new ButtonBar(getSkin(), items, true, "default");
@@ -57,30 +57,44 @@ public class PartMixer extends ControlTable {
         add(buttonBar).width(100);
 
         for (int i = 0; i < 6; i++) {
-            final int index = i;
-            final Slider slider = new Slider(0, 2, 0.01f, true, getSkin());
-            slider.addListener(new ChangeListener() {
+            final int sliderIndex = i;
+            PartMixerControls controls = new PartMixerControls(i, getSkin());
+            controls.setOnPartMixerControlsListener(new OnPartMixerControlsListener() {
                 @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    if (blockEvents)
-                        return;
-                    int buttonIndex = selectedIndex;
-                    int sliderIdnex = index;
-                    float sliderValue = slider.getValue();
-                    listener.onSliderChange(buttonIndex, sliderIdnex, sliderValue);
+                public void onSoloChange(boolean selected) {
+                    listener.onSoloChange(selectedIndex, sliderIndex, selected);
+                }
+
+                @Override
+                public void onSliderChange(float value) {
+                    listener.onSliderChange(selectedIndex, sliderIndex, value);
+                }
+
+                @Override
+                public void onMuteChange(boolean selected) {
+                    listener.onMuteChange(selectedIndex, sliderIndex, selected);
+                }
+
+                @Override
+                public void onKnobChange(float value) {
+                    listener.onKnobChange(selectedIndex, sliderIndex, value);
                 }
             });
-            slider.setWidth(40f);
-            add(slider).width(40f).fillY().expand().align(Align.right);
-            sliders.add(slider);
+
+            add(controls).fillY().expand().align(Align.right);
+            partControls.add(controls);
         }
 
         setWidth(getPrefWidth());
         setHeight(getPrefHeight());
     }
 
-    public Slider getSliderAt(int index) {
-        return sliders.get(index);
+    public TextSlider getSliderAt(int index) {
+        return partControls.get(index).getVolumeSlider();
+    }
+
+    public Knob getKnobAt(int index) {
+        return partControls.get(index).getPanKnob();
     }
 
     public void setOnPartMixerListener(OnPartMixerListener l) {
@@ -91,5 +105,11 @@ public class PartMixer extends ControlTable {
         void onButtonChange(int index);
 
         void onSliderChange(int buttonIndex, int sliderIndex, float sliderValue);
+
+        void onKnobChange(int buttonIndex, int sliderIndex, float value);
+
+        void onMuteChange(int buttonIndex, int sliderIndex, boolean selected);
+
+        void onSoloChange(int buttonIndex, int sliderIndex, boolean selected);
     }
 }
