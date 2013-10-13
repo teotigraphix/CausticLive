@@ -45,6 +45,8 @@ public class PadButton extends ToggleButton {
 
     private Label beatLabel;
 
+    private Label machineLabel;
+
     //--------------------------------------------------------------------------
     // Public Property :: API
     //--------------------------------------------------------------------------
@@ -138,6 +140,11 @@ public class PadButton extends ToggleButton {
         beatLabel = new Label("beat", labelStyle);
         beatLabel.setPosition(5f, 1);
         addActor(beatLabel);
+
+        labelStyle = new LabelStyle(skin.getFont("eras-12-b"), Color.CYAN);
+        machineLabel = new Label("", labelStyle);
+        machineLabel.setPosition(5f, -10f);
+        addActor(machineLabel);
     }
 
     //--------------------------------------------------------------------------
@@ -153,10 +160,12 @@ public class PadButton extends ToggleButton {
         Drawable lockOverlay = getStyle().lockOverlay;
 
         beatLabel.setColor(Color.WHITE);
+        machineLabel.setText("");
 
         if (queueData != null) {
             switch (queueData.getState()) {
                 case Queue:
+                    batch.setColor(Color.GREEN);
                     queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
                     break;
                 case Play:
@@ -185,6 +194,7 @@ public class PadButton extends ToggleButton {
                     setText(tone.getName());
                     beatLabel.setText("");
                 }
+                machineLabel.setText(tone.getIndex() + ":" + tone.getName());
             }
         } else {
             setText("Unassigned");

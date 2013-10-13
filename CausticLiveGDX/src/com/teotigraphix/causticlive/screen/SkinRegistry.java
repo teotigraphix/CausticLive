@@ -25,9 +25,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.teotigraphix.causticlive.view.main.components.PadButton.PadButtonStyle;
 import com.teotigraphix.libgdx.ui.Led.LedStyle;
@@ -37,6 +39,8 @@ import com.teotigraphix.libgdx.ui.SelectButton.SelectButtonStyle;
 public class SkinRegistry {
 
     public static void register(Skin skin) {
+
+        skin.add("eras-12-b", new BitmapFont(Gdx.files.internal("font/Eras-12-B.fnt"), false));
 
         skin.add("green", new Color(0, 1, 0, 1));
         skin.add("white", new Color(1, 1, 1, 1));
@@ -56,6 +60,13 @@ public class SkinRegistry {
         textButtonStyle.font = skin.getFont("default-font");
         textButtonStyle.fontColor = skin.getColor("white");
         skin.add("default", textButtonStyle);
+
+        TextFieldStyle textFieldStyle = new TextFieldStyle();
+        textFieldStyle.background = skin.getDrawable("pad_up");
+        textFieldStyle.font = skin.getFont("eras-12-b");
+        textFieldStyle.fontColor = skin.getColor("white");
+        textFieldStyle.cursor = skin.getDrawable("textfield_cursor");
+        skin.add("default", textFieldStyle);
 
         PadButtonStyle padButtonStyle = new PadButtonStyle();
         padButtonStyle.up = skin.getDrawable("pad_up");
@@ -131,9 +142,17 @@ public class SkinRegistry {
         skin.add("led-green", ledGreenStyle);
 
         SliderStyle sliderStyle = new SliderStyle();
-        sliderStyle.background = skin.getDrawable("pad_up");
-        sliderStyle.knob = skin.getDrawable("pad_selected");
+        sliderStyle.background = skin.getDrawable("slider_background");
+        sliderStyle.knob = skin.getDrawable("slider_knob");
         skin.add("default-vertical", sliderStyle);
+
+        SelectBoxStyle selectBoxStyle = new SelectBoxStyle();
+        selectBoxStyle.background = skin.getDrawable("pad_up");
+        selectBoxStyle.font = skin.getFont("default-font");
+        selectBoxStyle.fontColor = skin.getColor("white");
+        selectBoxStyle.scrollStyle = scrollPaneStyle;
+        selectBoxStyle.listStyle = listStyle;
+        skin.add("default", selectBoxStyle);
     }
 
     public static OverlayButtonStyle createOverlayButtonStyle(Skin skin, String name, String up,

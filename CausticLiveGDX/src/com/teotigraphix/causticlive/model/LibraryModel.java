@@ -191,13 +191,20 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
             // probably easiest of I keep track of the library phrase that originally 
             // created it, then its the standard remove and apply phrase
             Phrase currentPhrase = queueData.getPhrase();
-            UUID phraseId = currentPhrase.getPhraseId();
-            currentPhrase.clear();
-            queueData.setViewChannelIndex(toneIndex);
-            currentPhrase = queueData.getPhrase();
-            sequencerModel.assignPhrase(queueData, currentPhrase.getTrack(), phraseId);
+            if (currentPhrase != null) {
+                UUID phraseId = currentPhrase.getPhraseId();
+                queueData.setViewChannelIndex(toneIndex);
+
+                if (phraseId != null) {
+                    currentPhrase.clear();
+                    currentPhrase = queueData.getPhrase();
+                    sequencerModel.assignPhrase(queueData, currentPhrase.getTrack(), phraseId);
+                }
+            } else {
+                queueData.setViewChannelIndex(toneIndex);
+            }
         }
-        // queueData.setViewChannelIndex(toneIndex);
+
         //trigger(new OnToneModelMachineIndexChange());
     }
 }

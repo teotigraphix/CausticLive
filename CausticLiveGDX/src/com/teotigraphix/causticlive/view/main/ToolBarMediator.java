@@ -4,15 +4,14 @@ package com.teotigraphix.causticlive.view.main;
 import org.androidtransfuse.event.EventObserver;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.AlertDialog;
-import com.badlogic.gdx.scenes.scene2d.ui.AlertDialog.OnAlertDialogListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.view.main.components.PartMixer;
 import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
@@ -39,6 +38,8 @@ public class ToolBarMediator extends ScreenMediator {
     private PartMixer partMixer;
 
     private IScreen screen;
+
+    private Dialog mixerDialog;
 
     public ToolBarMediator() {
     }
@@ -80,16 +81,34 @@ public class ToolBarMediator extends ScreenMediator {
 
     private void createMixerButton(Table table, Skin skin) {
         mixerButton = new TextButton("Mixer", skin);
-        mixerButton.addListener(new ActorGestureListener() {
+        //        mixerButton.addListener(new ActorGestureListener() {
+        //            @Override
+        //            public void tap(InputEvent event, float x, float y, int count, int button) {
+        //                createOrShowMixer();
+        //            }
+        //        });
+        mixerButton.addListener(new ChangeListener() {
             @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                createOrShowMixer();
+            public void changed(ChangeEvent event, Actor actor) {
+                toggleMixer(mixerButton.isChecked());
             }
         });
         table.add(mixerButton);
     }
 
+    protected void toggleMixer(boolean checked) {
+        if (checked) {
+            createOrShowMixer();
+            mixerDialog.show(screen.getStage());
+        } else {
+            mixerDialog.hide();
+        }
+    }
+
     protected void createOrShowMixer() {
+        if (partMixer != null)
+            return;
+
         partMixer = new PartMixer(skin);
         partMixer.setOnPartMixerListener(new OnPartMixerListener() {
             @Override
@@ -125,22 +144,22 @@ public class ToolBarMediator extends ScreenMediator {
             }
         });
 
-        AlertDialog dialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
-        dialog.setOnAlertDialogListener(new OnAlertDialogListener() {
-            @Override
-            public void onOk() {
+        mixerDialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
+        partMixer.validate();
+        mixerDialog.getContentTable().add(partMixer).size(partMixer.getPrefWidth());
+        //        mixerDialog.setOnAlertDialogListener(new OnAlertDialogListener() {
+        //            @Override
+        //            public void onOk() {
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onCancel() {
+        //
+        //            }
+        //        });
 
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-        //dialog.size(500f);
-        dialog.show(screen.getStage());
-
-        updateSliders(0);
+        // updateSliders(0);
     }
 
     protected void updateSliders(int index) {

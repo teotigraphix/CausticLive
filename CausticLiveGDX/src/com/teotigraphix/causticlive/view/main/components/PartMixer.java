@@ -7,6 +7,7 @@ import java.util.List;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
@@ -40,7 +41,7 @@ public class PartMixer extends ControlTable {
     @Override
     protected void createChildren() {
         super.createChildren();
-
+        debug();
         // column 1 volume, pan, reverb, delay, stereo
 
         buttonBar = new ButtonBar(getSkin(), items, true, "default");
@@ -53,7 +54,7 @@ public class PartMixer extends ControlTable {
                 blockEvents = false;
             }
         });
-        add(buttonBar);
+        add(buttonBar).width(100);
 
         for (int i = 0; i < 6; i++) {
             final int index = i;
@@ -69,12 +70,13 @@ public class PartMixer extends ControlTable {
                     listener.onSliderChange(buttonIndex, sliderIdnex, sliderValue);
                 }
             });
-            add(slider).width(40f).expandY().fillY();
+            slider.setWidth(40f);
+            add(slider).width(40f).fillY().expand().align(Align.right);
             sliders.add(slider);
         }
 
-        setWidth(getPrefWidth() + 100);
-        setHeight(getPrefHeight() + 100);
+        setWidth(getPrefWidth());
+        setHeight(getPrefHeight());
     }
 
     public Slider getSliderAt(int index) {

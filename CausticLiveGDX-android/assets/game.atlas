@@ -5,7 +5,7 @@ filter: Linear,Linear
 repeat: none
 default-rect
   rotate: false
-  xy: 2, 79
+  xy: 2, 91
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -13,22 +13,14 @@ default-rect
   index: -1
 default-round-large
   rotate: false
-  xy: 2, 2
+  xy: 2, 14
   size: 25, 25
   orig: 25, 25
   offset: 0, 0
   index: -1
 default-scroll
   rotate: false
-  xy: 1204, 833
-  size: 48, 48
-  split: 21, 24, 24, 22
-  orig: 48, 48
-  offset: 0, 0
-  index: -1
-pad_selected
-  rotate: false
-  xy: 1204, 833
+  xy: 1204, 845
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -36,35 +28,35 @@ pad_selected
   index: -1
 led_off_green
   rotate: false
-  xy: 52, 62
+  xy: 102, 124
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_off_red
   rotate: false
-  xy: 102, 112
+  xy: 1204, 778
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_on_green
   rotate: false
-  xy: 1204, 766
+  xy: 1254, 848
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_on_red
   rotate: false
-  xy: 1254, 816
+  xy: 1294, 878
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 list_select_bg
   rotate: false
-  xy: 1304, 871
+  xy: 2, 2
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10
@@ -72,7 +64,7 @@ list_select_bg
   index: -1
 overlay_play
   rotate: false
-  xy: 2, 29
+  xy: 2, 41
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -80,7 +72,7 @@ overlay_play
   index: -1
 overlay_queued
   rotate: false
-  xy: 52, 79
+  xy: 52, 91
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -88,24 +80,55 @@ overlay_queued
   index: -1
 overlay_unqueued
   rotate: false
-  xy: 1204, 783
+  xy: 1204, 795
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
+  offset: 0, 0
+  index: -1
+pad_selected
+  rotate: false
+  xy: 29, 29
+  size: 10, 10
+  split: 2, 2, 2, 2
+  orig: 10, 10
   offset: 0, 0
   index: -1
 pad_up
   rotate: false
-  xy: 1254, 833
-  size: 48, 48
-  split: 21, 24, 24, 22
-  orig: 48, 48
+  xy: 52, 67
+  size: 10, 10
+  split: 2, 2, 2, 2
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+slider_background
+  rotate: false
+  xy: 52, 79
+  size: 38, 10
+  split: 2, 2, 2, 2
+  orig: 38, 10
+  offset: 0, 0
+  index: -1
+slider_knob
+  rotate: false
+  xy: 1254, 865
+  size: 38, 28
+  split: 2, 2, 2, 2
+  orig: 38, 28
   offset: 0, 0
   index: -1
 splash
   rotate: false
-  xy: 2, 129
+  xy: 2, 141
   size: 1200, 752
   orig: 1200, 752
+  offset: 0, 0
+  index: -1
+textfield_cursor
+  rotate: false
+  xy: 92, 79
+  size: 3, 10
+  orig: 3, 10
   offset: 0, 0
   index: -1

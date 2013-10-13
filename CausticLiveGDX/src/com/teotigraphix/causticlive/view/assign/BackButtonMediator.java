@@ -3,9 +3,14 @@ package com.teotigraphix.causticlive.view.assign;
 
 import org.androidtransfuse.event.EventObserver;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
@@ -26,6 +31,10 @@ public class BackButtonMediator extends ScreenMediator {
     ISequencerModel sequencerModel;
 
     private Label titleLabel;
+
+    private TextButton nameButton;
+
+    private TextField nameField;
 
     public BackButtonMediator() {
     }
@@ -49,6 +58,40 @@ public class BackButtonMediator extends ScreenMediator {
         titleLabel = new Label("Hello", screen.getSkin());
         titleLabel.setPosition(10f, 720f);
         stage.addActor(titleLabel);
+
+        nameButton = new TextButton("Change Name", screen.getSkin());
+        nameButton.setPosition(5f, 600f);
+        nameButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.input.getTextInput(new TextInputListener() {
+                    @Override
+                    public void input(String text) {
+                        getController().getLogger().log("BackButtonMediator", text);
+                    }
+
+                    @Override
+                    public void canceled() {
+                        getController().getLogger().log("BackButtonMediator",
+                                "Name change Canceled");
+                    }
+                }, "Enter a new name", sequencerModel.getActiveData().getViewChannel().getTone()
+                        .getName());
+            }
+        });
+        stage.addActor(nameButton);
+
+        nameField = new TextField("Name", screen.getSkin());
+        nameField.setTextFieldListener(new TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char key) {
+                if (key == '\n')
+                    textField.getOnscreenKeyboard().show(false);
+                getController().getLogger().log("BackButtonMediator", nameField.getText());
+            }
+        });
+        stage.addActor(nameField);
+        nameField.setPosition(10f, 675f);
     }
 
     @Override
