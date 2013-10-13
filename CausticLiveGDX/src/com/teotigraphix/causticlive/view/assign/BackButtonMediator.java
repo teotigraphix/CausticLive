@@ -81,17 +81,27 @@ public class BackButtonMediator extends ScreenMediator {
         });
         stage.addActor(nameButton);
 
-        nameField = new TextField("Name", screen.getSkin());
+        createPadNameField(screen);
+    }
+
+    private void createPadNameField(IScreen screen) {
+        final String name = sequencerModel.getActiveData().getName();
+        nameField = new TextField(name, screen.getSkin());
         nameField.setTextFieldListener(new TextFieldListener() {
             @Override
             public void keyTyped(TextField textField, char key) {
                 if (key == '\n')
                     textField.getOnscreenKeyboard().show(false);
-                getController().getLogger().log("BackButtonMediator", nameField.getText());
+                //getController().getLogger().log("BackButtonMediator", nameField.getText());
+                updatePadNameField();
             }
         });
-        stage.addActor(nameField);
+        screen.getStage().addActor(nameField);
         nameField.setPosition(10f, 675f);
+    }
+
+    protected void updatePadNameField() {
+        sequencerModel.getActiveData().setName(nameField.getText());
     }
 
     @Override
@@ -110,6 +120,7 @@ public class BackButtonMediator extends ScreenMediator {
     @Override
     public void onShow(IScreen screen) {
         refreshTitle();
+        nameField.setText(sequencerModel.getActiveData().getName());
     }
 
     protected void refreshTitle() {

@@ -187,13 +187,13 @@ public class PadButton extends ToggleButton {
                     int beat = queueData.getPhrase().getLocalBeat();
                     if (queueData.getPhrase().isLastBeat())
                         beatLabel.setColor(Color.RED);
-                    setText(tone.getName());
                     int numMeasures = queueData.getPhrase().getLength();
                     beatLabel.setText((numMeasures * 4) + ":" + (beat + 1));
                 } else {
                     setText(tone.getName());
                     beatLabel.setText("");
                 }
+                setText(queueData.getName());
                 machineLabel.setText(tone.getIndex() + ":" + tone.getName());
             }
         } else {
