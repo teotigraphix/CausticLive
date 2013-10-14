@@ -138,18 +138,25 @@ public class PadButton extends ToggleButton {
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         beatLabel = new Label("beat", labelStyle);
-        beatLabel.setPosition(5f, 1);
+
         addActor(beatLabel);
 
         labelStyle = new LabelStyle(skin.getFont("eras-12-b"), Color.CYAN);
         machineLabel = new Label("", labelStyle);
-        machineLabel.setPosition(5f, -10f);
+
         addActor(machineLabel);
     }
 
     //--------------------------------------------------------------------------
     // Overridden Public :: Methods
     //--------------------------------------------------------------------------
+
+    @Override
+    public void layout() {
+        super.layout();
+        beatLabel.setPosition(5f, 1);
+        machineLabel.setPosition(5f, getHeight() + 5f);
+    }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {

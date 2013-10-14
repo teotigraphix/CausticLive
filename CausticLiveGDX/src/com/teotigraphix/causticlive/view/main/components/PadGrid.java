@@ -82,13 +82,13 @@ public class PadGrid extends WidgetGroup {
         if (sizeInvalid)
             computeSize();
 
-        float gap = 28f;
+        float gap = 10f;
 
-        float calcX = 0f;
-        float calcY = 0f;
+        float calcX = 5f;
+        float calcY = 5f;
 
-        float calcWidth = 115;
-        float calcHeight = 115;
+        float calcWidth = 90;
+        float calcHeight = 90;
 
         int index = 0;
         Array<Actor> children = getChildren();
@@ -101,7 +101,7 @@ public class PadGrid extends WidgetGroup {
                 calcX += gap + calcWidth;
                 index++;
             }
-            calcX = 0;
+            calcX = 5f;
             calcY += gap + calcHeight;
         }
     }

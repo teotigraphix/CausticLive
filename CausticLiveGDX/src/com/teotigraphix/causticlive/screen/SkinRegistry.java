@@ -22,6 +22,7 @@ package com.teotigraphix.causticlive.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -40,17 +41,41 @@ import com.teotigraphix.libgdx.ui.TextSlider.TextSliderStyle;
 
 public class SkinRegistry {
 
+    public static void _setScaleFactor(Label label) {
+        if (Gdx.graphics.getWidth() > 800) {
+            //float ratio = (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
+            //label.setFontScale(ratio);
+        }
+    }
+
     public static void register(Skin skin) {
 
-        skin.add("eras-12-b", new BitmapFont(Gdx.files.internal("font/Eras-12-B.fnt"), false));
+        // large = 32 , small = 24 greater than 600 of width
+        // large = 16 , small = 8 less than that 
 
+        float ratio = ((float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
+        // Eras-12-B.fnt
+        if (Gdx.graphics.getWidth() > 800) {
+            BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font/Segoe-18.fnt"),
+                    skin.getRegion("Segoe-18"), false);
+            bitmapFont.setScale(ratio);
+            skin.add("default-font", bitmapFont);
+            skin.add("eras-12-b", bitmapFont);
+        } else {
+            BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font/Segoe-11.fnt"),
+                    skin.getRegion("Segoe-11"), false);
+            skin.add("default-font", bitmapFont);
+            skin.add("eras-12-b", bitmapFont);
+        }
+
+        //skin.add("eras-12-b", new BitmapFont(Gdx.files.internal("font/ArialBlack-8.fnt"), false));
         skin.add("green", new Color(0, 1, 0, 1));
         skin.add("white", new Color(1, 1, 1, 1));
         skin.add("red", new Color(1, 0, 0, 1));
         skin.add("black", new Color(0, 0, 0, 1));
 
-        BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("skin/default.fnt"), false);
-        skin.add("default-font", bitmapFont);
+        //BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("skin/default.fnt"), false);
+        //skin.add("default-font", bitmapFont);
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         skin.add("default", labelStyle);

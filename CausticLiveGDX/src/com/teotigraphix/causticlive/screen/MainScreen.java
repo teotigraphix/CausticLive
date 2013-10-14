@@ -21,6 +21,7 @@ package com.teotigraphix.causticlive.screen;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.view.assign.PhraseListMediator;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
 import com.teotigraphix.causticlive.view.main.ToolBarMediator;
@@ -39,6 +40,9 @@ public class MainScreen extends ScreenBase {
 
     @Inject
     BankBarMediator BankMediator;
+
+    @Inject
+    PhraseListMediator phraseListMediator;
 
     //    @Inject
     //    SongListMediator SongListMediator;
@@ -62,9 +66,8 @@ public class MainScreen extends ScreenBase {
 
         addMediator(TransportControlMediator);
         addMediator(BankMediator);
-        //        addMediator(SongListMediator);
-        //        addMediator(LibraryItemSelectMediator);
         addMediator(toolBarMediator);
+        addMediator(phraseListMediator);
     }
 
     @Override

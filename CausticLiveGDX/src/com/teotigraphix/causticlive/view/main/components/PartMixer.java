@@ -54,7 +54,7 @@ public class PartMixer extends ControlTable {
                 blockEvents = false;
             }
         });
-        add(buttonBar).width(100);
+        add(buttonBar).width(75f).fillY().expandY();
 
         for (int i = 0; i < 6; i++) {
             final int sliderIndex = i;

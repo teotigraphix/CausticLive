@@ -3,7 +3,6 @@ package com.teotigraphix.causticlive.view.main;
 
 import org.androidtransfuse.event.EventObserver;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -76,9 +75,10 @@ public class ToolBarMediator extends ScreenMediator {
         createMixerButton(table, screen.getSkin());
         float prefHeight = table.getPrefHeight();
 
-        int height = Gdx.graphics.getHeight();
+        int height = 480;
+        int width = 800;
         table.setPosition(0, height - prefHeight);
-        table.setSize(Gdx.graphics.getWidth(), prefHeight);
+        table.setSize(width, prefHeight);
         screen.getStage().addActor(table);
     }
 
@@ -170,9 +170,19 @@ public class ToolBarMediator extends ScreenMediator {
         });
 
         mixerDialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
-        partMixer.validate();
-        mixerDialog.getContentTable().add(partMixer).size(partMixer.getPrefWidth());
-        updateSliders(0);
+        mixerDialog.pad(5f);
+        mixerDialog.padTop(25f);
+
+        mixerDialog.getContentTable().add(partMixer);//.fill().expand();
+
+        mixerDialog.setPosition(5f, 105f);
+        //mixerDialog.setSize(335f, 240f);
+        mixerDialog.setWidth(200f);
+        mixerDialog.setHeight(240f);
+        // mixerDialog.validate();
+
+        //partMixer.validate();
+        //updateSliders(0);
     }
 
     protected void updateSliders(int index) {

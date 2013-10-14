@@ -80,7 +80,7 @@ public class PadGridMediator extends ScreenMediator {
 
         });
 
-        view.setPosition(640f, 89f);
+        view.setPosition(400f, 0f);
         screen.getStage().addActor(view);
     }
 

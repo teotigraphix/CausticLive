@@ -27,8 +27,8 @@ public class TransportControlMediator extends ScreenMediator {
 
         playButton = new ToggleButton("Play", screen.getSkin());
         playButton.setToggle(true);
-        playButton.setPosition(66f, 90f);
-        playButton.setSize(83f, 50f);
+        playButton.setPosition(5f, 5f);
+        playButton.setSize(75f, 50f);
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

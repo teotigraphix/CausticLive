@@ -44,14 +44,15 @@ public class BankBarMediator extends ScreenMediator {
         super.onCreate(screen);
 
         view = new ButtonBar(screen.getSkin(), sequencerModel.getBankNames(), true, "default");
+        view.defaults().space(5f);
         view.setOnButtonBarListener(new OnButtonBarListener() {
             @Override
             public void onChange(int index) {
                 sequencerModel.setSelectedBank(index);
             }
         });
-        view.setPosition(540f, 365f);
-        view.setSize(50f, 250f);
+        view.setPosition(350f, 205f);
+        view.setSize(45f, 190f);
         screen.getStage().addActor(view);
     }
 
