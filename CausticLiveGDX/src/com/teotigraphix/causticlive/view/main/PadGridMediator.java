@@ -36,7 +36,6 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.causticlive.model.ISoundModel;
-import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.causticlive.view.main.components.PadButton;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
@@ -103,9 +102,13 @@ public class PadGridMediator extends ScreenMediator {
             @Override
             public void onLongPress(Integer localIndex, float x, float y) {
                 getController().getLogger().log("PadGridMediator", "long press");
-                sequencerModel.setActiveData(sequencerModel.getQueueData(
-                        sequencerModel.getSelectedBank(), localIndex));
-                screenProvider.getScreen().getGame().setScreen(ICausticLiveScreen.ASSIGN_SCREEN);
+                if (sequencerModel.getPadState() == PadState.Perform) {
+
+                } else {
+                    sequencerModel.setActiveData(sequencerModel.getQueueData(
+                            sequencerModel.getSelectedBank(), localIndex));
+                    showToneSelectPopUp();
+                }
             }
 
         });
@@ -188,26 +191,33 @@ public class PadGridMediator extends ScreenMediator {
 
         if (show && sequencerModel.getActiveData() != null
                 && sequencerModel.getActiveData().getViewChannelIndex() == -1) {
-            if (toneSelectPopUp == null) {
-                toneSelectPopUp = dialogManager.createPopUp(screenProvider.getScreen(),
-                        "Select Machine", null);
-                toneSelectPopUp.add(toneSelectBox);
-                toneSelectPopUp.pad(1f);
-                toneSelectPopUp.padTop(20f);
-                toneSelectPopUp.show(screenProvider.getScreen().getStage());
-            }
-
-            updateToneIndex();
-
-            PadButton button = (PadButton)view.getChildren().get(
-                    sequencerModel.getActiveData().getPatternIndex());
-            Vector2 localCoords = new Vector2(button.getX(), button.getY());
-            localCoords = button.getParent().localToStageCoordinates(localCoords);
-            toneSelectPopUp.setPosition(localCoords.x - toneSelectPopUp.getWidth(), localCoords.y);
+            showToneSelectPopUp();
         } else if (toneSelectPopUp != null) {
-            toneSelectPopUp.hide();
-            toneSelectPopUp = null;
+            hideToneSelectPopUp();
         }
+    }
+
+    private void hideToneSelectPopUp() {
+        toneSelectPopUp.hide();
+        toneSelectPopUp = null;
+    }
+
+    private void showToneSelectPopUp() {
+        if (toneSelectPopUp == null) {
+            toneSelectPopUp = dialogManager.createPopUp(screenProvider.getScreen(),
+                    "Select Machine", null);
+            toneSelectPopUp.add(toneSelectBox);
+            toneSelectPopUp.pad(1f);
+            toneSelectPopUp.padTop(20f);
+            toneSelectPopUp.show(screenProvider.getScreen().getStage());
+        }
+        updateToneIndex();
+
+        PadButton button = (PadButton)view.getChildren().get(
+                sequencerModel.getActiveData().getPatternIndex());
+        Vector2 localCoords = new Vector2(button.getX(), button.getY());
+        localCoords = button.getParent().localToStageCoordinates(localCoords);
+        toneSelectPopUp.setPosition(localCoords.x - toneSelectPopUp.getWidth(), localCoords.y);
     }
 
     private void updateToneIndex() {
@@ -244,6 +254,7 @@ public class PadGridMediator extends ScreenMediator {
                         return;
                     libraryModel.assignTone(index, activeData);
                     updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+                    hideToneSelectPopUp();
                 }
             }
         });
