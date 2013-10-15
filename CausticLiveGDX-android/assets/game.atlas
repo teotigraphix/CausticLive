@@ -5,35 +5,35 @@ filter: Linear,Linear
 repeat: none
 Segoe-11
   rotate: false
-  xy: 2, 578
+  xy: 2, 593
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 Segoe-18
   rotate: false
-  xy: 1204, 1332
+  xy: 1204, 1347
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 dail_background
   rotate: false
-  xy: 1204, 1240
+  xy: 1254, 1305
   size: 40, 40
   orig: 40, 40
   offset: 0, 0
   index: -1
 dail_foreground
   rotate: false
-  xy: 1254, 1290
+  xy: 1718, 1769
   size: 40, 40
   orig: 40, 40
   offset: 0, 0
   index: -1
 default-rect
   rotate: false
-  xy: 1204, 1282
+  xy: 1204, 1297
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -41,14 +41,14 @@ default-rect
   index: -1
 default-round-large
   rotate: false
-  xy: 1768, 1819
+  xy: 2, 2
   size: 25, 25
   orig: 25, 25
   offset: 0, 0
   index: -1
 default-scroll
   rotate: false
-  xy: 1718, 1796
+  xy: 1718, 1811
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -56,35 +56,35 @@ default-scroll
   index: -1
 led_off_green
   rotate: false
-  xy: 516, 511
+  xy: 566, 576
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_off_red
   rotate: false
-  xy: 566, 561
+  xy: 1030, 1040
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_on_green
   rotate: false
-  xy: 1030, 1025
+  xy: 1080, 1090
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 led_on_red
   rotate: false
-  xy: 1080, 1075
+  xy: 1204, 1230
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 list_selection
   rotate: false
-  xy: 1204, 1228
+  xy: 1254, 1293
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10
@@ -92,15 +92,23 @@ list_selection
   index: -1
 pad_selected
   rotate: false
-  xy: 1204, 1228
+  xy: 1254, 1293
   size: 10, 10
   split: 2, 2, 2, 2
   orig: 10, 10
   offset: 0, 0
   index: -1
+overlay_active
+  rotate: false
+  xy: 2, 29
+  size: 48, 48
+  split: 21, 24, 24, 22
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 overlay_play
   rotate: false
-  xy: 2, 14
+  xy: 516, 543
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -108,7 +116,7 @@ overlay_play
   index: -1
 overlay_queued
   rotate: false
-  xy: 516, 528
+  xy: 1030, 1057
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -116,7 +124,7 @@ overlay_queued
   index: -1
 overlay_unqueued
   rotate: false
-  xy: 1030, 1042
+  xy: 1204, 1247
   size: 48, 48
   split: 21, 24, 24, 22
   orig: 48, 48
@@ -124,7 +132,7 @@ overlay_unqueued
   index: -1
 pad_up
   rotate: false
-  xy: 1296, 1320
+  xy: 1296, 1335
   size: 10, 10
   split: 2, 2, 2, 2
   orig: 10, 10
@@ -132,7 +140,7 @@ pad_up
   index: -1
 scrollpane_background
   rotate: false
-  xy: 1296, 1320
+  xy: 1296, 1335
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10
@@ -140,7 +148,7 @@ scrollpane_background
   index: -1
 scrollpane_hscroll
   rotate: false
-  xy: 1718, 1754
+  xy: 1718, 1757
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10
@@ -148,7 +156,7 @@ scrollpane_hscroll
   index: -1
 scrollpane_vscroll
   rotate: false
-  xy: 1718, 1754
+  xy: 1718, 1757
   size: 10, 10
   split: 4, 3, 4, 4
   orig: 10, 10
@@ -156,7 +164,7 @@ scrollpane_vscroll
   index: -1
 scrollpane_hscrollknob
   rotate: false
-  xy: 1768, 1807
+  xy: 1768, 1819
   size: 10, 10
   split: 2, 2, 2, 2
   orig: 10, 10
@@ -164,7 +172,7 @@ scrollpane_hscrollknob
   index: -1
 scrollpane_vscrollknob
   rotate: false
-  xy: 1768, 1807
+  xy: 1768, 1819
   size: 10, 10
   split: 2, 2, 2, 2
   orig: 10, 10
@@ -172,7 +180,7 @@ scrollpane_vscrollknob
   index: -1
 slider_background
   rotate: false
-  xy: 2, 2
+  xy: 52, 67
   size: 38, 10
   split: 2, 2, 2, 2
   orig: 38, 10
@@ -180,7 +188,7 @@ slider_background
   index: -1
 slider_knob
   rotate: false
-  xy: 1718, 1766
+  xy: 1768, 1831
   size: 38, 28
   split: 2, 2, 2, 2
   orig: 38, 28
@@ -188,35 +196,35 @@ slider_knob
   index: -1
 splash
   rotate: false
-  xy: 2, 1092
+  xy: 2, 1107
   size: 1200, 752
   orig: 1200, 752
   offset: 0, 0
   index: -1
 techniq-12
   rotate: false
-  xy: 2, 64
+  xy: 2, 79
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 techniq-18
   rotate: false
-  xy: 516, 578
+  xy: 516, 593
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 textfield_cursor
   rotate: false
-  xy: 1246, 1270
+  xy: 1760, 1799
   size: 3, 10
   orig: 3, 10
   offset: 0, 0
   index: -1
 toolbar_background
   rotate: false
-  xy: 52, 44
+  xy: 516, 523
   size: 18, 18
   split: 8, 9, 9, 8
   pad: 2, 2, 2, 2

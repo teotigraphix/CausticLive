@@ -22,7 +22,6 @@ package com.teotigraphix.causticlive.view.main.components;
 import java.util.Collection;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -45,7 +44,7 @@ public class PadGrid extends WidgetGroup {
 
     protected boolean longPressed;
 
-    private Image activeOverlay;
+    //private Image activeOverlay;
 
     public PadGrid(Skin skin) {
         this.skin = skin;
@@ -56,14 +55,13 @@ public class PadGrid extends WidgetGroup {
         int index = 0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColums; j++) {
-                final PadButton button = new PadButton(index + "", skin);
+                final PadButton button = new PadButton("", skin);
                 button.setIndex(index);
                 button.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         PadButton button = (PadButton)actor;
                         listener.onChange(button.getIndex(), button.getData());
-                        //button.invalidate();
                     }
                 });
                 button.setOnPadButtonListener(new OnPadButtonListener() {
@@ -140,14 +138,13 @@ public class PadGrid extends WidgetGroup {
         }
     }
 
-    public void updateActive(int localIndex, boolean show) {
-        if (show) {
-            activeOverlay = new Image(skin.getDrawable("pad_selected"));
-            activeOverlay.setBounds(0, 0, 100, 100);
-            addActor(activeOverlay);
-        } else {
-            removeActor(activeOverlay);
-            activeOverlay = null;
+    public void updateActive(QueueData data, boolean show) {
+        SnapshotArray<Actor> children = getChildren();
+        for (Actor actor : children) {
+            ((PadButton)actor).setActive(false);
+        }
+        if (data != null) {
+            ((PadButton)children.get(data.getPatternIndex())).setActive(show);
         }
     }
 

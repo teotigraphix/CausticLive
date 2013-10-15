@@ -13,7 +13,6 @@ import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
-import com.teotigraphix.libgdx.ui.OverlayButton;
 import com.teotigraphix.libgdx.ui.ScrollList;
 
 @Singleton
@@ -24,9 +23,9 @@ public class PhraseListMediator extends ScreenMediator {
 
     private ScrollList view; // need composite component
 
-    private OverlayButton assignButton; // this should be in the view
-
-    private OverlayButton unassignButton;
+    //    private OverlayButton assignButton; // this should be in the view
+    //
+    //    private OverlayButton unassignButton;
 
     private String[] items = new String[] {
             "Assign", "Unassign"

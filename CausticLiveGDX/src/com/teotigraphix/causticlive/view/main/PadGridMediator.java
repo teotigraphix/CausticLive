@@ -138,6 +138,7 @@ public class PadGridMediator extends ScreenMediator {
                                 break;
 
                             case ActiveData:
+                                invalidateActivePadOverlay();
                                 break;
                         }
                     }
@@ -156,7 +157,7 @@ public class PadGridMediator extends ScreenMediator {
                 break;
         }
 
-        view.updateActive(sequencerModel.getActiveData().getPatternIndex(), show);
+        view.updateActive(sequencerModel.getActiveData(), show);
     }
 
     @Override

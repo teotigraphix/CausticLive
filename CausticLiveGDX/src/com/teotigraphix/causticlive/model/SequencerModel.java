@@ -91,8 +91,10 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
     @Override
     public void setSelectedBank(int value) {
         boolean changed = getSequencerModelState().setSelectedBank(value);
-        if (changed)
+        if (changed) {
+            setActiveData(null);
             trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
+        }
     }
 
     private final String[] items = {

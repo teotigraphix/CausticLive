@@ -116,6 +116,7 @@ public class SkinRegistry {
         padButtonStyle.lockOverlay = skin.getDrawable("overlay_unqueued");
         padButtonStyle.playOverlay = skin.getDrawable("overlay_play");
         padButtonStyle.queueOverlay = skin.getDrawable("overlay_queued");
+        padButtonStyle.activeOverlay = skin.getDrawable("overlay_active");
 
         padButtonStyle.font = skin.getFont("default-font");
         padButtonStyle.fontColor = skin.getColor("white");

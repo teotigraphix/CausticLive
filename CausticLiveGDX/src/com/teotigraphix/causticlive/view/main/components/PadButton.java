@@ -24,9 +24,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.ToggleButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
@@ -47,6 +50,8 @@ public class PadButton extends ToggleButton {
 
     private Label machineLabel;
 
+    private Label textLabel;
+
     //--------------------------------------------------------------------------
     // Public Property :: API
     //--------------------------------------------------------------------------
@@ -56,6 +61,22 @@ public class PadButton extends ToggleButton {
     @Override
     public PadButtonStyle getStyle() {
         return style;
+    }
+
+    //----------------------------------
+    // text
+    //----------------------------------
+
+    private String text;
+
+    @Override
+    public void setText(String value) {
+        text = value;
+    }
+
+    @Override
+    public CharSequence getText() {
+        return text;
     }
 
     //----------------------------------
@@ -84,6 +105,19 @@ public class PadButton extends ToggleButton {
 
     public void setData(QueueData value) {
         queueData = value;
+        invalidate();
+    }
+
+    private boolean active;
+
+    public void setActive(boolean value) {
+        active = value;
+        if (active) {
+            activeOverlay.addAction(Actions.forever(Actions.sequence(Actions.fadeIn(0.5f),
+                    Actions.delay(0.25f), Actions.fadeOut(0.5f))));
+        } else {
+            activeOverlay.clearActions();
+        }
         invalidate();
     }
 
@@ -135,13 +169,49 @@ public class PadButton extends ToggleButton {
 
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         beatLabel = new Label("beat", labelStyle);
-
         addActor(beatLabel);
 
         labelStyle = new LabelStyle(skin.getFont("eras-12-b"), Color.CYAN);
         machineLabel = new Label("", labelStyle);
-
         addActor(machineLabel);
+
+        createOverlayStack();
+
+        // main label
+        labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        textLabel = new Label("", labelStyle);
+        addActor(textLabel);
+    }
+
+    private Stack overlayStack;
+
+    private Image queueOverlay;
+
+    private Image playOverlay;
+
+    private Image lockOverlay;
+
+    private Image activeOverlay;
+
+    private void createOverlayStack() {
+        overlayStack = new Stack();
+
+        queueOverlay = new Image(getStyle().queueOverlay);
+        playOverlay = new Image(getStyle().playOverlay);
+        lockOverlay = new Image(getStyle().lockOverlay);
+        activeOverlay = new Image(getStyle().activeOverlay);
+
+        queueOverlay.setVisible(false);
+        playOverlay.setVisible(false);
+        lockOverlay.setVisible(false);
+        activeOverlay.setVisible(false);
+
+        overlayStack.addActor(queueOverlay);
+        overlayStack.addActor(playOverlay);
+        overlayStack.addActor(lockOverlay);
+        overlayStack.addActor(activeOverlay);
+
+        addActor(overlayStack);
     }
 
     //--------------------------------------------------------------------------
@@ -153,15 +223,21 @@ public class PadButton extends ToggleButton {
         super.layout();
         beatLabel.setPosition(5f, 1);
         machineLabel.setPosition(5f, getHeight() + 5f);
+        textLabel.setText(text);
+        textLabel.validate();
+        textLabel.setPosition(0f, getHeight() - textLabel.getHeight() - 8f);
+        overlayStack.setSize(getWidth(), getHeight());
+        overlayStack.invalidate();
+        activeOverlay.setVisible(active);
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        Drawable queueOverlay = getStyle().queueOverlay;
-        Drawable playOverlay = getStyle().playOverlay;
-        Drawable lockOverlay = getStyle().lockOverlay;
+        queueOverlay.setVisible(false);
+        playOverlay.setVisible(false);
+        lockOverlay.setVisible(false);
 
         beatLabel.setColor(Color.WHITE);
         machineLabel.setText("");
@@ -169,15 +245,14 @@ public class PadButton extends ToggleButton {
         if (queueData != null) {
             switch (queueData.getState()) {
                 case Queue:
-                    batch.setColor(Color.GREEN);
-                    queueOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+                    queueOverlay.setVisible(true);
                     break;
                 case Play:
-                    playOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+                    playOverlay.setVisible(true);
                     break;
                 case PlayUnqueued:
                 case UnQueued:
-                    lockOverlay.draw(batch, getX(), getY(), getWidth(), getHeight());
+                    lockOverlay.setVisible(true);
                     break;
                 case Idle:
                     break;
@@ -230,6 +305,8 @@ public class PadButton extends ToggleButton {
         public Drawable playOverlay;
 
         public Drawable lockOverlay;
+
+        public Drawable activeOverlay;
 
         public PadButtonStyle() {
         }
