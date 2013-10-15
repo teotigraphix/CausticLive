@@ -82,11 +82,19 @@ led_on_red
   orig: 15, 15
   offset: 0, 0
   index: -1
-list_select_bg
+list_selection
   rotate: false
   xy: 1080, 1080
   size: 10, 10
   split: 4, 3, 4, 4
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+pad_selected
+  rotate: false
+  xy: 1080, 1080
+  size: 10, 10
+  split: 2, 2, 2, 2
   orig: 10, 10
   offset: 0, 0
   index: -1
@@ -114,7 +122,7 @@ overlay_unqueued
   orig: 48, 48
   offset: 0, 0
   index: -1
-pad_selected
+pad_up
   rotate: false
   xy: 1204, 1228
   size: 10, 10
@@ -122,9 +130,41 @@ pad_selected
   orig: 10, 10
   offset: 0, 0
   index: -1
-pad_up
+scrollpane_background
+  rotate: false
+  xy: 1204, 1228
+  size: 10, 10
+  split: 4, 3, 4, 4
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+scrollpane_hscroll
   rotate: false
   xy: 1296, 1320
+  size: 10, 10
+  split: 4, 3, 4, 4
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+scrollpane_vscroll
+  rotate: false
+  xy: 1296, 1320
+  size: 10, 10
+  split: 4, 3, 4, 4
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+scrollpane_hscrollknob
+  rotate: false
+  xy: 1718, 1754
+  size: 10, 10
+  split: 2, 2, 2, 2
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+scrollpane_vscrollknob
+  rotate: false
+  xy: 1718, 1754
   size: 10, 10
   split: 2, 2, 2, 2
   orig: 10, 10

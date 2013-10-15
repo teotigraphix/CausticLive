@@ -41,6 +41,7 @@ public class PhraseListMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
         view = new ScrollList(screen.getSkin());
+        view.setOverscroll(false, true);
         view.setPosition(5f, 105f);
         view.setSize(335f, 240f);
         screen.getStage().addActor(view);

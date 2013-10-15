@@ -121,18 +121,19 @@ public class SkinRegistry {
         skin.add("default", padButtonStyle);
 
         ListStyle listStyle = new ListStyle();
-        listStyle.selection = skin.getDrawable("list_select_bg");
+        listStyle.selection = skin.getDrawable("list_selection");
         listStyle.font = skin.getFont("default-font");
-        listStyle.fontColorSelected = skin.getColor("white");
+        listStyle.fontColorSelected = skin.getColor("black");
         listStyle.fontColorUnselected = skin.getColor("white");
         skin.add("default", listStyle);
 
         ScrollPaneStyle scrollPaneStyle = new ScrollPaneStyle();
-        scrollPaneStyle.vScroll = skin.getDrawable("list_select_bg");
-        scrollPaneStyle.hScroll = skin.getDrawable("list_select_bg");
-        scrollPaneStyle.vScrollKnob = skin.getDrawable("list_select_bg");
-        scrollPaneStyle.hScrollKnob = skin.getDrawable("list_select_bg");
-        scrollPaneStyle.background = skin.getDrawable("list_select_bg");
+        scrollPaneStyle.background = skin.getDrawable("scrollpane_background");
+        scrollPaneStyle.vScroll = skin.getDrawable("scrollpane_vscroll");
+        scrollPaneStyle.hScroll = skin.getDrawable("scrollpane_hscroll");
+        scrollPaneStyle.vScrollKnob = skin.getDrawable("scrollpane_vscrollknob");
+        scrollPaneStyle.hScrollKnob = skin.getDrawable("scrollpane_hscrollknob");
+
         skin.add("default", scrollPaneStyle);
 
         WindowStyle windowStyle = new WindowStyle();
