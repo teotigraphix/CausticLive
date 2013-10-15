@@ -4,7 +4,7 @@ package com.teotigraphix.causticlive.view.main;
 import org.androidtransfuse.event.EventObserver;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.PopUp;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -39,7 +39,7 @@ public class ToolBarMediator extends ScreenMediator {
 
     private IScreen screen;
 
-    private Dialog mixerDialog;
+    private PopUp mixerDialog;
 
     private boolean updating;
 
@@ -84,12 +84,6 @@ public class ToolBarMediator extends ScreenMediator {
 
     private void createMixerButton(Table table, Skin skin) {
         mixerButton = new TextButton("Mixer", skin);
-        //        mixerButton.addListener(new ActorGestureListener() {
-        //            @Override
-        //            public void tap(InputEvent event, float x, float y, int count, int button) {
-        //                createOrShowMixer();
-        //            }
-        //        });
         mixerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -169,20 +163,17 @@ public class ToolBarMediator extends ScreenMediator {
             }
         });
 
-        mixerDialog = dialogManager.createDialog(screen, "Part Mixer", partMixer);
+        mixerDialog = dialogManager.createPopUp(screen, "Part Mixer", partMixer);
         mixerDialog.pad(5f);
         mixerDialog.padTop(25f);
 
-        mixerDialog.getContentTable().add(partMixer);//.fill().expand();
+        mixerDialog.getContentTable().add(partMixer).fill().expand();
 
         mixerDialog.setPosition(5f, 105f);
-        //mixerDialog.setSize(335f, 240f);
-        mixerDialog.setWidth(200f);
-        mixerDialog.setHeight(240f);
-        // mixerDialog.validate();
+        mixerDialog.setExplicitSize(335f, 240f);
+        mixerDialog.validate();
 
-        //partMixer.validate();
-        //updateSliders(0);
+        updateSliders(0);
     }
 
     protected void updateSliders(int index) {
