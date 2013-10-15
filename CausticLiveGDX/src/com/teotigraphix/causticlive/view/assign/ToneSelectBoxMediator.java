@@ -32,7 +32,7 @@ public class ToneSelectBoxMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
 
-        view = new SelectBox(soundModel.getToneNames(), screen.getSkin(), "default");
+        view = new SelectBox(soundModel.getToneNames(false), screen.getSkin(), "default");
         view.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

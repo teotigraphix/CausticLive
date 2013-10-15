@@ -23,12 +23,21 @@ import java.util.Collection;
 
 import org.androidtransfuse.event.EventObserver;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.PopUp;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
+import com.teotigraphix.causticlive.model.ISoundModel;
 import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
+import com.teotigraphix.causticlive.view.main.components.PadButton;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
 import com.teotigraphix.caustk.sequencer.IQueueSequencer.OnQueueSequencerDataChange;
@@ -51,7 +60,19 @@ public class PadGridMediator extends ScreenMediator {
     @Inject
     ISequencerModel sequencerModel;
 
+    @Inject
+    ISoundModel soundModel;
+
+    @Inject
+    ILibraryModel libraryModel;
+
     private PadGrid view;
+
+    private SelectBox toneSelectBox;
+
+    private Skin skin;
+
+    private PopUp toneSelectPopUp;
 
     public PadGridMediator() {
     }
@@ -59,6 +80,8 @@ public class PadGridMediator extends ScreenMediator {
     @Override
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
+
+        skin = screen.getSkin();
 
         view = new PadGrid(screen.getSkin());
         view.setOnPadGridListener(new OnPadGridListener() {
@@ -89,6 +112,10 @@ public class PadGridMediator extends ScreenMediator {
 
         view.setPosition(400f, 0f);
         screen.getStage().addActor(view);
+
+        //------------------------------------
+        createToneSelectBox();
+
     }
 
     @Override
@@ -158,6 +185,41 @@ public class PadGridMediator extends ScreenMediator {
         }
 
         view.updateActive(sequencerModel.getActiveData(), show);
+
+        if (show && sequencerModel.getActiveData() != null
+                && sequencerModel.getActiveData().getViewChannelIndex() == -1) {
+            if (toneSelectPopUp == null) {
+                toneSelectPopUp = dialogManager.createPopUp(screenProvider.getScreen(),
+                        "Select Machine", null);
+                toneSelectPopUp.add(toneSelectBox);
+                toneSelectPopUp.pad(1f);
+                toneSelectPopUp.padTop(20f);
+                toneSelectPopUp.show(screenProvider.getScreen().getStage());
+            }
+
+            updateToneIndex();
+
+            PadButton button = (PadButton)view.getChildren().get(
+                    sequencerModel.getActiveData().getPatternIndex());
+            Vector2 localCoords = new Vector2(button.getX(), button.getY());
+            localCoords = button.getParent().localToStageCoordinates(localCoords);
+            toneSelectPopUp.setPosition(localCoords.x - toneSelectPopUp.getWidth(), localCoords.y);
+        } else if (toneSelectPopUp != null) {
+            toneSelectPopUp.hide();
+            toneSelectPopUp = null;
+        }
+    }
+
+    private void updateToneIndex() {
+        if (sequencerModel.getActiveData() == null) {
+            toneSelectPopUp.hide();
+            toneSelectPopUp = null;
+            return;
+        }
+        int index = sequencerModel.getActiveData().getViewChannelIndex();
+        if (index == -1)
+            index = toneSelectBox.getItems().length - 1;
+        toneSelectBox.setSelection(index);
     }
 
     @Override
@@ -168,5 +230,22 @@ public class PadGridMediator extends ScreenMediator {
 
     protected void updateView(Collection<QueueData> viewData) {
         view.refresh(viewData, true);
+    }
+
+    private void createToneSelectBox() {
+        toneSelectBox = new SelectBox(soundModel.getToneNames(true), skin, "default");
+        toneSelectBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                final int index = toneSelectBox.getSelectionIndex();
+                if (getController().getRack().getSoundSource().hasTone(index)) {
+                    QueueData activeData = sequencerModel.getActiveData();
+                    if (activeData.getViewChannelIndex() == index)
+                        return;
+                    libraryModel.assignTone(index, activeData);
+                    updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+                }
+            }
+        });
     }
 }

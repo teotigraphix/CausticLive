@@ -31,19 +31,26 @@ public class SoundModel extends CaustkModelBase implements ISoundModel {
     }
 
     @Override
-    public String[] getToneNames() {
+    public String[] getToneNames(boolean addEmpty) {
         final ISoundSource soundSource = getController().getRack().getSoundSource();
-        final String[] result = new String[14];
+        final int numTones = soundSource.getToneCount();
+        int len = (addEmpty) ? numTones + 1 : numTones;
+        final String[] result = new String[len];
 
-        for (int i = 0; i < 14; i++) {
-            String prefix = (i + 1) + " - ";
+        for (int i = 0; i < numTones; i++) {
             final Tone tone = soundSource.getTone(i);
-            String name = "Unassigned";
             if (tone != null) {
-                name = tone.getName();
+                String prefix = (tone.getIndex() + 1) + " - ";
+                String name = tone.getName();
+                result[i] = prefix + name;
             }
-            result[i] = prefix + name;
         }
+
+        if (addEmpty) {
+            // add index 14 
+            result[numTones] = "Choose Machine";
+        }
+
         return result;
     }
 
