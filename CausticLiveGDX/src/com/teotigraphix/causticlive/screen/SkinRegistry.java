@@ -210,4 +210,12 @@ public class SkinRegistry {
         skin.add(name, style);
         return style;
     }
+
+    public static float getWidth() {
+        return 800;
+    }
+
+    public static float getHeight() {
+        return 480;
+    }
 }

@@ -9,8 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ToggleButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
+import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.causticlive.screen.SkinRegistry;
 import com.teotigraphix.causticlive.view.main.components.PartMixer;
 import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
 import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
@@ -25,7 +28,12 @@ import com.teotigraphix.libgdx.ui.TextSlider;
 public class ToolBarMediator extends ScreenMediator {
 
     @Inject
+    ISequencerModel sequencerModel;
+
+    @Inject
     IDialogManager dialogManager;
+
+    private ToggleButton playButton;
 
     private Led redLed;
 
@@ -42,6 +50,8 @@ public class ToolBarMediator extends ScreenMediator {
     private PopUp mixerDialog;
 
     private boolean updating;
+
+    private boolean isTopPlacement = true;
 
     public ToolBarMediator() {
     }
@@ -69,17 +79,45 @@ public class ToolBarMediator extends ScreenMediator {
         skin = screen.getSkin();
 
         Table table = new Table();
+        table.setBackground(skin.getDrawable("toolbar_background"));
         //table.debug();
+
+        createPlayButton(table, screen.getSkin());
 
         createBeatLed(table, screen.getSkin());
         createMixerButton(table, screen.getSkin());
         float prefHeight = table.getPrefHeight();
 
-        int height = 480;
-        int width = 800;
-        table.setPosition(0, height - prefHeight);
+        float height = SkinRegistry.getHeight();
+        float width = SkinRegistry.getWidth();
+
+        if (isTopPlacement) {
+            table.setPosition(0f, height - prefHeight);
+        } else {
+            table.setPosition(0f, 0f);
+        }
+
         table.setSize(width, prefHeight);
         screen.getStage().addActor(table);
+    }
+
+    private void createPlayButton(Table table, Skin skin2) {
+        playButton = new ToggleButton("Play", screen.getSkin());
+        playButton.setToggle(true);
+        playButton.setPosition(5f, 5f);
+        playButton.setSize(75f, 50f);
+        playButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (playButton.isChecked()) {
+                    sequencerModel.play();
+                } else {
+                    sequencerModel.stop();
+                }
+            }
+        });
+
+        table.add(playButton).size(70f, 30f);
     }
 
     private void createMixerButton(Table table, Skin skin) {
@@ -90,7 +128,7 @@ public class ToolBarMediator extends ScreenMediator {
                 toggleMixer(mixerButton.isChecked());
             }
         });
-        table.add(mixerButton);
+        table.add(mixerButton).size(70f, 30f);
     }
 
     protected void toggleMixer(boolean checked) {
@@ -228,4 +266,17 @@ public class ToolBarMediator extends ScreenMediator {
         table.add(stack).size(30f, 30f);
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        playButton.check(getController().getRack().getSystemSequencer().isPlaying());
+    }
+
+    @Override
+    public void onDispose(IScreen screen) {
+        super.onDispose(screen);
+
+        playButton.setChecked(false);
+    }
 }

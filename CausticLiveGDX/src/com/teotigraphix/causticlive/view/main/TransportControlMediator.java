@@ -14,7 +14,7 @@ public class TransportControlMediator extends ScreenMediator {
     @Inject
     ISequencerModel sequencerModel;
 
-    private ToggleButton playButton;
+    //    private ToggleButton playButton;
 
     private ToggleButton recordButton;
 
@@ -25,22 +25,22 @@ public class TransportControlMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
 
-        playButton = new ToggleButton("Play", screen.getSkin());
-        playButton.setToggle(true);
-        playButton.setPosition(5f, 5f);
-        playButton.setSize(75f, 50f);
-        playButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (playButton.isChecked()) {
-                    sequencerModel.play();
-                } else {
-                    sequencerModel.stop();
-                }
-            }
-        });
-
-        screen.getStage().addActor(playButton);
+        //        playButton = new ToggleButton("Play", screen.getSkin());
+        //        playButton.setToggle(true);
+        //        playButton.setPosition(5f, 5f);
+        //        playButton.setSize(75f, 50f);
+        //        playButton.addListener(new ChangeListener() {
+        //            @Override
+        //            public void changed(ChangeEvent event, Actor actor) {
+        //                if (playButton.isChecked()) {
+        //                    sequencerModel.play();
+        //                } else {
+        //                    sequencerModel.stop();
+        //                }
+        //            }
+        //        });
+        //
+        //        screen.getStage().addActor(playButton);
 
         recordButton = new ToggleButton("Record", screen.getSkin());
         recordButton.setPosition(170f, 90f);
@@ -58,21 +58,21 @@ public class TransportControlMediator extends ScreenMediator {
 
         //screen.getStage().addActor(recordButton);
 
-        boolean playing = getController().getRack().getSystemSequencer().isPlaying();
-        playButton.setChecked(playing);
+        //        boolean playing = getController().getRack().getSystemSequencer().isPlaying();
+        //        playButton.setChecked(playing);
     }
 
     @Override
     public void onShow(IScreen screen) {
         super.onShow(screen);
 
-        playButton.check(getController().getRack().getSystemSequencer().isPlaying());
+        //        playButton.check(getController().getRack().getSystemSequencer().isPlaying());
     }
 
     @Override
     public void onDispose(IScreen screen) {
         super.onDispose(screen);
 
-        playButton.setChecked(false);
+        //        playButton.setChecked(false);
     }
 }
