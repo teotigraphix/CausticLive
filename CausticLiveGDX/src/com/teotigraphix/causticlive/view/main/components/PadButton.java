@@ -225,7 +225,7 @@ public class PadButton extends ToggleButton {
         machineLabel.setPosition(5f, getHeight() + 5f);
         textLabel.setText(text);
         textLabel.validate();
-        textLabel.setPosition(0f, getHeight() - textLabel.getHeight() - 8f);
+        textLabel.setPosition(3f, getHeight() - textLabel.getHeight() - 8f);
         overlayStack.setSize(getWidth(), getHeight());
         overlayStack.invalidate();
         activeOverlay.setVisible(active);
@@ -241,6 +241,8 @@ public class PadButton extends ToggleButton {
 
         beatLabel.setColor(Color.WHITE);
         machineLabel.setText("");
+
+        textLabel.setColor(Color.WHITE);
 
         if (queueData != null) {
             switch (queueData.getState()) {
@@ -273,10 +275,14 @@ public class PadButton extends ToggleButton {
                     beatLabel.setText("");
                 }
                 setText(queueData.getName());
+                if (queueData.getPhrase().getNotes().size() == 0) {
+                    textLabel.setColor(new Color(0.4f, 0.6f, 0.2f, 1f));
+                }
                 machineLabel.setText(tone.getIndex() + ":" + tone.getName());
             } else {
                 // was unassigned from assign screen
                 setText("Unassigned");
+                beatLabel.setText("");
             }
         } else {
             setText("Unassigned");

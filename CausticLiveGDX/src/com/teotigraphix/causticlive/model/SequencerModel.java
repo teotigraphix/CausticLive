@@ -220,7 +220,7 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
         channel.unassignPhrase();
 
         phrase.getTrack().setCurrentBankPattern(lastBank, lastPattern);
-
+        getQueueSequencer().remove(data);
         // XXX is this the right place?
         data.setViewChannelIndex(-1);
     }

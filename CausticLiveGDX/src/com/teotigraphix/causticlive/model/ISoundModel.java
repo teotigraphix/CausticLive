@@ -22,5 +22,5 @@ package com.teotigraphix.causticlive.model;
 import com.teotigraphix.libgdx.model.ICaustkModel;
 
 public interface ISoundModel extends ICaustkModel {
-    String[] getToneNames(boolean addEmpty);
+    String[] getToneNames(boolean addEmpty, String postFixMessage);
 }

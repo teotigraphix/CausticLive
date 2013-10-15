@@ -42,6 +42,7 @@ import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListen
 import com.teotigraphix.caustk.sequencer.IQueueSequencer.OnQueueSequencerDataChange;
 import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.scene2d.IScreenProvider;
@@ -72,6 +73,8 @@ public class PadGridMediator extends ScreenMediator {
     private Skin skin;
 
     private PopUp toneSelectPopUp;
+
+    private boolean resetingItems;
 
     public PadGridMediator() {
     }
@@ -105,12 +108,26 @@ public class PadGridMediator extends ScreenMediator {
                 if (sequencerModel.getPadState() == PadState.Perform) {
 
                 } else {
-                    sequencerModel.setActiveData(sequencerModel.getQueueData(
-                            sequencerModel.getSelectedBank(), localIndex));
-                    showToneSelectPopUp();
+                    QueueData activeData = sequencerModel.getActiveData();
+                    if (activeData == null)
+                        return;
+
+                    QueueData pressedData = sequencerModel.getQueueData(
+                            sequencerModel.getSelectedBank(), localIndex);
+
+                    // don't allow long presses on unsassigned data
+                    if (pressedData.getViewChannelIndex() == -1)
+                        return;
+
+                    if (!getController().getRack().getSystemSequencer().isPlaying()) {
+                        sequencerModel.setActiveData(pressedData);
+                        showToneSelectPopUp("Unassign machine");
+                    } else {
+                        dialogManager.createToast(
+                                "Sequencer must be stopped to change a machine assignment", 2f);
+                    }
                 }
             }
-
         });
 
         view.setPosition(400f, 0f);
@@ -159,7 +176,6 @@ public class PadGridMediator extends ScreenMediator {
                                         invalidateActivePadOverlay();
                                         break;
                                 }
-
                                 break;
 
                             case Bank:
@@ -191,7 +207,7 @@ public class PadGridMediator extends ScreenMediator {
 
         if (show && sequencerModel.getActiveData() != null
                 && sequencerModel.getActiveData().getViewChannelIndex() == -1) {
-            showToneSelectPopUp();
+            showToneSelectPopUp("Choose machine");
         } else if (toneSelectPopUp != null) {
             hideToneSelectPopUp();
         }
@@ -202,7 +218,7 @@ public class PadGridMediator extends ScreenMediator {
         toneSelectPopUp = null;
     }
 
-    private void showToneSelectPopUp() {
+    private void showToneSelectPopUp(String operationText) {
         if (toneSelectPopUp == null) {
             toneSelectPopUp = dialogManager.createPopUp(screenProvider.getScreen(),
                     "Select Machine", null);
@@ -211,6 +227,11 @@ public class PadGridMediator extends ScreenMediator {
             toneSelectPopUp.padTop(20f);
             toneSelectPopUp.show(screenProvider.getScreen().getStage());
         }
+
+        resetingItems = true;
+        toneSelectBox.setItems(soundModel.getToneNames(true, operationText));
+        resetingItems = false;
+
         updateToneIndex();
 
         PadButton button = (PadButton)view.getChildren().get(
@@ -243,10 +264,14 @@ public class PadGridMediator extends ScreenMediator {
     }
 
     private void createToneSelectBox() {
-        toneSelectBox = new SelectBox(soundModel.getToneNames(true), skin, "default");
+        toneSelectBox = new SelectBox(soundModel.getToneNames(true, "Choose Machine"), skin,
+                "default");
         toneSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                if (resetingItems)
+                    return;
+
                 final int index = toneSelectBox.getSelectionIndex();
                 if (getController().getRack().getSoundSource().hasTone(index)) {
                     QueueData activeData = sequencerModel.getActiveData();
@@ -254,6 +279,16 @@ public class PadGridMediator extends ScreenMediator {
                         return;
                     libraryModel.assignTone(index, activeData);
                     updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+                    hideToneSelectPopUp();
+                    dialogManager.createToast(activeData.getName() + " assigned to pad "
+                            + (activeData.getPatternIndex() + 1), 1f);
+                } else if (index == toneSelectBox.getItems().length - 1) {
+                    QueueData activeData = sequencerModel.getActiveData();
+                    dialogManager.createToast("Pad " + (activeData.getPatternIndex() + 1)
+                            + " was unassigned", 1f);
+                    Track track = getController().getRack().getTrackSequencer()
+                            .getTrack(activeData.getViewChannelIndex());
+                    sequencerModel.unassignPhrase(activeData, track);
                     hideToneSelectPopUp();
                 }
             }

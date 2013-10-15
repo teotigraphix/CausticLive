@@ -31,7 +31,7 @@ public class SoundModel extends CaustkModelBase implements ISoundModel {
     }
 
     @Override
-    public String[] getToneNames(boolean addEmpty) {
+    public String[] getToneNames(boolean addEmpty, String postFixMessage) {
         final ISoundSource soundSource = getController().getRack().getSoundSource();
         final int numTones = soundSource.getToneCount();
         int len = (addEmpty) ? numTones + 1 : numTones;
@@ -48,7 +48,7 @@ public class SoundModel extends CaustkModelBase implements ISoundModel {
 
         if (addEmpty) {
             // add index 14 
-            result[numTones] = "Choose Machine";
+            result[numTones] = postFixMessage;
         }
 
         return result;

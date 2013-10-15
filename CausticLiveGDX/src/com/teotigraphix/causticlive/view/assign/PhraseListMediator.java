@@ -18,6 +18,7 @@ import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.track.Phrase;
 import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
+import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
 import com.teotigraphix.libgdx.ui.ScrollList;
@@ -27,6 +28,9 @@ public class PhraseListMediator extends ScreenMediator {
 
     @Inject
     ISequencerModel sequencerModel;
+
+    @Inject
+    IDialogManager dialogManager;
 
     private ScrollList view; // need composite component
 
@@ -71,6 +75,8 @@ public class PhraseListMediator extends ScreenMediator {
                 }
 
                 sequencerModel.assignPhrase(data, track, libraryPhrase);
+
+                dialogManager.createToast("Selected phrase added to " + data.getName(), 1f);
             }
 
         });
