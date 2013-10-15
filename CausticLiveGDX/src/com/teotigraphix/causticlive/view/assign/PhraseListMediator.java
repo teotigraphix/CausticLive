@@ -5,11 +5,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListDoubleTapEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListListener;
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
+import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.sequencer.track.Phrase;
+import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.ButtonBar;
@@ -40,6 +47,33 @@ public class PhraseListMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
         view = new ScrollList(screen.getSkin());
+        view.addListener(new AdvancedListListener() {
+
+            @Override
+            public void changed(AdvancedListChangeEvent event, Actor actor) {
+                getController().getLogger().log("", "Change");
+            }
+
+            @Override
+            public void doubleTap(AdvancedListDoubleTapEvent event, Actor actor) {
+
+                // XXX warning ?
+                final QueueData data = sequencerModel.getActiveData();
+                if (data == null)
+                    return;
+
+                LibraryPhrase libraryPhrase = (LibraryPhrase)view.getSelectedItem();
+                Track track = getController().getRack().getTrackSequencer()
+                        .getTrack(data.getViewChannelIndex());
+                Phrase phrase = data.getPhrase();
+                if (phrase != null) {
+                    phrase.clear();
+                }
+
+                sequencerModel.assignPhrase(data, track, libraryPhrase);
+            }
+
+        });
         view.setOverscroll(false, true);
         view.setPosition(5f, 105f);
         view.setSize(335f, 240f);
