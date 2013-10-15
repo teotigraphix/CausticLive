@@ -22,6 +22,7 @@ package com.teotigraphix.causticlive.view.main.components;
 import java.util.Collection;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -44,6 +45,8 @@ public class PadGrid extends WidgetGroup {
 
     protected boolean longPressed;
 
+    private Image activeOverlay;
+
     public PadGrid(Skin skin) {
         this.skin = skin;
         createChildren();
@@ -59,8 +62,8 @@ public class PadGrid extends WidgetGroup {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         PadButton button = (PadButton)actor;
-                        listener.onChange(button.getIndex());
-                        button.invalidate();
+                        listener.onChange(button.getIndex(), button.getData());
+                        //button.invalidate();
                     }
                 });
                 button.setOnPadButtonListener(new OnPadButtonListener() {
@@ -115,7 +118,7 @@ public class PadGrid extends WidgetGroup {
     }
 
     public interface OnPadGridListener {
-        void onChange(int localIndex);
+        void onChange(int localIndex, QueueData data);
 
         void onLongPress(Integer localIndex, float x, float y);
 
@@ -134,6 +137,17 @@ public class PadGrid extends WidgetGroup {
                 padButton.setData(queueData);
             }
             index++;
+        }
+    }
+
+    public void updateActive(int localIndex, boolean show) {
+        if (show) {
+            activeOverlay = new Image(skin.getDrawable("pad_selected"));
+            activeOverlay.setBounds(0, 0, 100, 100);
+            addActor(activeOverlay);
+        } else {
+            removeActor(activeOverlay);
+            activeOverlay = null;
         }
     }
 

@@ -21,6 +21,7 @@ package com.teotigraphix.causticlive.model.state;
 
 import java.io.Serializable;
 
+import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.caustk.controller.ICaustkController;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueSequencer;
@@ -35,6 +36,27 @@ public class SequencerModelState implements Serializable {
         return queueSequencer;
     }
 
+    //----------------------------------
+    // padState
+    //----------------------------------
+
+    private PadState padState = PadState.Perform;
+
+    public PadState getPadState() {
+        return padState;
+    }
+
+    public boolean setPadState(PadState value) {
+        if (value == padState)
+            return false;
+        padState = value;
+        return true;
+    }
+
+    //----------------------------------
+    // selectedBank
+    //----------------------------------
+
     private int selectedBank = 0;
 
     public int getSelectedBank() {
@@ -48,6 +70,8 @@ public class SequencerModelState implements Serializable {
         return true;
     }
 
+    //----------------------------------
+    // activeData
     //----------------------------------
 
     private QueueData activeData;

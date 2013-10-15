@@ -119,9 +119,6 @@ public class PadButton extends ToggleButton {
                     return;
                 }
 
-                if (isDisabled() || queueData == null)
-                    return;
-
                 ChangeEvent changeEvent = Pools.obtain(ChangeEvent.class);
                 if (fire(changeEvent)) {
                 }

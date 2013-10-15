@@ -64,6 +64,22 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
     //--------------------------------------------------------------------------
 
     //----------------------------------
+    // padState
+    //----------------------------------
+
+    @Override
+    public PadState getPadState() {
+        return getSequencerModelState().getPadState();
+    }
+
+    @Override
+    public void setPadState(PadState value) {
+        boolean changed = getSequencerModelState().setPadState(value);
+        if (changed)
+            trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.PadState));
+    }
+
+    //----------------------------------
     // selectedBank
     //----------------------------------
 

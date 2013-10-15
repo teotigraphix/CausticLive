@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
+import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
@@ -63,11 +64,17 @@ public class PadGridMediator extends ScreenMediator {
         view.setOnPadGridListener(new OnPadGridListener() {
 
             @Override
-            public void onChange(int localIndex) {
-                QueueData data = sequencerModel.getQueueData(sequencerModel.getSelectedBank(),
-                        localIndex);
-                if (data.getViewChannelIndex() != -1)
-                    sequencerModel.touch(data);
+            public void onChange(int localIndex, QueueData data) {
+                //getController().getLogger().log("", localIndex + "");
+                if (sequencerModel.getPadState() == PadState.Perform) {
+                    if (data != null) {
+                        if (data.getViewChannelIndex() != -1)
+                            sequencerModel.touch(data);
+                    }
+                } else {
+                    sequencerModel.setActiveData(sequencerModel.getQueueData(
+                            sequencerModel.getSelectedBank(), localIndex));
+                }
             }
 
             @Override
@@ -112,22 +119,50 @@ public class PadGridMediator extends ScreenMediator {
                     @Override
                     public void trigger(OnSequencerModelPropertyChange object) {
                         switch (object.getKind()) {
+                            case PadState:
+                                switch (sequencerModel.getPadState()) {
+                                    case Perform:
+                                        invalidateActivePadOverlay();
+                                        break;
+
+                                    case Assign:
+                                        invalidateActivePadOverlay();
+                                        break;
+                                }
+
+                                break;
+
                             case Bank:
                                 updateView(sequencerModel.getViewData(sequencerModel
                                         .getSelectedBank()));
                                 break;
+
                             case ActiveData:
-                                break;
-                            default:
                                 break;
                         }
                     }
                 });
     }
 
+    protected void invalidateActivePadOverlay() {
+        boolean show = false;
+        switch (sequencerModel.getPadState()) {
+            case Perform:
+                show = false;
+                break;
+
+            case Assign:
+                show = true;
+                break;
+        }
+
+        view.updateActive(sequencerModel.getActiveData().getPatternIndex(), show);
+    }
+
     @Override
     public void onShow(IScreen screen) {
         updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
+        invalidateActivePadOverlay();
     }
 
     protected void updateView(Collection<QueueData> viewData) {

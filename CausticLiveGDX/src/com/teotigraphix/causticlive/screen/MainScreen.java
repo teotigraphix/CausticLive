@@ -24,6 +24,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.view.assign.PhraseListMediator;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
+import com.teotigraphix.causticlive.view.main.TaskBarMediator;
 import com.teotigraphix.causticlive.view.main.ToolBarMediator;
 import com.teotigraphix.causticlive.view.main.TransportControlMediator;
 import com.teotigraphix.libgdx.application.IGame;
@@ -53,6 +54,9 @@ public class MainScreen extends ScreenBase {
     @Inject
     ToolBarMediator toolBarMediator;
 
+    @Inject
+    TaskBarMediator taskBarMediator;
+
     //private Image splashImage;
 
     public MainScreen() {
@@ -67,6 +71,7 @@ public class MainScreen extends ScreenBase {
         addMediator(TransportControlMediator);
         addMediator(BankMediator);
         addMediator(toolBarMediator);
+        addMediator(taskBarMediator);
         addMediator(phraseListMediator);
     }
 

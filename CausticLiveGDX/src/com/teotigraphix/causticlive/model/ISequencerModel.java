@@ -34,6 +34,15 @@ public interface ISequencerModel extends ICaustkModel {
     // Property API
     //--------------------------------------------------------------------------
 
+    PadState getPadState();
+
+    /**
+     * @param value
+     * @see OnSequencerModelPropertyChange
+     * @see PropertyChangeKind#PadState
+     */
+    void setPadState(PadState value);
+
     //----------------------------------
     // selectedBank
     //----------------------------------
@@ -87,11 +96,43 @@ public interface ISequencerModel extends ICaustkModel {
 
     void unassignPhrase(QueueData data, Track track);
 
+    public enum PadState {
+        Perform(0),
+
+        Assign(1);
+
+        private int value;
+
+        public int getValue() {
+            return value;
+        }
+
+        PadState(int value) {
+            this.value = value;
+        }
+
+        public static PadState fromInt(int value) {
+            for (PadState state : values()) {
+                if (state.getValue() == value)
+                    return state;
+            }
+            return null;
+        }
+    }
+
+    public enum SequencerState {
+        Play,
+
+        Record;
+    }
+
     //--------------------------------------------------------------------------
     // Event API
     //--------------------------------------------------------------------------
 
     public enum PropertyChangeKind {
+        PadState,
+
         Bank,
 
         ActiveData;

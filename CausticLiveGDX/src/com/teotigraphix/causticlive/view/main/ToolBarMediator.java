@@ -86,7 +86,7 @@ public class ToolBarMediator extends ScreenMediator {
 
         createBeatLed(table, screen.getSkin());
         createMixerButton(table, screen.getSkin());
-        float prefHeight = table.getPrefHeight();
+        float prefHeight = 35f; //table.getPrefHeight();
 
         float height = SkinRegistry.getHeight();
         float width = SkinRegistry.getWidth();

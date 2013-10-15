@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ListRowRenderer.ListRowRendererStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -126,6 +127,11 @@ public class SkinRegistry {
         listStyle.fontColorSelected = skin.getColor("black");
         listStyle.fontColorUnselected = skin.getColor("white");
         skin.add("default", listStyle);
+
+        ListRowRendererStyle listRowRendererStyle = new ListRowRendererStyle();
+        listRowRendererStyle.background = skin.getDrawable("scrollpane_background");
+        listRowRendererStyle.selection = skin.getDrawable("list_selection");
+        skin.add("default", listRowRendererStyle);
 
         ScrollPaneStyle scrollPaneStyle = new ScrollPaneStyle();
         scrollPaneStyle.background = skin.getDrawable("scrollpane_background");
