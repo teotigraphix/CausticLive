@@ -43,6 +43,9 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     @Inject
     ISequencerModel sequencerModel;
 
+    @Inject
+    IStateModel stateModel;
+
     private static final String TAG = "LibraryModel";
 
     private static final String USER_LIBRAY_NAME = "User";
@@ -56,12 +59,6 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     //----------------------------------
     // selectedSceneId
     //----------------------------------
-
-    private UUID selectedSceneId;
-
-    public UUID getSelectedSceneId() {
-        return selectedSceneId;
-    }
 
     @Override
     public Array<LibraryScene> getScenes() {
@@ -78,11 +75,11 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
             e.printStackTrace();
         }
         // set, this could be loaded from outside of the model
-        selectedSceneId = item.getId();
+        stateModel.setSelectedSceneId(item.getId());
         getController().getLogger().log(TAG, "Loaded LibraryScene " + item.toString());
 
         Project project = getController().getProjectManager().getProject();
-        project.put(PREF_SELECTED_SCENE_ID, selectedSceneId.toString());
+        project.put(PREF_SELECTED_SCENE_ID, stateModel.getSelectedSceneId().toString());
     }
 
     //--------------------------------------------------------------------------
@@ -102,7 +99,7 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         Project project = getController().getProjectManager().getProject();
         String uid = project.getString(PREF_SELECTED_SCENE_ID, null);
         if (uid != null) {
-            selectedSceneId = UUID.fromString(uid);
+            stateModel.setSelectedSceneId(UUID.fromString(uid));
         }
 
         String path = project.getString(PREF_USER_LIBRARY_PATH, null);
@@ -144,12 +141,12 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     public void restoreState() throws CausticException {
         // only load the scene if there is not a scene
         // the machine state is already loaded in the App state object
-        if (selectedSceneId == null) {
+        if (stateModel.getSelectedSceneId() == null) {
             // get the first and only scene of the demo imported
-            selectedSceneId = getScenes().get(0).getId();
+            stateModel.setSelectedSceneId(getScenes().get(0).getId());
 
             LibraryScene libraryScene = getController().getLibraryManager().getSelectedLibrary()
-                    .findSceneById(selectedSceneId);
+                    .findSceneById(stateModel.getSelectedSceneId());
 
             if (libraryScene == null)
                 throw new CausticException("Failure restoring initial LibraryScene");

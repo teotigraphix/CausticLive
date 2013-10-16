@@ -22,6 +22,8 @@ package com.teotigraphix.causticlive.application;
 import java.io.File;
 import java.io.IOException;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
@@ -41,19 +43,47 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     @Inject
     ILibraryModel libraryModel;
 
-    //    @Inject
-    //    ISoundModel soundModel;
-
     @Inject
     ISequencerModel sequencerModel;
-
-    //
-    //    @Inject
-    //    IToneModel toneModel;
 
     public ApplicationMediator() {
         stateType = CausticLiveApplicationState.class;
         deleteCausticFile = false;
+    }
+
+    @Override
+    public void onRegister() {
+        // onLoad()
+        super.onRegister();
+
+        register(OnApplicationMediatorNewProject.class,
+                new EventObserver<OnApplicationMediatorNewProject>() {
+                    @Override
+                    public void trigger(OnApplicationMediatorNewProject object) {
+                        // create a new project, this is probably going to be multi step
+                        // with dialogs
+                        getController().getLogger()
+                                .log("ApplicationMediator", "Create new project");
+                        createNewProject();
+                    }
+                });
+    }
+
+    protected void createNewProject() {
+        // What has to happen?
+        // - Rack needs to be cleared, can't just kill the instance because of all
+        // the listeners added at startup
+
+        // CausticLiveApplicationState needs to be recreated from scratch and saved once the
+        // project is created
+
+        // ProjectManager save dialog
+
+        // project manager new project name dialog
+
+        // project manager creates a new project, maybe sending
+        // out a message that all mediators onShow() gets called will
+        // update the UI accordingly
     }
 
     @Override
@@ -108,5 +138,8 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
         }
 
         SequencerMessage.SONG_END_MODE.send(getController(), 0);
+    }
+
+    public static class OnApplicationMediatorNewProject {
     }
 }

@@ -24,9 +24,11 @@ import com.teotigraphix.causticlive.application.ApplicationMediator;
 import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.IStateModel;
 import com.teotigraphix.causticlive.model.LibraryModel;
 import com.teotigraphix.causticlive.model.SequencerModel;
 import com.teotigraphix.causticlive.model.SoundModel;
+import com.teotigraphix.causticlive.model.StateModel;
 import com.teotigraphix.caustk.controller.ICaustkConfiguration;
 import com.teotigraphix.caustk.controller.core.CaustkConfigurationBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
@@ -49,6 +51,7 @@ public class CausticLiveModule extends CausticRuntimeModule {
     protected void configureApplicationRequirements() {
         bind(ICaustkConfiguration.class).to(ApplicationConfiguration.class).in(Singleton.class);
 
+        bind(IStateModel.class).to(StateModel.class).in(Singleton.class);
         bind(ISequencerModel.class).to(SequencerModel.class).in(Singleton.class);
         bind(ISoundModel.class).to(SoundModel.class).in(Singleton.class);
         bind(ILibraryModel.class).to(LibraryModel.class).in(Singleton.class);

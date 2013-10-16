@@ -36,7 +36,7 @@ public final class UI {
     public static Table createComponent(IScreen screen, Component component) {
         final Rectangle bounds = component.getBounds();
         final Table table = new Table(screen.getSkin());
-        //table.debug();
+        table.debug();
         table.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         screen.getStage().addActor(table);
         return table;

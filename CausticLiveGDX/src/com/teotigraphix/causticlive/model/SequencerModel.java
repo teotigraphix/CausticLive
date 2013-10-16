@@ -35,18 +35,15 @@ import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
 import com.teotigraphix.caustk.sequencer.track.Phrase;
 import com.teotigraphix.caustk.sequencer.track.Track;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
-import com.teotigraphix.libgdx.model.IApplicationModel;
 
 @Singleton
 public class SequencerModel extends CaustkModelBase implements ISequencerModel {
 
     @Inject
-    IApplicationModel applicationModel;
-
-    private CausticLiveApplicationState state;
+    IStateModel stateModel;
 
     protected final SequencerModelState getSequencerModelState() {
-        return state.getSequencerModelState();
+        return stateModel.getSequencerModelState();
     }
 
     protected final IQueueSequencer getQueueSequencer() {
@@ -56,12 +53,24 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
     @Override
     public void onRegister() {
         super.onRegister();
-        state = applicationModel.getState();
     }
 
     //--------------------------------------------------------------------------
     // ISequencerModel API :: Properties
     //--------------------------------------------------------------------------
+
+    //----------------------------------
+    // items
+    //----------------------------------
+
+    private final String[] bankNames = {
+            "A", "B", "C", "D"
+    };
+
+    @Override
+    public final String[] getBankNames() {
+        return bankNames;
+    }
 
     //----------------------------------
     // padState
@@ -95,15 +104,6 @@ public class SequencerModel extends CaustkModelBase implements ISequencerModel {
             setActiveData(null);
             trigger(new OnSequencerModelPropertyChange(PropertyChangeKind.Bank));
         }
-    }
-
-    private final String[] items = {
-            "A", "B", "C", "D"
-    };
-
-    @Override
-    public final String[] getBankNames() {
-        return items;
     }
 
     //----------------------------------
