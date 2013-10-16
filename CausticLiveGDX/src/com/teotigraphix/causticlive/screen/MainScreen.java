@@ -21,12 +21,15 @@ package com.teotigraphix.causticlive.screen;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.teotigraphix.causticlive.view.assign.PhraseListMediator;
 import com.teotigraphix.causticlive.view.main.BankBarMediator;
+import com.teotigraphix.causticlive.view.main.ContextPaneMediator;
+import com.teotigraphix.causticlive.view.main.ContextPaneToolBar;
+import com.teotigraphix.causticlive.view.main.ExtrasBarMediator;
+import com.teotigraphix.causticlive.view.main.MainToggleMediator;
+import com.teotigraphix.causticlive.view.main.MainToolBarMediator;
 import com.teotigraphix.causticlive.view.main.PadGridMediator;
-import com.teotigraphix.causticlive.view.main.TaskBarMediator;
-import com.teotigraphix.causticlive.view.main.ToolBarMediator;
-import com.teotigraphix.causticlive.view.main.TransportControlMediator;
+import com.teotigraphix.causticlive.view.main.PadGridToolBarMediator;
+import com.teotigraphix.causticlive.view.main.TransportBarMediator;
 import com.teotigraphix.libgdx.application.IGame;
 import com.teotigraphix.libgdx.screen.ScreenBase;
 
@@ -34,30 +37,31 @@ import com.teotigraphix.libgdx.screen.ScreenBase;
 public class MainScreen extends ScreenBase {
 
     @Inject
-    PadGridMediator PadGridMediator;
+    MainToolBarMediator mainToolBarMediator;
 
     @Inject
-    TransportControlMediator TransportControlMediator;
+    ContextPaneToolBar contextPaneToolBar;
 
     @Inject
-    BankBarMediator BankMediator;
+    MainToggleMediator mainToggleMediator;
 
     @Inject
-    PhraseListMediator phraseListMediator;
-
-    //    @Inject
-    //    SongListMediator SongListMediator;
-    //
-    //    @Inject
-    //    LibraryItemSelectMediator LibraryItemSelectMediator;
+    PadGridToolBarMediator padGridToolBarMediator;
 
     @Inject
-    ToolBarMediator toolBarMediator;
+    ContextPaneMediator contextPaneMediator;
 
     @Inject
-    TaskBarMediator taskBarMediator;
+    TransportBarMediator transportBarMediator;
 
-    //private Image splashImage;
+    @Inject
+    BankBarMediator bankBarMediator;
+
+    @Inject
+    ExtrasBarMediator extrasBarMediator;
+
+    @Inject
+    PadGridMediator padGridMediator;
 
     public MainScreen() {
     }
@@ -66,13 +70,16 @@ public class MainScreen extends ScreenBase {
     public void initialize(IGame game) {
         super.initialize(game);
         SkinRegistry.register(getSkin());
-        addMediator(PadGridMediator);
 
-        addMediator(TransportControlMediator);
-        addMediator(BankMediator);
-        addMediator(toolBarMediator);
-        addMediator(taskBarMediator);
-        addMediator(phraseListMediator);
+        addMediator(mainToolBarMediator);
+        addMediator(contextPaneToolBar);
+        addMediator(mainToggleMediator);
+        addMediator(padGridToolBarMediator);
+        addMediator(contextPaneMediator);
+        addMediator(transportBarMediator);
+        addMediator(bankBarMediator);
+        addMediator(extrasBarMediator);
+        addMediator(padGridMediator);
     }
 
     @Override

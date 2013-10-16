@@ -20,49 +20,22 @@
 package com.teotigraphix.causticlive.view.main;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.google.inject.Inject;
-import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
-import com.teotigraphix.libgdx.ui.ButtonBar;
-import com.teotigraphix.libgdx.ui.ButtonBar.OnButtonBarListener;
 
-public class BankBarMediator extends ScreenMediator {
+public class MainToolBarMediator extends ScreenMediator {
 
-    @Inject
-    ISequencerModel sequencerModel;
-
-    private ButtonBar view;
-
-    public BankBarMediator() {
+    public MainToolBarMediator() {
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
 
-        Table table = UI.createComponent(screen, Component.BankBar);
-        float padding = UI.PAD_GRID_PADDING;
-        table.defaults().padTop(padding).padBottom(padding).padLeft(padding);
+        Table table = UI.createComponent(screen, Component.MainToolBar);
 
-        view = new ButtonBar(screen.getSkin(), sequencerModel.getBankNames(), true, "default");
-        view.defaults().space(10f);
-        view.setOnButtonBarListener(new OnButtonBarListener() {
-            @Override
-            public void onChange(int index) {
-                sequencerModel.setSelectedBank(index);
-            }
-        });
-
-        table.add(view).expand().fill();
-    }
-
-    @Override
-    public void onShow(IScreen screen) {
-        super.onShow(screen);
-
-        view.select(sequencerModel.getSelectedBank(), true);
     }
 }

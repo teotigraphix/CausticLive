@@ -1,28 +1,40 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2013 Michael Schmalle - Teoti Graphix, LLC
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Michael Schmalle, Principal Architect
+// mschmalle at teotigraphix dot com
+////////////////////////////////////////////////////////////////////////////////
 
 package com.teotigraphix.causticlive.view.main;
-
-import org.androidtransfuse.event.EventObserver;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.PopUp;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ToggleButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.screen.SkinRegistry;
 import com.teotigraphix.causticlive.view.main.components.PartMixer;
 import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
-import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
 import com.teotigraphix.caustk.sound.mixer.SoundMixerChannel;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Knob;
-import com.teotigraphix.libgdx.ui.Led;
 import com.teotigraphix.libgdx.ui.TextSlider;
 
 public class ToolBarMediator extends ScreenMediator {
@@ -32,12 +44,6 @@ public class ToolBarMediator extends ScreenMediator {
 
     @Inject
     IDialogManager dialogManager;
-
-    private ToggleButton playButton;
-
-    private Led redLed;
-
-    private Led greenLed;
 
     private TextButton mixerButton;
 
@@ -57,22 +63,6 @@ public class ToolBarMediator extends ScreenMediator {
     }
 
     @Override
-    public void onAttach(IScreen screen) {
-        register(getController(), OnSystemSequencerBeatChange.class,
-                new EventObserver<OnSystemSequencerBeatChange>() {
-                    @Override
-                    public void trigger(OnSystemSequencerBeatChange object) {
-                        final float beat = object.getBeat();
-                        if (beat % 4 == 0) {
-                            greenLed.turnOn(0.05f); // 0.2 is smooth at 60 - 100
-                        } else {
-                            redLed.turnOn(0.05f); // 0.2 is smooth at 60 - 100
-                        }
-                    }
-                });
-    }
-
-    @Override
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
         this.screen = screen;
@@ -82,9 +72,9 @@ public class ToolBarMediator extends ScreenMediator {
         table.setBackground(skin.getDrawable("toolbar_background"));
         //table.debug();
 
-        createPlayButton(table, screen.getSkin());
+        //        createPlayButton(table, screen.getSkin());
 
-        createBeatLed(table, screen.getSkin());
+        //        createBeatLed(table, screen.getSkin());
         createMixerButton(table, screen.getSkin());
         float prefHeight = 35f; //table.getPrefHeight();
 
@@ -99,25 +89,6 @@ public class ToolBarMediator extends ScreenMediator {
 
         table.setSize(width, prefHeight);
         screen.getStage().addActor(table);
-    }
-
-    private void createPlayButton(Table table, Skin skin2) {
-        playButton = new ToggleButton("Play", screen.getSkin());
-        playButton.setToggle(true);
-        playButton.setPosition(5f, 5f);
-        playButton.setSize(75f, 50f);
-        playButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (playButton.isChecked()) {
-                    sequencerModel.play();
-                } else {
-                    sequencerModel.stop();
-                }
-            }
-        });
-
-        table.add(playButton).size(70f, 30f);
     }
 
     private void createMixerButton(Table table, Skin skin) {
@@ -250,33 +221,17 @@ public class ToolBarMediator extends ScreenMediator {
         updating = false;
     }
 
-    private void createBeatLed(Table table, Skin skin) {
-        Stack stack = new Stack();
-
-        redLed = new Led(skin);
-        redLed.setStyleName("led-red");
-
-        greenLed = new Led(skin);
-        greenLed.setStyleName("led-green");
-        greenLed.setShowOnlyOn(true);
-
-        stack.add(redLed);
-        stack.add(greenLed);
-
-        table.add(stack).size(30f, 30f);
-    }
-
     @Override
     public void onShow(IScreen screen) {
         super.onShow(screen);
 
-        playButton.check(getController().getRack().getSystemSequencer().isPlaying());
+        //        playButton.check(getController().getRack().getSystemSequencer().isPlaying());
     }
 
     @Override
     public void onDispose(IScreen screen) {
         super.onDispose(screen);
 
-        playButton.setChecked(false);
+        //        playButton.setChecked(false);
     }
 }

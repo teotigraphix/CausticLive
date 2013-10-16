@@ -32,6 +32,18 @@ import com.teotigraphix.libgdx.ui.OverlayButton.OnPadButtonListener;
 
 public class PadGrid extends WidgetGroup {
 
+    //--------------------------------------------------------------------------
+    // Public :: Variables
+    //--------------------------------------------------------------------------
+
+    public float padding;
+
+    public float padSize;
+
+    //--------------------------------------------------------------------------
+    // Private :: Variables
+    //--------------------------------------------------------------------------
+
     private Skin skin;
 
     private int numRows = 4;
@@ -40,11 +52,9 @@ public class PadGrid extends WidgetGroup {
 
     private boolean sizeInvalid;
 
-    private OnPadGridListener listener;
-
-    protected boolean longPressed;
-
-    //private Image activeOverlay;
+    //--------------------------------------------------------------------------
+    // Constructor
+    //--------------------------------------------------------------------------
 
     public PadGrid(Skin skin) {
         this.skin = skin;
@@ -55,26 +65,38 @@ public class PadGrid extends WidgetGroup {
         int index = 0;
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numColums; j++) {
-                final PadButton button = new PadButton("", skin);
-                button.setIndex(index);
-                button.addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ChangeEvent event, Actor actor) {
-                        PadButton button = (PadButton)actor;
-                        listener.onChange(button.getIndex(), button.getData());
-                    }
-                });
-                button.setOnPadButtonListener(new OnPadButtonListener() {
-                    @Override
-                    public void onLongPress(Integer index, float x, float y) {
-                        listener.onLongPress(index, x, y);
-                    }
-                });
+                final PadButton button = createButton(index);
                 addActor(button);
                 index++;
             }
         }
     }
+
+    private PadButton createButton(int index) {
+        final PadButton button = new PadButton("", skin);
+        button.setIndex(index);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PadButton button = (PadButton)actor;
+                listener.onChange(button.getIndex(), button.getData());
+            }
+        });
+        button.setOnPadButtonListener(new OnPadButtonListener() {
+            @Override
+            public void onLongPress(Integer index, float x, float y) {
+                listener.onLongPress(index, x, y);
+            }
+        });
+        return button;
+    }
+
+    private void computeSize() {
+    }
+
+    //--------------------------------------------------------------------------
+    // Overridden :: Methods
+    //--------------------------------------------------------------------------
 
     @Override
     public void layout() {
@@ -83,13 +105,13 @@ public class PadGrid extends WidgetGroup {
         if (sizeInvalid)
             computeSize();
 
-        float gap = 24f;
+        float gap = padding * 2;
 
-        float calcX = 12f;
-        float calcY = 12f;
+        float calcX = padding;
+        float calcY = padding;
 
-        float calcWidth = 76f;
-        float calcHeight = 76f;
+        float calcWidth = padSize;
+        float calcHeight = padSize;
 
         int index = 0;
         Array<Actor> children = getChildren();
@@ -102,25 +124,14 @@ public class PadGrid extends WidgetGroup {
                 calcX += gap + calcWidth;
                 index++;
             }
-            calcX = 12f;
+            calcX = padding;
             calcY += gap + calcHeight;
         }
     }
 
-    private void computeSize() {
-    }
-
-    public void setOnPadGridListener(OnPadGridListener l) {
-        listener = l;
-
-    }
-
-    public interface OnPadGridListener {
-        void onChange(int localIndex, QueueData data);
-
-        void onLongPress(Integer localIndex, float x, float y);
-
-    }
+    //--------------------------------------------------------------------------
+    // Public API :: Methods
+    //--------------------------------------------------------------------------
 
     public void refresh(Collection<QueueData> viewData, boolean selected) {
         final SnapshotArray<Actor> children = getChildren();
@@ -148,4 +159,19 @@ public class PadGrid extends WidgetGroup {
         }
     }
 
+    //--------------------------------------------------------------------------
+    // Events
+    //--------------------------------------------------------------------------
+
+    private OnPadGridListener listener;
+
+    public void setOnPadGridListener(OnPadGridListener l) {
+        listener = l;
+    }
+
+    public interface OnPadGridListener {
+        void onChange(int localIndex, QueueData data);
+
+        void onLongPress(Integer localIndex, float x, float y);
+    }
 }

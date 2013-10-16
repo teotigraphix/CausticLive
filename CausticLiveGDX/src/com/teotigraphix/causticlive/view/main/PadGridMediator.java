@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.PopUp;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -36,6 +37,8 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.view.UI;
+import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.causticlive.view.main.components.PadButton;
 import com.teotigraphix.causticlive.view.main.components.PadGrid;
 import com.teotigraphix.causticlive.view.main.components.PadGrid.OnPadGridListener;
@@ -70,8 +73,6 @@ public class PadGridMediator extends ScreenMediator {
 
     private SelectBox toneSelectBox;
 
-    private Skin skin;
-
     private PopUp toneSelectPopUp;
 
     private boolean resetingItems;
@@ -83,9 +84,11 @@ public class PadGridMediator extends ScreenMediator {
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
 
-        skin = screen.getSkin();
+        Table table = UI.createComponent(screen, Component.PadGrid);
 
         view = new PadGrid(screen.getSkin());
+        view.padding = UI.PAD_GRID_PADDING;
+        view.padSize = UI.PAD_GRID_PAD_SIZE;
         view.setOnPadGridListener(new OnPadGridListener() {
 
             @Override
@@ -130,11 +133,10 @@ public class PadGridMediator extends ScreenMediator {
             }
         });
 
-        view.setPosition(400f, 0f);
-        screen.getStage().addActor(view);
-
-        //------------------------------------
-        createToneSelectBox();
+        table.addActor(view);
+        //
+        //        //------------------------------------
+        createToneSelectBox(screen.getSkin());
 
     }
 
@@ -263,7 +265,7 @@ public class PadGridMediator extends ScreenMediator {
         view.refresh(viewData, true);
     }
 
-    private void createToneSelectBox() {
+    private void createToneSelectBox(Skin skin) {
         toneSelectBox = new SelectBox(soundModel.getToneNames(true, "Choose Machine"), skin,
                 "default");
         toneSelectBox.addListener(new ChangeListener() {
