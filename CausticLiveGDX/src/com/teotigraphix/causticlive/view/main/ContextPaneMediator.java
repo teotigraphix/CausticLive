@@ -19,26 +19,47 @@
 
 package com.teotigraphix.causticlive.view.main;
 
-import java.util.List;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.Array;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
-import com.teotigraphix.caustk.library.item.LibraryPhrase;
+import com.teotigraphix.causticlive.view.main.panes.ControlsPaneMediator;
+import com.teotigraphix.causticlive.view.main.panes.LibraryPaneMediator;
+import com.teotigraphix.causticlive.view.main.panes.MixerPaneMediator;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Pane;
 import com.teotigraphix.libgdx.ui.PaneStack;
-import com.teotigraphix.libgdx.ui.ScrollList;
 
+@Singleton
 public class ContextPaneMediator extends ScreenMediator {
+
+    @Inject
+    LibraryPaneMediator libraryPaneMediator;
+
+    @Inject
+    MixerPaneMediator mixerPaneMediator;
+
+    @Inject
+    ControlsPaneMediator controlsPaneMediator;
+
+    //----------------------------------
 
     private PaneStack paneStack;
 
     public ContextPaneMediator() {
+    }
+
+    @Override
+    public void onInitialize(IScreen screen) {
+        super.onInitialize(screen);
+
+        addMediator(libraryPaneMediator);
+        addMediator(mixerPaneMediator);
+        addMediator(controlsPaneMediator);
     }
 
     @Override
@@ -51,40 +72,21 @@ public class ContextPaneMediator extends ScreenMediator {
 
         paneStack = new PaneStack(skin, Align.top);
 
+        // LibraryPane
         Pane pane1 = new Pane(skin, "Library");
-
-        PaneStack libraryStack = new PaneStack(skin, Align.bottom);
-        libraryStack.setSelectedIndex(2); // Phrase (temp)
-        pane1.add(libraryStack).expand().fill();
-        libraryStack.addPane(new Pane(skin, "Scene"));
-        libraryStack.addPane(new Pane(skin, "Phrase"));
-        Pane patchPane = new Pane(skin, "Patch");
-        libraryStack.addPane(patchPane);
-
-        ScrollList list = new ScrollList(skin);
-        list.setOverscroll(false, true);
-        list.setItems(getPhraseItems());
-        patchPane.add(list).fill().expand();
-
+        libraryPaneMediator.onCreate(screen, pane1);
         paneStack.addPane(pane1);
 
+        // MixerPane
         Pane pane2 = new Pane(skin, "Mixer");
+        mixerPaneMediator.onCreate(screen, pane2);
         paneStack.addPane(pane2);
 
+        // ControlsPane
         Pane pane3 = new Pane(skin, "Controls");
+        controlsPaneMediator.onCreate(screen, pane3);
         paneStack.addPane(pane3);
-        pane3.setBackground("pad_selected");
 
         table.add(paneStack).fill().expand();
-    }
-
-    private Array<?> getPhraseItems() {
-        final List<LibraryPhrase> phrases = getController().getLibraryManager()
-                .getSelectedLibrary().getPhrases();
-        Array<LibraryPhrase> result = new Array<LibraryPhrase>();
-        for (LibraryPhrase libraryPhrase : phrases) {
-            result.add(libraryPhrase);
-        }
-        return result;
     }
 }
