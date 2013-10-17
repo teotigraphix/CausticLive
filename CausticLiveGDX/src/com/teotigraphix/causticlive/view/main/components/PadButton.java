@@ -35,6 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
+import com.teotigraphix.causticlive.model.NameUtils;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
 import com.teotigraphix.caustk.tone.Tone;
@@ -274,7 +275,7 @@ public class PadButton extends ToggleButton {
                     setText(tone.getName());
                     beatLabel.setText("");
                 }
-                setText(queueData.getName());
+                setText(NameUtils.dataDisplayName(queueData));
                 if (queueData.getPhrase().getNotes().size() == 0) {
                     textLabel.setColor(new Color(0.4f, 0.6f, 0.2f, 1f));
                 }

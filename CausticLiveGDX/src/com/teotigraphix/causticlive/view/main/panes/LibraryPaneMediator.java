@@ -1,12 +1,16 @@
 
 package com.teotigraphix.causticlive.view.main.panes;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListDoubleTapEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListListener;
+import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListLongPressEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -14,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.causticlive.model.NameUtils;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.track.Phrase;
@@ -62,7 +67,43 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
         list.addListener(new AdvancedListListener() {
             @Override
             public void changed(AdvancedListChangeEvent event, Actor actor) {
-                getController().getLogger().log("", "Change");
+                getController().getLogger().log("LibraryPaneMediator", "changed");
+            }
+
+            @Override
+            public void longPress(AdvancedListLongPressEvent event, Actor actor) {
+                getController().getLogger().log("LibraryPaneMediator", "longPress");
+                // have to check the the long pressed data index 
+                // is the same index as the selected data index
+                int index = actor.getParent().getChildren().indexOf(actor, true);
+                if (list.getSelectedIndex() == index) {
+                    getController().getLogger().log("LibraryPaneMediator", "identical index");
+                    final LibraryPhrase phrase = (LibraryPhrase)list.getSelectedItem();
+                    final String name = phrase.getMetadataInfo().getName();
+
+                    Gdx.input.getTextInput(new TextInputListener() {
+                        @Override
+                        public void input(String text) {
+                            getController().getLogger().log("LibraryPaneMediator", text);
+                            phrase.getMetadataInfo().setName(text);
+                            try {
+                                getController().getLibraryManager().save();
+                                list.refresh();
+                                // update padgrid as well
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void canceled() {
+                            getController().getLogger().log("LibraryPaneMediator",
+                                    "Name change Canceled");
+                        }
+                    }, "Enter a new name", name);
+
+                }
             }
 
             @Override
@@ -83,7 +124,8 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
                 sequencerModel.assignPhrase(data, track, libraryPhrase);
 
-                dialogManager.createToast("Selected phrase added to " + data.getName(), 1f);
+                dialogManager.createToast(
+                        "Selected phrase added to " + NameUtils.dataDisplayName(data), 1f);
             }
 
         });

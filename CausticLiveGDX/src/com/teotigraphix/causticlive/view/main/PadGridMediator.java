@@ -37,6 +37,7 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.ISequencerModel.OnSequencerModelPropertyChange;
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.causticlive.model.ISoundModel;
+import com.teotigraphix.causticlive.model.NameUtils;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.causticlive.view.main.components.PadButton;
@@ -282,8 +283,8 @@ public class PadGridMediator extends ScreenMediator {
                     libraryModel.assignTone(index, activeData);
                     updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
                     hideToneSelectPopUp();
-                    dialogManager.createToast(activeData.getName() + " assigned to pad "
-                            + (activeData.getPatternIndex() + 1), 1f);
+                    dialogManager.createToast(NameUtils.dataDisplayName(activeData)
+                            + " assigned to pad " + (activeData.getPatternIndex() + 1), 1f);
                 } else if (index == toneSelectBox.getItems().length - 1) {
                     QueueData activeData = sequencerModel.getActiveData();
                     dialogManager.createToast("Pad " + (activeData.getPatternIndex() + 1)
