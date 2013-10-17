@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.androidtransfuse.event.EventObserver;
+
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -35,7 +37,9 @@ import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 import com.teotigraphix.caustk.sequencer.track.Phrase;
+import com.teotigraphix.caustk.utils.RuntimeUtils;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
+import com.teotigraphix.libgdx.model.IApplicationModel.OnApplicationModelProjectLoadComplete;
 
 @Singleton
 public class LibraryModel extends CaustkModelBase implements ILibraryModel {
@@ -95,8 +99,24 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
     @Override
     public void onRegister() {
+        createFromProject(getController().getProjectManager().getProject());
 
-        Project project = getController().getProjectManager().getProject();
+        getController().register(OnApplicationModelProjectLoadComplete.class,
+                new EventObserver<OnApplicationModelProjectLoadComplete>() {
+                    @Override
+                    public void trigger(OnApplicationModelProjectLoadComplete object) {
+                        createFromProject(object.getProject());
+                        importDemoSong();
+                    }
+                });
+    }
+
+    //--------------------------------------------------------------------------
+    // ILibraryModel API :: Methods 
+    //--------------------------------------------------------------------------
+
+    private void createFromProject(Project project) {
+
         String uid = project.getString(PREF_SELECTED_SCENE_ID, null);
         if (uid != null) {
             stateModel.setSelectedSceneId(UUID.fromString(uid));
@@ -133,9 +153,17 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         trigger(new OnLibraryModelLibraryChange());
     }
 
-    //--------------------------------------------------------------------------
-    // ILibraryModel API :: Methods 
-    //--------------------------------------------------------------------------
+    @Override
+    public void importDemoSong() {
+        File file = RuntimeUtils.getCausticSongFile("C2DEMO");
+        try {
+            importSong(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void restoreState() throws CausticException {

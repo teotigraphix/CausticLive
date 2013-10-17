@@ -41,4 +41,6 @@ public interface ILibraryModel extends ICaustkModel {
 
     void assignTone(int toneIndex, QueueData queueData);
 
+    void importDemoSong();
+
 }

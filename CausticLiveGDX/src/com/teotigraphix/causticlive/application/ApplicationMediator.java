@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.androidtransfuse.event.EventObserver;
 
+import com.badlogic.gdx.Gdx;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
@@ -32,9 +33,10 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.controller.IRack;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
-import com.teotigraphix.caustk.utils.RuntimeUtils;
+import com.teotigraphix.caustk.project.Project;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
+import com.teotigraphix.libgdx.controller.IApplicationController;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
 
 @Singleton
@@ -46,6 +48,9 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     @Inject
     ISequencerModel sequencerModel;
 
+    @Inject
+    IApplicationController applicationController;
+
     public ApplicationMediator() {
         stateType = CausticLiveApplicationState.class;
         deleteCausticFile = false;
@@ -53,7 +58,10 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
     @Override
     public void onRegister() {
-        // onLoad()
+        // register Models
+        applicationModel.registerModel(sequencerModel);
+        applicationModel.registerModel(libraryModel);
+
         super.onRegister();
 
         register(OnApplicationMediatorNewProject.class,
@@ -76,6 +84,20 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
         // CausticLiveApplicationState needs to be recreated from scratch and saved once the
         // project is created
+
+        try {
+            final Project project = applicationController.createProject("Foo1");
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    getController().getRack().unregisterObservers();
+                    applicationModel.setProject(project);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // ProjectManager save dialog
 
@@ -101,31 +123,11 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     }
 
     @Override
-    protected void onLoad() {
-        super.onLoad();
-
-        // get any references from the deseralized rack
-
-        // setup app specific commands
-
-        // register Models
-        applicationModel.registerModel(sequencerModel);
-        applicationModel.registerModel(libraryModel);
-    }
-
-    @Override
     protected void onRun() {
         super.onRun();
 
         if (isFirstRun()) {
-            File file = RuntimeUtils.getCausticSongFile("C2DEMO");
-            try {
-                libraryModel.importSong(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (CausticException e) {
-                e.printStackTrace();
-            }
+            libraryModel.importDemoSong();
         } else {
 
         }
