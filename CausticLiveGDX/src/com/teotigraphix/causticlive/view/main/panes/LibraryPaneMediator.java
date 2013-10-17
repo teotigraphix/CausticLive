@@ -54,15 +54,17 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
     private Pane setupPane(Skin skin, Pane pane) {
 
         PaneStack libraryStack = new PaneStack(skin, Align.bottom);
-        libraryStack.setSelectedIndex(2); // Phrase (temp)
+        libraryStack.setSelectedIndex(1); // Phrase (temp)
         pane.add(libraryStack).expand().fill();
         libraryStack.addPane(new Pane(skin, "Scene"));
-        libraryStack.addPane(new Pane(skin, "Phrase"));
+        Pane phrasePane = new Pane(skin, "Phrase");
+        libraryStack.addPane(phrasePane);
         Pane patchPane = new Pane(skin, "Patch");
         libraryStack.addPane(patchPane);
 
         list = new ScrollList(skin);
         list.setOverscroll(false, true);
+        list.setFadeScrollBars(false);
         list.setItems(getPhraseItems());
         list.addListener(new AdvancedListListener() {
             @Override
@@ -129,7 +131,7 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
             }
 
         });
-        patchPane.add(list).fill().expand();
+        phrasePane.add(list).fill().expand();
 
         return pane;
     }
