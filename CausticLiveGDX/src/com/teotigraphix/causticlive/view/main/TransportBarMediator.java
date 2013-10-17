@@ -31,7 +31,10 @@ import com.google.inject.Inject;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
+import com.teotigraphix.causticlive.view.main.components.TempoControl;
+import com.teotigraphix.causticlive.view.main.components.TempoControl.OnTempControlListener;
 import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerBeatChange;
+import com.teotigraphix.caustk.sequencer.ISystemSequencer.OnSystemSequencerTempoChange;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Led;
@@ -49,6 +52,8 @@ public class TransportBarMediator extends ScreenMediator {
 
     private Stack stack;
 
+    private TempoControl tempoControl;
+
     public TransportBarMediator() {
     }
 
@@ -65,9 +70,30 @@ public class TransportBarMediator extends ScreenMediator {
         // spacer
         table.add().expand();
 
+        tempoControl = createTempoControl(screen.getSkin());
+        table.add(tempoControl).padLeft(15f).height(30f);
+
         // beat led
         stack = createBeatLed(screen.getSkin());
         table.add(stack).size(30f, 30f);
+    }
+
+    private TempoControl createTempoControl(Skin skin) {
+        TempoControl control = new TempoControl(skin);
+        control.setOnTempControlListener(new OnTempControlListener() {
+            @Override
+            public void onIncrementChange() {
+                getController().getRack().getSystemSequencer()
+                        .setTempo(getController().getRack().getSystemSequencer().getTempo() + 1);
+            }
+
+            @Override
+            public void onDecrementChange() {
+                getController().getRack().getSystemSequencer()
+                        .setTempo(getController().getRack().getSystemSequencer().getTempo() - 1);
+            }
+        });
+        return control;
     }
 
     private ToggleButton createPlayButton(Skin skin) {
@@ -119,6 +145,14 @@ public class TransportBarMediator extends ScreenMediator {
                         }
                     }
                 });
+
+        register(OnSystemSequencerTempoChange.class,
+                new EventObserver<OnSystemSequencerTempoChange>() {
+                    @Override
+                    public void trigger(OnSystemSequencerTempoChange object) {
+                        setLabel(Integer.valueOf((int)object.getTempo()) + "");
+                    }
+                });
     }
 
     @Override
@@ -126,6 +160,9 @@ public class TransportBarMediator extends ScreenMediator {
         super.onShow(screen);
 
         playButton.check(getController().getRack().getSystemSequencer().isPlaying());
+
+        setLabel(Integer.valueOf((int)getController().getRack().getSystemSequencer().getTempo())
+                + "");
     }
 
     @Override
@@ -134,4 +171,9 @@ public class TransportBarMediator extends ScreenMediator {
 
         playButton.setChecked(false);
     }
+
+    protected void setLabel(String text) {
+        tempoControl.setText(text);
+    }
+
 }
