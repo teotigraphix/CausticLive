@@ -283,8 +283,10 @@ public class PadGridMediator extends ScreenMediator {
                     libraryModel.assignTone(index, activeData);
                     updateView(sequencerModel.getViewData(sequencerModel.getSelectedBank()));
                     hideToneSelectPopUp();
-                    dialogManager.createToast(NameUtils.dataDisplayName(activeData)
-                            + " assigned to pad " + (activeData.getPatternIndex() + 1), 1f);
+                    dialogManager.createToast(
+                            NameUtils.dataDisplayName(getController().getLibraryManager()
+                                    .getSelectedLibrary(), activeData)
+                                    + " assigned to pad " + (activeData.getPatternIndex() + 1), 1f);
                 } else if (index == toneSelectBox.getItems().length - 1) {
                     QueueData activeData = sequencerModel.getActiveData();
                     dialogManager.createToast("Pad " + (activeData.getPatternIndex() + 1)

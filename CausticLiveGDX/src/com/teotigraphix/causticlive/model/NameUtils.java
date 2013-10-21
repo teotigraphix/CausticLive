@@ -21,12 +21,13 @@ package com.teotigraphix.causticlive.model;
 
 import java.util.UUID;
 
+import com.teotigraphix.caustk.library.core.Library;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.sequencer.queue.QueueData;
 
 public class NameUtils {
 
-    public static String dataDisplayName(QueueData data) {
+    public static String dataDisplayName(Library library, QueueData data) {
         String name = data.getName();
         if (name == null) {
             if (data.getViewChannelIndex() == -1)
@@ -34,8 +35,7 @@ public class NameUtils {
             String result = data.getViewChannel().getTone().getName();
             UUID phraseId = data.getPhrase().getPhraseId();
             if (phraseId != null) {
-                LibraryPhrase libraryPhrase = data.getRack().getController().getLibraryManager()
-                        .getSelectedLibrary().findPhraseById(phraseId);
+                LibraryPhrase libraryPhrase = library.findPhraseById(phraseId);
                 if (libraryPhrase.getMetadataInfo().hasName())
                     return libraryPhrase.getMetadataInfo().getName();
             }

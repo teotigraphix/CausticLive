@@ -127,7 +127,9 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
                 sequencerModel.assignPhrase(data, track, libraryPhrase);
 
                 dialogManager.createToast(
-                        "Selected phrase added to " + NameUtils.dataDisplayName(data), 1f);
+                        "Selected phrase added to "
+                                + NameUtils.dataDisplayName(getController().getLibraryManager()
+                                        .getSelectedLibrary(), data), 1f);
             }
 
         });
