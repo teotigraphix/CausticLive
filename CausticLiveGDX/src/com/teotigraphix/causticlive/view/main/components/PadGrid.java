@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.queue.QueueData;
 import com.teotigraphix.libgdx.ui.OverlayButton.OnPadButtonListener;
 
 public class PadGrid extends WidgetGroup {

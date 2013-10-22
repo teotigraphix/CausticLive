@@ -23,7 +23,7 @@ import java.util.UUID;
 
 import com.teotigraphix.caustk.library.core.Library;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.queue.QueueData;
 
 public class NameUtils {
 

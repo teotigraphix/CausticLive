@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.view.main.components.PartMixer;
 import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
-import com.teotigraphix.caustk.rack.sound.mixer.SoundMixerChannel;
+import com.teotigraphix.caustk.rack.mixer.SoundMixerChannel;
 import com.teotigraphix.libgdx.controller.ScreenMediatorChild;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.scene2d.IScreenProvider;

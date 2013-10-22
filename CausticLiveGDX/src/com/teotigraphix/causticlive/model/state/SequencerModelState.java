@@ -23,8 +23,8 @@ import java.io.Serializable;
 
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.caustk.controller.ICaustkController;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueSequencer;
+import com.teotigraphix.caustk.rack.QueueSequencer;
+import com.teotigraphix.caustk.rack.queue.QueueData;
 
 public class SequencerModelState implements Serializable {
 

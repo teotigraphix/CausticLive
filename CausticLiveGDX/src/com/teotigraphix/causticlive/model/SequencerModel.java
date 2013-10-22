@@ -29,11 +29,11 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.state.SequencerModelState;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
-import com.teotigraphix.caustk.rack.sequencer.IQueueSequencer;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.rack.sequencer.queue.QueueDataChannel;
-import com.teotigraphix.caustk.rack.sequencer.track.Phrase;
-import com.teotigraphix.caustk.rack.sequencer.track.Track;
+import com.teotigraphix.caustk.rack.IQueueSequencer;
+import com.teotigraphix.caustk.rack.queue.QueueData;
+import com.teotigraphix.caustk.rack.queue.QueueDataChannel;
+import com.teotigraphix.caustk.rack.track.Phrase;
+import com.teotigraphix.caustk.rack.track.Track;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 
 @Singleton

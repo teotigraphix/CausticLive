@@ -20,7 +20,7 @@
 package com.teotigraphix.causticlive.model;
 
 import com.google.inject.Singleton;
-import com.teotigraphix.caustk.rack.sound.ISoundSource;
+import com.teotigraphix.caustk.rack.ISoundSource;
 import com.teotigraphix.caustk.rack.tone.Tone;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 
