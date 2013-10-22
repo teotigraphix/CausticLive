@@ -35,8 +35,8 @@ import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
-import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.sequencer.track.Phrase;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.sequencer.track.Phrase;
 import com.teotigraphix.caustk.utils.RuntimeUtils;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 import com.teotigraphix.libgdx.model.IApplicationModel.OnApplicationModelProjectLoadComplete;
@@ -74,7 +74,7 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
     public void loadScene(LibraryScene item) {
         try {
-            getController().getRack().getSoundSource().createScene(item);
+            getController().getRack().createScene(item);
         } catch (CausticException e) {
             e.printStackTrace();
         }

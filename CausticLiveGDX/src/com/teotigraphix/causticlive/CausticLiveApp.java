@@ -24,7 +24,7 @@ import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
 import com.teotigraphix.causticlive.screen.MainScreen;
 import com.teotigraphix.causticlive.screen.SplashScreen;
-import com.teotigraphix.caustk.sound.ISoundGenerator;
+import com.teotigraphix.caustk.rack.sound.ISoundGenerator;
 import com.teotigraphix.libgdx.application.GDXGame;
 
 @Singleton

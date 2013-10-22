@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
-import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.sequencer.queue.QueueDataChannel;
-import com.teotigraphix.caustk.sequencer.track.Track;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueDataChannel;
+import com.teotigraphix.caustk.rack.sequencer.track.Track;
 import com.teotigraphix.libgdx.model.ICaustkModel;
 
 public interface ISequencerModel extends ICaustkModel {

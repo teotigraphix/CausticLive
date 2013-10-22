@@ -30,7 +30,7 @@ import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.screen.SkinRegistry;
 import com.teotigraphix.causticlive.view.main.components.PartMixer;
 import com.teotigraphix.causticlive.view.main.components.PartMixer.OnPartMixerListener;
-import com.teotigraphix.caustk.sound.mixer.SoundMixerChannel;
+import com.teotigraphix.caustk.rack.sound.mixer.SoundMixerChannel;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;

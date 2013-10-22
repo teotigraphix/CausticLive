@@ -25,7 +25,7 @@ import java.io.IOException;
 import com.badlogic.gdx.utils.Array;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.item.LibraryScene;
-import com.teotigraphix.caustk.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
 import com.teotigraphix.libgdx.model.ICaustkModel;
 
 public interface ILibraryModel extends ICaustkModel {

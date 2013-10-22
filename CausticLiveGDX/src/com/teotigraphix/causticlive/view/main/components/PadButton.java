@@ -35,9 +35,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Pools;
-import com.teotigraphix.caustk.sequencer.queue.QueueData;
-import com.teotigraphix.caustk.sequencer.queue.QueueData.QueueDataState;
-import com.teotigraphix.caustk.tone.Tone;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueData;
+import com.teotigraphix.caustk.rack.sequencer.queue.QueueData.QueueDataState;
+import com.teotigraphix.caustk.rack.tone.Tone;
 import com.teotigraphix.libgdx.ui.OverlayButton.OnPadButtonListener;
 
 public class PadButton extends ToggleButton {

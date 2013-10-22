@@ -25,8 +25,6 @@ import com.teotigraphix.libgdx.model.RackApplicationState;
 
 public class CausticLiveApplicationState extends RackApplicationState {
 
-    private static final long serialVersionUID = -8033613757836089213L;
-
     private SequencerModelState sequencerModelState;
 
     public final SequencerModelState getSequencerModelState() {
