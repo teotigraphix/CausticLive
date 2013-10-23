@@ -19,11 +19,13 @@
 
 package com.teotigraphix.causticlive.model;
 
+import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer.Tag;
 import com.teotigraphix.causticlive.model.state.SequencerModelState;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
 
 public class CausticLiveApplicationState extends ApplicationModelState {
 
+    @Tag(100)
     private SequencerModelState sequencerModelState;
 
     public final SequencerModelState getSequencerModelState() {
@@ -32,8 +34,17 @@ public class CausticLiveApplicationState extends ApplicationModelState {
 
     public CausticLiveApplicationState() {
         super();
+    }
 
-        //        sequencerModelState = new SequencerModelState(controller);
+    @Override
+    public void create() {
+        super.create();
+        sequencerModelState = new SequencerModelState(getController());
+    }
+
+    @Override
+    public void update() {
+        super.update();
     }
 
     @Override

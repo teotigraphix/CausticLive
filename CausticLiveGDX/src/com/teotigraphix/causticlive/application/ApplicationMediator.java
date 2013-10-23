@@ -19,10 +19,17 @@
 
 package com.teotigraphix.causticlive.application;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
 import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
+import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.core.osc.SequencerMessage;
+import com.teotigraphix.caustk.rack.IRack;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 
@@ -42,88 +49,49 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     public void onRegister() {
         super.onRegister();
 
+        applicationModel.setStateType(CausticLiveApplicationState.class);
+
         // register Models
         applicationModel.registerModel(sequencerModel);
         applicationModel.registerModel(libraryModel);
-
-        //        register(OnApplicationMediatorNewProject.class,
-        //                new EventObserver<OnApplicationMediatorNewProject>() {
-        //                    @Override
-        //                    public void trigger(OnApplicationMediatorNewProject object) {
-        //                        // create a new project, this is probably going to be multi step
-        //                        // with dialogs
-        //                        getController().getLogger()
-        //                                .log("ApplicationMediator", "Create new project");
-        //                        createNewProject();
-        //                    }
-        //                });
     }
 
-    protected void createNewProject() {
-        // What has to happen?
-        // - Rack needs to be cleared, can't just kill the instance because of all
-        // the listeners added at startup
+    @Override
+    protected void onInitializeProject() {
+        super.onInitializeProject();
 
-        // CausticLiveApplicationState needs to be recreated from scratch and saved once the
-        // project is created
+        final IRack rack = getController().getRack();
 
-        //        try {
-        //            final Project project = applicationController.createProject("Foo1");
-        //            Gdx.app.postRunnable(new Runnable() {
-        //                @Override
-        //                public void run() {
-        //                    getController().getRack().unregisterObservers();
-        //                    applicationModel.setProject(project);
-        //                }
-        //            });
-        //
-        //        } catch (IOException e) {
-        //            e.printStackTrace();
-        //        }
+        try {
+            rack.getTrackSequencer().createSong(new File("UntitledSong.ctks"));
+            rack.getTrackSequencer().setCurrentTrack(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // ProjectManager save dialog
+        SequencerMessage.SONG_END_MODE.send(getController(), 0);
 
-        // project manager new project name dialog
+        libraryModel.createFromProject(applicationModel.getProject());
 
-        // project manager creates a new project, maybe sending
-        // out a message that all mediators onShow() gets called will
-        // update the UI accordingly
+        libraryModel.importDemoSong();
+
+        try {
+            libraryModel.restoreState();
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
     }
 
-    //    @Override
-    //    protected void firstRun(ApplicationModelState state) {
-    //        super.firstRun(state);
-    //
-    //        final IRack rack = getController().getRack();
-    //
-    //        try {
-    //            rack.getTrackSequencer().createSong(new File("UntitledSong.ctks"));
-    //            rack.getTrackSequencer().setCurrentTrack(0);
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
-    //
-    //    @Override
-    //    protected void onRun() {
-    //        super.onRun();
-    //
-    //        if (applicationModel.isFirstRun()) {
-    //            libraryModel.importDemoSong();
-    //        } else {
-    //
-    //        }
-    //
-    //        // load the last scene 
-    //        try {
-    //            libraryModel.restoreState();
-    //        } catch (CausticException e) {
-    //            e.printStackTrace();
-    //        }
-    //
-    //        SequencerMessage.SONG_END_MODE.send(getController(), 0);
-    //    }
+    @Override
+    protected void onReloadProject() {
+        super.onReloadProject();
 
-    public static class OnApplicationMediatorNewProject {
+        libraryModel.createFromProject(applicationModel.getProject());
+        // load the last scene 
+        try {
+            libraryModel.restoreState();
+        } catch (CausticException e) {
+            e.printStackTrace();
+        }
     }
 }

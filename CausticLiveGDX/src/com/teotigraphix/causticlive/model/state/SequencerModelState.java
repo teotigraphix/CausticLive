@@ -19,18 +19,26 @@
 
 package com.teotigraphix.causticlive.model.state;
 
-import java.io.Serializable;
-
+import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer.Tag;
 import com.teotigraphix.causticlive.model.ISequencerModel.PadState;
 import com.teotigraphix.caustk.controller.ICaustkController;
+import com.teotigraphix.caustk.rack.IQueueSequencer;
 import com.teotigraphix.caustk.rack.QueueSequencer;
 import com.teotigraphix.caustk.rack.queue.QueueData;
 
-public class SequencerModelState implements Serializable {
+public class SequencerModelState {
 
-    private static final long serialVersionUID = -4629791250494306755L;
-
+    @Tag(0)
     private QueueSequencer queueSequencer;
+
+    @Tag(1)
+    private QueueData activeData;
+
+    @Tag(2)
+    private PadState padState = PadState.Perform;
+
+    @Tag(3)
+    private int selectedBank = 0;
 
     public final QueueSequencer getQueueSequencer() {
         return queueSequencer;
@@ -39,8 +47,6 @@ public class SequencerModelState implements Serializable {
     //----------------------------------
     // padState
     //----------------------------------
-
-    private PadState padState = PadState.Perform;
 
     public PadState getPadState() {
         return padState;
@@ -57,8 +63,6 @@ public class SequencerModelState implements Serializable {
     // selectedBank
     //----------------------------------
 
-    private int selectedBank = 0;
-
     public int getSelectedBank() {
         return selectedBank;
     }
@@ -74,8 +78,6 @@ public class SequencerModelState implements Serializable {
     // activeData
     //----------------------------------
 
-    private QueueData activeData;
-
     public QueueData getActiveData() {
         return activeData;
     }
@@ -84,8 +86,12 @@ public class SequencerModelState implements Serializable {
         activeData = value;
     }
 
+    SequencerModelState() {
+    }
+
     public SequencerModelState(ICaustkController controller) {
         queueSequencer = new QueueSequencer(controller.getRack());
+        controller.getRack().addComponent(IQueueSequencer.class, queueSequencer);
         queueSequencer.create(controller.getRack().getTrackSequencer().getTrackSong());
     }
 

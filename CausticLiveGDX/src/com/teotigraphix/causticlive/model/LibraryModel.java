@@ -96,7 +96,6 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
     @Override
     public void onRegister() {
-        createFromProject(getController().getProjectManager().getProject());
 
         //        getController().register(OnApplicationModelProjectLoadComplete.class,
         //                new EventObserver<OnApplicationModelProjectLoadComplete>() {
@@ -112,7 +111,8 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     // ILibraryModel API :: Methods 
     //--------------------------------------------------------------------------
 
-    private void createFromProject(Project project) {
+    @Override
+    public void createFromProject(Project project) {
 
         String uid = project.getString(PREF_SELECTED_SCENE_ID, null);
         if (uid != null) {
@@ -164,6 +164,7 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
 
     @Override
     public void restoreState() throws CausticException {
+
         // only load the scene if there is not a scene
         // the machine state is already loaded in the App state object
         if (stateModel.getSelectedSceneId() == null) {

@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.teotigraphix.causticlive.application.ApplicationMediator.OnApplicationMediatorNewProject;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
@@ -79,7 +78,7 @@ public class MainToolBarMediator extends ScreenMediator {
         button.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                getController().trigger(new OnApplicationMediatorNewProject());
+                //getController().trigger(new OnApplicationMediatorNewProject());
             }
         });
         return button;
