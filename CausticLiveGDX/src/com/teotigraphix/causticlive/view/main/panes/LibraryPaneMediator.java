@@ -138,6 +138,13 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
         return pane;
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        list.setItems(getPhraseItems());
+    }
+
     private Array<?> getPhraseItems() {
         final List<LibraryPhrase> phrases = getController().getLibraryManager()
                 .getSelectedLibrary().getPhrases();

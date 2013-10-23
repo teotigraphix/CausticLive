@@ -112,6 +112,11 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     //--------------------------------------------------------------------------
 
     @Override
+    public void reset() {
+        getController().getLibraryManager().reset();
+    }
+
+    @Override
     public void createFromProject(Project project) {
 
         String uid = project.getString(PREF_SELECTED_SCENE_ID, null);

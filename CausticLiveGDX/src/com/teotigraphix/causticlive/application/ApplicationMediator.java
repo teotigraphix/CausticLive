@@ -71,6 +71,8 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
         SequencerMessage.SONG_END_MODE.send(getController(), 0);
 
+        libraryModel.reset();
+
         libraryModel.createFromProject(applicationModel.getProject());
 
         libraryModel.importDemoSong();

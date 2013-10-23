@@ -24,16 +24,14 @@ public class StateModel extends CaustkModelBase implements IStateModel {
         return getState().getSequencerModelState();
     }
 
-    private UUID selectedSceneId;
-
     @Override
     public UUID getSelectedSceneId() {
-        return selectedSceneId;
+        return getState().getSelectedSceneId();
     }
 
     @Override
     public void setSelectedSceneId(UUID value) {
-        selectedSceneId = value;
+        getState().setSelectedSceneId(value);
     }
 
     public StateModel() {

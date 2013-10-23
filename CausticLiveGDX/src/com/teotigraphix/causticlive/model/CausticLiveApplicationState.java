@@ -19,6 +19,8 @@
 
 package com.teotigraphix.causticlive.model;
 
+import java.util.UUID;
+
 import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer.Tag;
 import com.teotigraphix.causticlive.model.state.SequencerModelState;
 import com.teotigraphix.libgdx.model.ApplicationModelState;
@@ -30,6 +32,17 @@ public class CausticLiveApplicationState extends ApplicationModelState {
 
     public final SequencerModelState getSequencerModelState() {
         return sequencerModelState;
+    }
+
+    @Tag(150)
+    private UUID selectedSceneId;
+
+    public UUID getSelectedSceneId() {
+        return selectedSceneId;
+    }
+
+    public void setSelectedSceneId(UUID value) {
+        selectedSceneId = value;
     }
 
     public CausticLiveApplicationState() {

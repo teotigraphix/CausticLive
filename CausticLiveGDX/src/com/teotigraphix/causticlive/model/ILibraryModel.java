@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import com.badlogic.gdx.utils.Array;
 import com.teotigraphix.caustk.core.CausticException;
+import com.teotigraphix.caustk.library.ILibraryManager;
 import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.project.Project;
 import com.teotigraphix.caustk.rack.queue.QueueData;
@@ -45,5 +46,10 @@ public interface ILibraryModel extends ICaustkModel {
     void importDemoSong();
 
     void createFromProject(Project project);
+
+    /**
+     * Resets the {@link ILibraryManager} when creating or loading a nw project.
+     */
+    void reset();
 
 }

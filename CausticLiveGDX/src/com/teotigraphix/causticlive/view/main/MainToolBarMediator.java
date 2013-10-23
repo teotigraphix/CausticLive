@@ -19,17 +19,28 @@
 
 package com.teotigraphix.causticlive.view.main;
 
+import java.io.IOException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.google.inject.Inject;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
+import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
+import com.teotigraphix.libgdx.model.IApplicationModel;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.OverlayButton;
+import com.teotigraphix.libgdx.ui.caustk.DialogFactory;
 
 public class MainToolBarMediator extends ScreenMediator {
+
+    @Inject
+    IApplicationModel applicationModel;
 
     private OverlayButton loadButton;
 
@@ -66,7 +77,7 @@ public class MainToolBarMediator extends ScreenMediator {
         button.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-
+                DialogFactory.createAndShowLoadProjectDialog(applicationModel);
             }
         });
         return button;
@@ -78,7 +89,7 @@ public class MainToolBarMediator extends ScreenMediator {
         button.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                //getController().trigger(new OnApplicationMediatorNewProject());
+                createNewProjectDialog();
             }
         });
         return button;
@@ -90,9 +101,36 @@ public class MainToolBarMediator extends ScreenMediator {
         button.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-
+                try {
+                    // XXX Needs to be a command the app mediator handles
+                    getController().getApplication().save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         return button;
     }
+
+    protected void createNewProjectDialog() {
+        Gdx.input.getTextInput(new TextInputListener() {
+            @Override
+            public void input(String text) {
+                try {
+                    getController().getApplication().save();
+                    applicationModel.createNewProject(text);
+                } catch (CausticException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void canceled() {
+
+            }
+        }, "Project Name", "");
+    }
+
 }
