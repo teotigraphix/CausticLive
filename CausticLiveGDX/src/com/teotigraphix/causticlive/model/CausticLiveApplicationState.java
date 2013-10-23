@@ -20,10 +20,9 @@
 package com.teotigraphix.causticlive.model;
 
 import com.teotigraphix.causticlive.model.state.SequencerModelState;
-import com.teotigraphix.caustk.controller.ICaustkController;
-import com.teotigraphix.libgdx.model.RackApplicationState;
+import com.teotigraphix.libgdx.model.ApplicationModelState;
 
-public class CausticLiveApplicationState extends RackApplicationState {
+public class CausticLiveApplicationState extends ApplicationModelState {
 
     private SequencerModelState sequencerModelState;
 
@@ -31,10 +30,10 @@ public class CausticLiveApplicationState extends RackApplicationState {
         return sequencerModelState;
     }
 
-    public CausticLiveApplicationState(ICaustkController controller) {
-        super(controller);
+    public CausticLiveApplicationState() {
+        super();
 
-        sequencerModelState = new SequencerModelState(controller);
+        //        sequencerModelState = new SequencerModelState(controller);
     }
 
     @Override

@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import org.androidtransfuse.event.EventObserver;
-
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -39,7 +37,6 @@ import com.teotigraphix.caustk.rack.queue.QueueData;
 import com.teotigraphix.caustk.rack.track.Phrase;
 import com.teotigraphix.caustk.utils.RuntimeUtils;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
-import com.teotigraphix.libgdx.model.IApplicationModel.OnApplicationModelProjectLoadComplete;
 
 @Singleton
 public class LibraryModel extends CaustkModelBase implements ILibraryModel {
@@ -101,14 +98,14 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     public void onRegister() {
         createFromProject(getController().getProjectManager().getProject());
 
-        getController().register(OnApplicationModelProjectLoadComplete.class,
-                new EventObserver<OnApplicationModelProjectLoadComplete>() {
-                    @Override
-                    public void trigger(OnApplicationModelProjectLoadComplete object) {
-                        createFromProject(object.getProject());
-                        importDemoSong();
-                    }
-                });
+        //        getController().register(OnApplicationModelProjectLoadComplete.class,
+        //                new EventObserver<OnApplicationModelProjectLoadComplete>() {
+        //                    @Override
+        //                    public void trigger(OnApplicationModelProjectLoadComplete object) {
+        //                        createFromProject(object.getProject());
+        //                        importDemoSong();
+        //                    }
+        //                });
     }
 
     //--------------------------------------------------------------------------

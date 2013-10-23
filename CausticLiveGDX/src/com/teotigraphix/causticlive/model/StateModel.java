@@ -6,7 +6,6 @@ import java.util.UUID;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.state.SequencerModelState;
-import com.teotigraphix.libgdx.model.ApplicationModel;
 import com.teotigraphix.libgdx.model.CaustkModelBase;
 import com.teotigraphix.libgdx.model.IApplicationModel;
 
@@ -17,7 +16,7 @@ public class StateModel extends CaustkModelBase implements IStateModel {
     IApplicationModel applicationModel;
 
     protected final CausticLiveApplicationState getState() {
-        return ((CausticLiveApplicationState)((ApplicationModel)applicationModel).getState());
+        return applicationModel.getState(CausticLiveApplicationState.class);
     }
 
     @Override
