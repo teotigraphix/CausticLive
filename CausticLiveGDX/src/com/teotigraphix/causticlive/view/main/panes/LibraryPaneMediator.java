@@ -28,12 +28,19 @@ import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Pane;
 import com.teotigraphix.libgdx.ui.PaneStack;
+import com.teotigraphix.libgdx.ui.PaneStack.OnPaneStackListener;
 import com.teotigraphix.libgdx.ui.ScrollListPane.OnScrollListPaneListener;
 
 @Singleton
 public class LibraryPaneMediator extends ScreenMediatorChild {
 
-    private static final String PREF_SELECTED_PHRASE = "selectedPhrase";
+    private static final String PREF_SELECTED_SCENE = "selectedSceneIndex";
+
+    private static final String PREF_SELECTED_PHRASE = "selectedPhraseIndex";
+
+    private static final String PREF_SELECTED_PATCH = "selectedPatchIndex";
+
+    public static final String PREF_SELECTED_INDEX = "paneStackSelectedIndex";
 
     @Inject
     ISequencerModel sequencerModel;
@@ -41,7 +48,7 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
     @Inject
     IDialogManager dialogManager;
 
-    private PaneStack libraryPane;
+    private PaneStack paneStack;
 
     private LibraryPhrasePane phrasePane;
 
@@ -61,9 +68,14 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
     private Pane setupPane(Skin skin, Pane pane) {
 
-        libraryPane = new PaneStack(skin, Align.bottom);
-        libraryPane.setSelectedIndex(1); // Phrase (temp)
-        pane.add(libraryPane).expand().fill();
+        paneStack = new PaneStack(skin, Align.bottom);
+        paneStack.setOnOnPaneStackListener(new OnPaneStackListener() {
+            @Override
+            public void onChange(int index) {
+                updateSelectedIndex(index);
+            }
+        });
+        pane.add(paneStack).expand().fill();
 
         scenePane = new LibraryScenePane(skin, "Scene");
         scenePane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
@@ -79,10 +91,10 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
             @Override
             public void onListChange(int index) {
-
+                putPref(PREF_SELECTED_SCENE, index);
             }
         });
-        libraryPane.addPane(scenePane);
+        paneStack.addPane(scenePane);
 
         phrasePane = new LibraryPhrasePane(skin, "Phrase");
         phrasePane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
@@ -145,11 +157,10 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
             @Override
             public void onListChange(int index) {
-                getController().getLogger().log("LibraryPaneMediator", "changed");
-                selectPaneIndex(index);
+                putPref(PREF_SELECTED_PHRASE, index);
             }
         });
-        libraryPane.addPane(phrasePane);
+        paneStack.addPane(phrasePane);
 
         patchPane = new LibraryPatchPane(skin, "Patch");
         patchPane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
@@ -163,15 +174,12 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
             @Override
             public void onListChange(int index) {
+                putPref(PREF_SELECTED_PATCH, index);
             }
         });
-        libraryPane.addPane(patchPane);
+        paneStack.addPane(patchPane);
 
         return pane;
-    }
-
-    protected void selectPaneIndex(int selectedIndex) {
-        putPref(PREF_SELECTED_PHRASE, selectedIndex);
     }
 
     @Override
@@ -179,12 +187,22 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
         super.onShow(screen);
 
         scenePane.setItems(getSceneItems());
+        scenePane.setSelectedIndex(getInteger(PREF_SELECTED_SCENE, 0));
 
-        Integer index = getInteger(PREF_SELECTED_PHRASE, 0);
         phrasePane.setItems(getPhraseItems());
-        phrasePane.setSelectedIndex(index);
+        phrasePane.setSelectedIndex(getInteger(PREF_SELECTED_PHRASE, 0));
 
         patchPane.setItems(getPatchItems());
+        patchPane.setSelectedIndex(getInteger(PREF_SELECTED_PATCH, 0));
+
+        paneStack.setSelectedIndex(getInteger(PREF_SELECTED_INDEX, 0));
+    }
+
+    protected void updateSelectedIndex(int index) {
+        putPref(PREF_SELECTED_INDEX, index);
+        putPref(PREF_SELECTED_SCENE, scenePane.getSelectedIndex());
+        putPref(PREF_SELECTED_PHRASE, phrasePane.getSelectedIndex());
+        putPref(PREF_SELECTED_PATCH, patchPane.getSelectedIndex());
     }
 
     private Array<?> getSceneItems() {

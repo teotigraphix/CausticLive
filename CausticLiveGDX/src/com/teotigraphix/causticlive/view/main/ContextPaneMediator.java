@@ -33,9 +33,12 @@ import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Pane;
 import com.teotigraphix.libgdx.ui.PaneStack;
+import com.teotigraphix.libgdx.ui.PaneStack.OnPaneStackListener;
 
 @Singleton
 public class ContextPaneMediator extends ScreenMediator {
+
+    public static final String PREF_SELECTED_INDEX = "paneStackSelectedIndex";
 
     @Inject
     LibraryPaneMediator libraryPaneMediator;
@@ -71,6 +74,12 @@ public class ContextPaneMediator extends ScreenMediator {
         Table table = UI.createComponent(screen, Component.ContextPane);
 
         paneStack = new PaneStack(skin, Align.top);
+        paneStack.setOnOnPaneStackListener(new OnPaneStackListener() {
+            @Override
+            public void onChange(int index) {
+                updateSelectedIndex(index);
+            }
+        });
 
         // LibraryPane
         Pane pane1 = new Pane(skin, "Library");
@@ -88,5 +97,16 @@ public class ContextPaneMediator extends ScreenMediator {
         paneStack.addPane(pane3);
 
         table.add(paneStack).fill().expand();
+    }
+
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        paneStack.setSelectedIndex(getInteger(PREF_SELECTED_INDEX, 0));
+    }
+
+    protected void updateSelectedIndex(int index) {
+        putPref(PREF_SELECTED_INDEX, index);
     }
 }
