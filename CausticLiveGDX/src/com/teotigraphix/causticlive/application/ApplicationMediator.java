@@ -60,6 +60,8 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
     protected void onInitializeProject() {
         super.onInitializeProject();
 
+        final String lastProject = applicationModel.getLastProject();
+
         final IRack rack = getController().getRack();
 
         try {
@@ -75,12 +77,14 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
         libraryModel.createFromProject(applicationModel.getProject());
 
-        libraryModel.importDemoSong();
-
-        try {
-            libraryModel.restoreState();
-        } catch (CausticException e) {
-            e.printStackTrace();
+        // Only import the demo song if this is the very first start of the app
+        if (lastProject == null) {
+            libraryModel.importDemoSong();
+            try {
+                libraryModel.restoreState();
+            } catch (CausticException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -222,6 +222,10 @@ public class PadGridMediator extends ScreenMediator {
     }
 
     private void showToneSelectPopUp(String operationText) {
+        // XXX
+        if (getController().getRack().isEmpty())
+            return;
+
         if (toneSelectPopUp == null) {
             toneSelectPopUp = dialogManager.createPopUp(screenProvider.getScreen(),
                     "Select Machine", null);

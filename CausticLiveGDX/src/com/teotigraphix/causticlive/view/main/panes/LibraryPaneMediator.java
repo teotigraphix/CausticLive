@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.NameUtils;
 import com.teotigraphix.causticlive.view.main.components.LibraryPatchPane;
 import com.teotigraphix.causticlive.view.main.components.LibraryPhrasePane;
 import com.teotigraphix.causticlive.view.main.components.LibraryScenePane;
+import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
 import com.teotigraphix.caustk.library.item.LibraryScene;
@@ -47,6 +49,9 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
     @Inject
     IDialogManager dialogManager;
+
+    @Inject
+    ILibraryModel libraryModel;
 
     private PaneStack paneStack;
 
@@ -86,7 +91,12 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
             @Override
             public void onListDoubleTap(int index) {
-
+                LibraryScene selectedItem = (LibraryScene)scenePane.getSelectedItem();
+                try {
+                    libraryModel.loadScene(selectedItem);
+                } catch (CausticException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

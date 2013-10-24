@@ -54,4 +54,6 @@ public interface ILibraryModel extends ICaustkModel {
      */
     void reset();
 
+    void loadScene(LibraryScene scene) throws CausticException;
+
 }

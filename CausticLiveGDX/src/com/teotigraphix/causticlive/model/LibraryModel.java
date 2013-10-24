@@ -69,7 +69,16 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         return result;
     }
 
-    public void loadScene(LibraryScene item) {
+    @Override
+    public void loadScene(LibraryScene item) throws CausticException {
+        // Check for assigning the same scene
+        if (item.getId() == stateModel.getSelectedSceneId())
+            return; // XXX throw error
+
+        // XXX the whole sound source needs to be flushed,
+        // all the paddata erased
+        getController().getRack().clearAndReset();
+
         try {
             getController().getRack().createScene(item);
         } catch (CausticException e) {
@@ -173,11 +182,11 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         // only load the scene if there is not a scene
         // the machine state is already loaded in the App state object
         if (stateModel.getSelectedSceneId() == null) {
-            // get the first and only scene of the demo imported
-            stateModel.setSelectedSceneId(getScenes().get(0).getId());
+            // get the first and only scene of the demo imported        
+            UUID sceneId = getScenes().get(0).getId();
 
             LibraryScene libraryScene = getController().getLibraryManager().getSelectedLibrary()
-                    .findSceneById(stateModel.getSelectedSceneId());
+                    .findSceneById(sceneId);
 
             if (libraryScene == null)
                 throw new CausticException("Failure restoring initial LibraryScene");
