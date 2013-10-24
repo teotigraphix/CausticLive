@@ -36,7 +36,7 @@ import com.teotigraphix.libgdx.ui.PaneStack;
 import com.teotigraphix.libgdx.ui.caustk.DialogFactory;
 
 @Singleton
-public class SongPaneMediator extends ScreenMediatorChild {
+public class ProjectPaneMediator extends ScreenMediatorChild {
 
     @Inject
     IApplicationModel applicationModel;
@@ -46,7 +46,15 @@ public class SongPaneMediator extends ScreenMediatorChild {
 
     private PaneStack paneStack;
 
-    public SongPaneMediator() {
+    private NewProjectPane newPane;
+
+    private LoadProjectPane loadPane;
+
+    private SaveProjectPane savePane;
+
+    private ImportCausticFilePane importPane;
+
+    public ProjectPaneMediator() {
     }
 
     @Override
@@ -56,13 +64,20 @@ public class SongPaneMediator extends ScreenMediatorChild {
         setupPane(screen.getSkin(), (Pane)parent);
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        loadPane.getProjectLabel().setText(applicationModel.getProject().getName());
+    }
+
     private Pane setupPane(Skin skin, Pane pane) {
 
         paneStack = new PaneStack(skin, Align.bottom);
         paneStack.setSelectedIndex(0);
         pane.add(paneStack).expand().fill();
 
-        NewProjectPane newPane = new NewProjectPane(skin, "New");
+        newPane = new NewProjectPane(skin, "New");
         newPane.setOnNewProjectPaneListener(new OnNewProjectPaneListener() {
             @Override
             public void onCreateTap() {
@@ -71,7 +86,7 @@ public class SongPaneMediator extends ScreenMediatorChild {
         });
         paneStack.addPane(newPane);
 
-        LoadProjectPane loadPane = new LoadProjectPane(skin, "Load");
+        loadPane = new LoadProjectPane(skin, "Load");
         loadPane.setOnLoadProjectPaneListener(new OnLoadProjectPaneListener() {
             @Override
             public void onLoadTap() {
@@ -80,7 +95,7 @@ public class SongPaneMediator extends ScreenMediatorChild {
         });
         paneStack.addPane(loadPane);
 
-        SaveProjectPane savePane = new SaveProjectPane(skin, "Save");
+        savePane = new SaveProjectPane(skin, "Save");
         savePane.setOnSaveProjectPaneListener(new OnSaveProjectPaneListener() {
             @Override
             public void onSaveTap() {
@@ -93,7 +108,7 @@ public class SongPaneMediator extends ScreenMediatorChild {
         });
         paneStack.addPane(savePane);
 
-        ImportCausticFilePane importPane = new ImportCausticFilePane(skin, "Import");
+        importPane = new ImportCausticFilePane(skin, "Import");
         importPane.setOnImportCausticFilePaneListener(new OnImportCausticFilePaneListener() {
             @Override
             public void onImportTap() {

@@ -40,7 +40,7 @@ import com.teotigraphix.libgdx.ui.PaneStack;
 public class OptionsPaneMediator extends ScreenMediator {
 
     @Inject
-    SongPaneMediator songPaneMediator;
+    ProjectPaneMediator projectPaneMediator;
 
     @Inject
     IApplicationModel applicationModel;
@@ -52,6 +52,13 @@ public class OptionsPaneMediator extends ScreenMediator {
     private OverlayButton backButton;
 
     public OptionsPaneMediator() {
+    }
+
+    @Override
+    public void onInitialize(IScreen screen) {
+        super.onInitialize(screen);
+
+        addMediator(projectPaneMediator);
     }
 
     @Override
@@ -82,7 +89,7 @@ public class OptionsPaneMediator extends ScreenMediator {
 
         // LibraryPane
         Pane pane1 = new Pane(skin, "Project");
-        songPaneMediator.onCreate(screen, pane1);
+        projectPaneMediator.onCreate(screen, pane1);
         paneStack.addPane(pane1);
 
         table.add(paneStack).fill().expand();

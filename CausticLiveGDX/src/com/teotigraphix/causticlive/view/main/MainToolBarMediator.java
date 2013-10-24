@@ -19,13 +19,16 @@
 
 package com.teotigraphix.causticlive.view.main;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.google.inject.Inject;
 import com.teotigraphix.causticlive.CausticLiveApp;
 import com.teotigraphix.causticlive.model.ILibraryModel;
+import com.teotigraphix.causticlive.screen.ComponentFactory;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
@@ -43,6 +46,8 @@ public class MainToolBarMediator extends ScreenMediator {
 
     private OverlayButton optionsButton;
 
+    private Table extrasTable;
+
     public MainToolBarMediator() {
     }
 
@@ -51,6 +56,7 @@ public class MainToolBarMediator extends ScreenMediator {
         super.onCreate(screen);
 
         Table table = UI.createComponent(screen, Component.MainToolBar);
+
         table.defaults().space(5f);
         table.setBackground("toolbar_background");
 
@@ -58,6 +64,16 @@ public class MainToolBarMediator extends ScreenMediator {
         table.add(optionsButton).size(75f, 30f);
 
         table.add().expand();
+
+        extrasTable = createExtras(screen.getSkin());
+        table.add(extrasTable).fillY().expandY();
+    }
+
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        projectLabel.setText(applicationModel.getProject().getName());
     }
 
     private OverlayButton createOptionsButton(Skin skin) {
@@ -70,6 +86,28 @@ public class MainToolBarMediator extends ScreenMediator {
             }
         });
         return button;
+    }
+
+    //----------------------------------
+    // Extras
+    //----------------------------------
+
+    private Label projectLabel;
+
+    private Table createExtras(Skin skin) {
+        Table table = new Table();
+        // spacer for now to push the project label down
+        table.add().expandY();
+        table.row();
+
+        projectLabel = createProjectLabel(skin);
+        table.add(projectLabel).pad(2f);
+
+        return table;
+    }
+
+    private Label createProjectLabel(Skin skin) {
+        return ComponentFactory.createLabel(skin, "", "default-font", Color.BLACK);
     }
 
 }
