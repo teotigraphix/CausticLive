@@ -187,6 +187,29 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     }
 
     @Override
+    public void importSongLive(File file) throws IOException, CausticException {
+        Library library = getController().getLibraryManager().getSelectedLibrary();
+        Library tempLibrary = getController().getLibraryManager().createLibrary();
+        tempLibrary.setDirectory(library.getDirectory());
+
+        getController().getLibraryManager().importSongLive(tempLibrary, file);
+
+        List<LibraryPatch> patches = tempLibrary.getPatches();
+        List<LibraryPhrase> phrases = tempLibrary.getPhrases();
+        // only one scene
+        List<LibraryScene> scenes = tempLibrary.getScenes();
+        LibraryScene scene = scenes.get(0);
+        library.addScene(scene);
+
+        library.getPatches().addAll(patches);
+        library.getPhrases().addAll(phrases);
+
+        getController().getLibraryManager().saveLibrary(library);
+
+        trigger(new OnLibraryModelLibraryChange());
+    }
+
+    @Override
     public void importSong(File file) throws IOException, CausticException {
         Library library = getController().getLibraryManager().getSelectedLibrary();
         Library tempLibrary = getController().getLibraryManager().createLibrary();

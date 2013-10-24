@@ -145,9 +145,9 @@ public class SongPaneMediator extends ScreenMediatorChild {
             public void onOk() {
                 int index = dialog.getSelectedIndex();
                 String songName = songs[index];
-                File file = RuntimeUtils.getCausticSongFile(songName);
+                File file = RuntimeUtils.getCausticSongFile(songName.replace(".caustic", ""));
                 try {
-                    libraryModel.importSong(file);
+                    libraryModel.importSongLive(file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (CausticException e) {

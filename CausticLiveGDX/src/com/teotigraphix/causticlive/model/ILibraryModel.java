@@ -34,6 +34,8 @@ public interface ILibraryModel extends ICaustkModel {
 
     void importSong(File file) throws IOException, CausticException;
 
+    void importSongLive(File file) throws IOException, CausticException;
+
     Array<LibraryScene> getScenes();
 
     public static class OnLibraryModelLibraryChange {
