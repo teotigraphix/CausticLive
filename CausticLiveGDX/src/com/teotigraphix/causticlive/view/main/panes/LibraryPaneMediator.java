@@ -6,11 +6,6 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListDoubleTapEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListListener;
-import com.badlogic.gdx.scenes.scene2d.ui.AdvancedList.AdvancedListLongPressEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -19,7 +14,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.causticlive.model.NameUtils;
+import com.teotigraphix.causticlive.view.main.components.LibraryPatchPane;
+import com.teotigraphix.causticlive.view.main.components.LibraryPhrasePane;
+import com.teotigraphix.causticlive.view.main.components.LibraryScenePane;
+import com.teotigraphix.caustk.library.item.LibraryPatch;
 import com.teotigraphix.caustk.library.item.LibraryPhrase;
+import com.teotigraphix.caustk.library.item.LibraryScene;
 import com.teotigraphix.caustk.rack.queue.QueueData;
 import com.teotigraphix.caustk.rack.track.Phrase;
 import com.teotigraphix.caustk.rack.track.Track;
@@ -28,7 +28,7 @@ import com.teotigraphix.libgdx.dialog.IDialogManager;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.Pane;
 import com.teotigraphix.libgdx.ui.PaneStack;
-import com.teotigraphix.libgdx.ui.ScrollList;
+import com.teotigraphix.libgdx.ui.ScrollListPane.OnScrollListPaneListener;
 
 @Singleton
 public class LibraryPaneMediator extends ScreenMediatorChild {
@@ -41,7 +41,13 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
     @Inject
     IDialogManager dialogManager;
 
-    private ScrollList list;
+    private PaneStack libraryPane;
+
+    private LibraryPhrasePane phrasePane;
+
+    private LibraryScenePane scenePane;
+
+    private LibraryPatchPane patchPane;
 
     public LibraryPaneMediator() {
     }
@@ -55,35 +61,39 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
 
     private Pane setupPane(Skin skin, Pane pane) {
 
-        PaneStack libraryStack = new PaneStack(skin, Align.bottom);
-        libraryStack.setSelectedIndex(1); // Phrase (temp)
-        pane.add(libraryStack).expand().fill();
-        libraryStack.addPane(new Pane(skin, "Scene"));
-        Pane phrasePane = new Pane(skin, "Phrase");
-        libraryStack.addPane(phrasePane);
-        Pane patchPane = new Pane(skin, "Patch");
-        libraryStack.addPane(patchPane);
+        libraryPane = new PaneStack(skin, Align.bottom);
+        libraryPane.setSelectedIndex(1); // Phrase (temp)
+        pane.add(libraryPane).expand().fill();
 
-        list = new ScrollList(skin);
-        list.setOverscroll(false, true);
-        list.setFadeScrollBars(false);
-        list.setItems(getPhraseItems());
-        list.addListener(new AdvancedListListener() {
+        scenePane = new LibraryScenePane(skin, "Scene");
+        scenePane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
             @Override
-            public void changed(AdvancedListChangeEvent event, Actor actor) {
-                getController().getLogger().log("LibraryPaneMediator", "changed");
-                selectPaneIndex(list.getSelectedIndex());
+            public void onListLongPress(int index) {
+
             }
 
             @Override
-            public void longPress(AdvancedListLongPressEvent event, Actor actor) {
+            public void onListDoubleTap(int index) {
+
+            }
+
+            @Override
+            public void onListChange(int index) {
+
+            }
+        });
+        libraryPane.addPane(scenePane);
+
+        phrasePane = new LibraryPhrasePane(skin, "Phrase");
+        phrasePane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
+            @Override
+            public void onListLongPress(int index) {
                 getController().getLogger().log("LibraryPaneMediator", "longPress");
                 // have to check the the long pressed data index 
                 // is the same index as the selected data index
-                int index = actor.getParent().getChildren().indexOf(actor, true);
-                if (list.getSelectedIndex() == index) {
+                if (phrasePane.getSelectedIndex() == index) {
                     getController().getLogger().log("LibraryPaneMediator", "identical index");
-                    final LibraryPhrase phrase = (LibraryPhrase)list.getSelectedItem();
+                    final LibraryPhrase phrase = (LibraryPhrase)phrasePane.getSelectedItem();
                     final String name = phrase.getMetadataInfo().getName();
 
                     Gdx.input.getTextInput(new TextInputListener() {
@@ -93,7 +103,7 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
                             phrase.getMetadataInfo().setName(text);
                             try {
                                 getController().getLibraryManager().save();
-                                list.refresh();
+                                phrasePane.refresh();
                                 // update padgrid as well
 
                             } catch (IOException e) {
@@ -107,19 +117,17 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
                                     "Name change Canceled");
                         }
                     }, "Enter a new name", name);
-
                 }
             }
 
             @Override
-            public void doubleTap(AdvancedListDoubleTapEvent event, Actor actor) {
-
+            public void onListDoubleTap(int index) {
                 // XXX warning ?
                 final QueueData data = sequencerModel.getActiveData();
                 if (data == null)
                     return;
 
-                LibraryPhrase libraryPhrase = (LibraryPhrase)list.getSelectedItem();
+                LibraryPhrase libraryPhrase = (LibraryPhrase)phrasePane.getSelectedItem();
                 Track track = getController().getRack().getTrackSequencer()
                         .getTrack(data.getViewChannelIndex());
                 Phrase phrase = data.getPhrase();
@@ -135,8 +143,29 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
                                         .getSelectedLibrary(), data), 1f);
             }
 
+            @Override
+            public void onListChange(int index) {
+                getController().getLogger().log("LibraryPaneMediator", "changed");
+                selectPaneIndex(index);
+            }
         });
-        phrasePane.add(list).fill().expand();
+        libraryPane.addPane(phrasePane);
+
+        patchPane = new LibraryPatchPane(skin, "Patch");
+        patchPane.setOnScrollListPaneListener(new OnScrollListPaneListener() {
+            @Override
+            public void onListLongPress(int index) {
+            }
+
+            @Override
+            public void onListDoubleTap(int index) {
+            }
+
+            @Override
+            public void onListChange(int index) {
+            }
+        });
+        libraryPane.addPane(patchPane);
 
         return pane;
     }
@@ -149,20 +178,42 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
     public void onShow(IScreen screen) {
         super.onShow(screen);
 
-        Integer index = getInteger(PREF_SELECTED_PHRASE, 0);
+        scenePane.setItems(getSceneItems());
 
-        list.setItems(getPhraseItems());
-        list.setSelectedIndex(index);
+        Integer index = getInteger(PREF_SELECTED_PHRASE, 0);
+        phrasePane.setItems(getPhraseItems());
+        phrasePane.setSelectedIndex(index);
+
+        patchPane.setItems(getPatchItems());
     }
 
-    private Array<?> getPhraseItems() {
-        final List<LibraryPhrase> phrases = getController().getLibraryManager()
-                .getSelectedLibrary().getPhrases();
-        Array<LibraryPhrase> result = new Array<LibraryPhrase>();
-        for (LibraryPhrase libraryPhrase : phrases) {
-            result.add(libraryPhrase);
+    private Array<?> getSceneItems() {
+        final List<LibraryScene> items = getController().getLibraryManager().getSelectedLibrary()
+                .getScenes();
+        Array<LibraryScene> result = new Array<LibraryScene>();
+        for (LibraryScene item : items) {
+            result.add(item);
         }
         return result;
     }
 
+    private Array<?> getPhraseItems() {
+        final List<LibraryPhrase> items = getController().getLibraryManager().getSelectedLibrary()
+                .getPhrases();
+        Array<LibraryPhrase> result = new Array<LibraryPhrase>();
+        for (LibraryPhrase item : items) {
+            result.add(item);
+        }
+        return result;
+    }
+
+    private Array<?> getPatchItems() {
+        final List<LibraryPatch> items = getController().getLibraryManager().getSelectedLibrary()
+                .getPatches();
+        Array<LibraryPatch> result = new Array<LibraryPatch>();
+        for (LibraryPatch item : items) {
+            result.add(item);
+        }
+        return result;
+    }
 }
