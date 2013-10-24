@@ -33,6 +33,8 @@ import com.teotigraphix.libgdx.ui.ScrollList;
 @Singleton
 public class LibraryPaneMediator extends ScreenMediatorChild {
 
+    private static final String PREF_SELECTED_PHRASE = "selectedPhrase";
+
     @Inject
     ISequencerModel sequencerModel;
 
@@ -70,6 +72,7 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
             @Override
             public void changed(AdvancedListChangeEvent event, Actor actor) {
                 getController().getLogger().log("LibraryPaneMediator", "changed");
+                selectPaneIndex(list.getSelectedIndex());
             }
 
             @Override
@@ -138,11 +141,18 @@ public class LibraryPaneMediator extends ScreenMediatorChild {
         return pane;
     }
 
+    protected void selectPaneIndex(int selectedIndex) {
+        putPref(PREF_SELECTED_PHRASE, selectedIndex);
+    }
+
     @Override
     public void onShow(IScreen screen) {
         super.onShow(screen);
 
+        Integer index = getInteger(PREF_SELECTED_PHRASE, 0);
+
         list.setItems(getPhraseItems());
+        list.setSelectedIndex(index);
     }
 
     private Array<?> getPhraseItems() {
