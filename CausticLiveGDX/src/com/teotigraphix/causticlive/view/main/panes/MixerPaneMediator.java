@@ -18,6 +18,8 @@ import com.teotigraphix.libgdx.ui.TextSlider;
 
 public class MixerPaneMediator extends ScreenMediatorChild {
 
+    public static final String PREF_MIXER_SELECTED_INDEX = "mixerSelectedIndex";
+
     @Inject
     IDialogManager dialogManager;
 
@@ -52,6 +54,7 @@ public class MixerPaneMediator extends ScreenMediatorChild {
             public void onSliderChange(int buttonIndex, int sliderIndex, float sliderValue) {
                 if (updating)
                     return;
+
                 SoundMixerChannel channel = getController().getRack().getSoundMixer()
                         .getChannel(sliderIndex);
                 switch (buttonIndex) {
@@ -76,6 +79,7 @@ public class MixerPaneMediator extends ScreenMediatorChild {
             @Override
             public void onButtonChange(int index) {
                 updateSliders(index);
+                putPref(PREF_MIXER_SELECTED_INDEX, index);
             }
 
             @Override
@@ -112,7 +116,14 @@ public class MixerPaneMediator extends ScreenMediatorChild {
         mixerDialog.setExplicitSize(335f, 240f);
         mixerDialog.validate();
 
-        updateSliders(0);
+    }
+
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+
+        partMixer.setSelectedIndex(getInteger(PREF_MIXER_SELECTED_INDEX, 0));
+        //updateSliders(getInteger(PREF_MIXER_SELECTED_INDEX, 0));
     }
 
     protected void updateSliders(int index) {
@@ -132,7 +143,7 @@ public class MixerPaneMediator extends ScreenMediatorChild {
                         break;
                     case 1:
                         getController().getLogger().log("ToolBarMediator", "Reverb");
-                        slider.setRange(0f, 1f);
+                        slider.setRange(0f, 0.5f);
                         slider.setValue(channel.getReverbSend());
                         break;
                     case 2:
@@ -142,7 +153,7 @@ public class MixerPaneMediator extends ScreenMediatorChild {
                         break;
                     case 3:
                         getController().getLogger().log("ToolBarMediator", "Width");
-                        slider.setRange(0f, 1f);
+                        slider.setRange(-1f, 1f);
                         slider.setValue(channel.getStereoWidth());
                         break;
                 }

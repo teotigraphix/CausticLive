@@ -56,6 +56,10 @@ public class PartMixer extends ControlTable {
 
     protected boolean blockEvents;
 
+    public void setSelectedIndex(int index) {
+        buttonBar.select(index, true);
+    }
+
     @Override
     protected void createChildren() {
         super.createChildren();
@@ -130,4 +134,5 @@ public class PartMixer extends ControlTable {
 
         void onSoloChange(int buttonIndex, int sliderIndex, boolean selected);
     }
+
 }
