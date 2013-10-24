@@ -17,59 +17,79 @@
 // mschmalle at teotigraphix dot com
 ////////////////////////////////////////////////////////////////////////////////
 
-package com.teotigraphix.causticlive.view.main;
+package com.teotigraphix.causticlive.view.admin;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.CausticLiveApp;
-import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.view.UI;
 import com.teotigraphix.causticlive.view.UI.Component;
 import com.teotigraphix.libgdx.controller.ScreenMediator;
 import com.teotigraphix.libgdx.model.IApplicationModel;
 import com.teotigraphix.libgdx.screen.IScreen;
 import com.teotigraphix.libgdx.ui.OverlayButton;
+import com.teotigraphix.libgdx.ui.Pane;
+import com.teotigraphix.libgdx.ui.PaneStack;
 
-public class MainToolBarMediator extends ScreenMediator {
+@Singleton
+public class OptionsPaneMediator extends ScreenMediator {
+
+    @Inject
+    SongPaneMediator songPaneMediator;
 
     @Inject
     IApplicationModel applicationModel;
 
-    @Inject
-    ILibraryModel libraryModel;
+    private Skin skin;
 
-    private OverlayButton optionsButton;
+    private PaneStack paneStack;
 
-    public MainToolBarMediator() {
+    private OverlayButton backButton;
+
+    public OptionsPaneMediator() {
+    }
+
+    @Override
+    public void onAttach(IScreen screen) {
+        super.onAttach(screen);
     }
 
     @Override
     public void onCreate(IScreen screen) {
         super.onCreate(screen);
+        skin = screen.getSkin();
 
-        Table table = UI.createComponent(screen, Component.MainToolBar);
-        table.defaults().space(5f);
-        table.setBackground("toolbar_background");
+        Table table = UI.createComponent(screen, Component.OptionsPane);
 
-        optionsButton = createOptionsButton(screen.getSkin());
-        table.add(optionsButton).size(75f, 30f);
+        paneStack = new PaneStack(skin, Align.top);
+        paneStack.setMaxButtonSize(100f);
 
-        table.add().expand();
-    }
-
-    private OverlayButton createOptionsButton(Skin skin) {
-        OverlayButton button = new OverlayButton("Options", skin);
-        button.setToggle(false);
-        button.addListener(new ActorGestureListener() {
+        backButton = new OverlayButton("Back", skin);
+        backButton.setToggle(false);
+        backButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                applicationModel.pushScreen(CausticLiveApp.ADMIN_SCREEN);
+                applicationModel.pushScreen(CausticLiveApp.MAIN_SCREEN);
             }
         });
-        return button;
+
+        paneStack.getToolsBar().add(backButton).height(30f).width(75f);
+
+        // LibraryPane
+        Pane pane1 = new Pane(skin, "Project");
+        songPaneMediator.onCreate(screen, pane1);
+        paneStack.addPane(pane1);
+
+        table.add(paneStack).fill().expand();
     }
 
+    @Override
+    public void onShow(IScreen screen) {
+        super.onShow(screen);
+    }
 }

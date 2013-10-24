@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.teotigraphix.causticlive.config.CausticLiveModule;
-import com.teotigraphix.caustk.sound.generator.AndroidSoundGenerator;
+import com.teotigraphix.caustk.rack.generator.AndroidSoundGenerator;
 
 public class MainActivity extends AndroidApplication {
 

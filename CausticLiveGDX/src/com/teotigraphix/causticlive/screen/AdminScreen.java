@@ -19,9 +19,25 @@
 
 package com.teotigraphix.causticlive.screen;
 
-public interface ICausticLiveScreen {
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.view.admin.OptionsPaneMediator;
+import com.teotigraphix.libgdx.application.IGame;
+import com.teotigraphix.libgdx.screen.ScreenBase;
 
-    public static final int SPLASH_SCREEN = 0;
+@Singleton
+public class AdminScreen extends ScreenBase {
 
-    public static final int MAIN_SCREEN = 1;
+    @Inject
+    OptionsPaneMediator optionsPaneMediator;
+
+    public AdminScreen() {
+    }
+
+    @Override
+    public void initialize(IGame game) {
+        super.initialize(game);
+        SkinRegistry.register(getSkin());
+        addMediator(optionsPaneMediator);
+    }
 }

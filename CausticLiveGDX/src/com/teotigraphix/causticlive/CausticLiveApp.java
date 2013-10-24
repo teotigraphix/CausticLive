@@ -21,7 +21,7 @@ package com.teotigraphix.causticlive;
 
 import com.google.inject.Module;
 import com.google.inject.Singleton;
-import com.teotigraphix.causticlive.screen.ICausticLiveScreen;
+import com.teotigraphix.causticlive.screen.AdminScreen;
 import com.teotigraphix.causticlive.screen.MainScreen;
 import com.teotigraphix.causticlive.screen.SplashScreen;
 import com.teotigraphix.caustk.rack.ISoundGenerator;
@@ -30,16 +30,23 @@ import com.teotigraphix.libgdx.application.GDXGame;
 @Singleton
 public class CausticLiveApp extends GDXGame {
 
+    public static final int SPLASH_SCREEN = 0;
+
+    public static final int MAIN_SCREEN = 1;
+
+    public static final int ADMIN_SCREEN = 2;
+
     public CausticLiveApp(ISoundGenerator generator, Module module) {
         super("CausticLive", generator, module);
-        addScreen(ICausticLiveScreen.SPLASH_SCREEN, SplashScreen.class);
-        addScreen(ICausticLiveScreen.MAIN_SCREEN, MainScreen.class);
+        addScreen(SPLASH_SCREEN, SplashScreen.class);
+        addScreen(MAIN_SCREEN, MainScreen.class);
+        addScreen(ADMIN_SCREEN, AdminScreen.class);
     }
 
     @Override
     public void create() {
         super.create();
-        setScreen(ICausticLiveScreen.SPLASH_SCREEN);
+        setScreen(MAIN_SCREEN);
     }
 
 }

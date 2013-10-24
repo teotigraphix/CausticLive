@@ -43,6 +43,11 @@ public final class UI {
     }
 
     public enum Component {
+
+        //------------------------------
+        // MainScreen
+        //------------------------------
+
         MainToolBar(0, 440, 800, 40),
 
         ContextPaneToolBar(0, 400, 350, 40),
@@ -59,7 +64,13 @@ public final class UI {
 
         ExtrasBar(350, 0, 50, 200),
 
-        PadGrid(400, 0, 400, 400);
+        PadGrid(400, 0, 400, 400),
+
+        //------------------------------
+        // AdminScreen
+        //------------------------------
+
+        OptionsPane(0, 0, 800, 480);
 
         private Rectangle bounds;
 

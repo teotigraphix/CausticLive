@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.google.inject.Singleton;
+import com.teotigraphix.causticlive.CausticLiveApp;
 import com.teotigraphix.libgdx.application.IGame;
 import com.teotigraphix.libgdx.screen.ScreenBase;
 
@@ -59,7 +60,7 @@ public class SplashScreen extends ScreenBase {
         splashImage.addAction(Actions.delay(0.01f, new Action() {
             @Override
             public boolean act(float delta) {
-                game.setScreen(ICausticLiveScreen.MAIN_SCREEN);
+                game.setScreen(CausticLiveApp.MAIN_SCREEN);
                 return true;
             }
         }));
