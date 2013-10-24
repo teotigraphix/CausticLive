@@ -167,8 +167,6 @@ public class ToolBarMediator extends ScreenMediator {
 
             @Override
             public void onSoloChange(int buttonIndex, int sliderIndex, boolean selected) {
-                // TODO Auto-generated method stub
-
             }
         });
 
