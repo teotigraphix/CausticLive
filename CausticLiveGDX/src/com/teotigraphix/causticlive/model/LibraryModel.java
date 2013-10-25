@@ -89,7 +89,8 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
         getController().getLogger().log(TAG, "Loaded LibraryScene " + item.toString());
 
         Project project = getController().getProjectManager().getProject();
-        project.put(PREF_SELECTED_SCENE_ID, stateModel.getSelectedSceneId().toString());
+        project.getPreferences().put(PREF_SELECTED_SCENE_ID,
+                stateModel.getSelectedSceneId().toString());
     }
 
     //--------------------------------------------------------------------------
@@ -128,12 +129,12 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
     @Override
     public void createFromProject(Project project) {
 
-        String uid = project.getString(PREF_SELECTED_SCENE_ID, null);
+        String uid = project.getPreferences().getString(PREF_SELECTED_SCENE_ID, null);
         if (uid != null) {
             stateModel.setSelectedSceneId(UUID.fromString(uid));
         }
 
-        String path = project.getString(PREF_USER_LIBRARY_PATH, null);
+        String path = project.getPreferences().getString(PREF_USER_LIBRARY_PATH, null);
 
         Library library = null;
 
@@ -144,7 +145,7 @@ public class LibraryModel extends CaustkModelBase implements ILibraryModel {
                 File userLibraryFile = new File(USER_LIBRAY_NAME);
                 library = getController().getLibraryManager().createLibrary(userLibraryFile);
                 // have to save the path without the 'libraries'
-                project.put(PREF_USER_LIBRARY_PATH, userLibraryFile.getPath());
+                project.getPreferences().put(PREF_USER_LIBRARY_PATH, userLibraryFile.getPath());
                 getController().getLibraryManager().setSelectedLibrary(library);
                 getController().getLibraryManager().save();
             } catch (IOException e) {
