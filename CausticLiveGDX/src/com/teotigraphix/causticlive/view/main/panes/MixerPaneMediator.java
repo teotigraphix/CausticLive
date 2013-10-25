@@ -115,7 +115,6 @@ public class MixerPaneMediator extends ScreenMediatorChild {
         mixerDialog.setPosition(5f, 105f);
         mixerDialog.setExplicitSize(335f, 240f);
         mixerDialog.validate();
-
     }
 
     @Override
@@ -123,7 +122,9 @@ public class MixerPaneMediator extends ScreenMediatorChild {
         super.onShow(screen);
 
         partMixer.setSelectedIndex(getInteger(PREF_MIXER_SELECTED_INDEX, 0));
-        //updateSliders(getInteger(PREF_MIXER_SELECTED_INDEX, 0));
+        // XXX Until ButtonBar gets updated with actual selectedIndex prop
+        // that starts at -1, the first assignment never callsback change
+        updateSliders(getInteger(PREF_MIXER_SELECTED_INDEX, 0));
     }
 
     protected void updateSliders(int index) {

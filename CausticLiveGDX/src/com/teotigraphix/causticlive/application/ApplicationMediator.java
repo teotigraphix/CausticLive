@@ -19,9 +19,6 @@
 
 package com.teotigraphix.causticlive.application;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.teotigraphix.causticlive.model.CausticLiveApplicationState;
@@ -29,7 +26,6 @@ import com.teotigraphix.causticlive.model.ILibraryModel;
 import com.teotigraphix.causticlive.model.ISequencerModel;
 import com.teotigraphix.caustk.core.CausticException;
 import com.teotigraphix.caustk.core.osc.SequencerMessage;
-import com.teotigraphix.caustk.rack.IRack;
 import com.teotigraphix.libgdx.application.ApplicationMediatorBase;
 import com.teotigraphix.libgdx.application.IApplicationMediator;
 
@@ -62,19 +58,10 @@ public class ApplicationMediator extends ApplicationMediatorBase implements IApp
 
         final String lastProject = applicationModel.getLastProject();
 
-        final IRack rack = getController().getRack();
-
-        try {
-            rack.getTrackSequencer().createSong(new File("UntitledSong.ctks"));
-            rack.getTrackSequencer().setCurrentTrack(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        getController().getRack().getTrackSequencer().setCurrentTrack(0);
         SequencerMessage.SONG_END_MODE.send(getController(), 0);
 
         libraryModel.reset();
-
         libraryModel.createFromProject(applicationModel.getProject());
 
         // Only import the demo song if this is the very first start of the app
